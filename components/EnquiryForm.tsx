@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import Link from "next/link";
 import { CheckCircle2, Send } from "lucide-react";
+import { TurnstileWidget } from "@/components/TurnstileWidget";
 
 type FormStatus =
   | { state: "idle"; message: "" }
@@ -11,14 +12,21 @@ type FormStatus =
   | { state: "error"; message: string };
 
 const initialStatus: FormStatus = { state: "idle", message: "" };
+const turnstileSiteKey =
+  process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim() ?? "";
 
 export function EnquiryForm() {
   const [status, setStatus] = useState<FormStatus>(initialStatus);
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileResetKey, setTurnstileResetKey] = useState(0);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
-    const payload = Object.fromEntries(new FormData(form).entries());
+    const payload = {
+      ...Object.fromEntries(new FormData(form).entries()),
+      turnstileToken,
+    };
     setStatus({ state: "submitting", message: "" });
 
     try {
@@ -39,6 +47,8 @@ export function EnquiryForm() {
           "Thank you. The admissions team has received your enquiry and will be in touch.",
       });
     } catch (error) {
+      setTurnstileToken("");
+      setTurnstileResetKey((current) => current + 1);
       setStatus({
         state: "error",
         message:
@@ -133,6 +143,13 @@ export function EnquiryForm() {
         <input name="website" tabIndex={-1} autoComplete="off" />
       </label>
 
+      <TurnstileWidget
+        siteKey={turnstileSiteKey}
+        action="enquiry"
+        resetKey={turnstileResetKey}
+        onToken={setTurnstileToken}
+      />
+
       {status.state === "error" ? (
         <p role="alert" className="text-sm leading-6 text-school-red">
           {status.message}
@@ -153,7 +170,10 @@ export function EnquiryForm() {
 
       <button
         type="submit"
-        disabled={status.state === "submitting"}
+        disabled={
+          status.state === "submitting" ||
+          (Boolean(turnstileSiteKey) && !turnstileToken)
+        }
         className="inline-flex min-h-13 items-center justify-center gap-3 bg-school-red px-6 py-3 text-[0.7rem] font-bold uppercase tracking-[0.15em] text-white transition-colors hover:bg-school-red-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-school-red disabled:cursor-wait disabled:opacity-65"
       >
         {status.state === "submitting" ? "Sending…" : "Send enquiry"}

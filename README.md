@@ -60,6 +60,19 @@ approves launch. At that point, set `NEXT_PUBLIC_SITE_URL` to the selected
 origin. The creator credit can be linked later by setting
 `NEXT_PUBLIC_CREATOR_PORTFOLIO_URL`.
 
+### Form protection and administrator notifications
+
+Public admissions enquiries and story comments support Cloudflare Turnstile.
+Create one Turnstile widget for the website hostnames, then set both
+`NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY`. Leave both blank
+to keep the checks disabled during local development; deploy the pair together.
+
+New enquiries and pending story comments can notify authorised staff by email.
+Verify a sending domain in Resend, then set `RESEND_API_KEY`,
+`RESEND_FROM_EMAIL` and `ADMIN_NOTIFICATION_EMAIL`. Multiple recipient
+addresses can be separated with commas. A notification failure never discards
+the enquiry or comment already stored in Supabase.
+
 ## Logo and photography
 
 - Official logo: `public/images/school-logo.png`

@@ -1,4 +1,6 @@
 import { createEnquiry } from "@/db/dashboard";
+import { notifyNewEnquiry } from "@/lib/admin-notifications";
+import { verifyTurnstile } from "@/lib/turnstile";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -8,6 +10,18 @@ export async function POST(request: Request) {
 
     if (clean(payload.website, 120)) {
       return Response.json({ ok: true }, { status: 201 });
+    }
+
+    const verification = await verifyTurnstile(
+      request,
+      payload.turnstileToken,
+      "enquiry",
+    );
+    if (!verification.ok) {
+      return Response.json(
+        { error: "Please complete the security check and try again." },
+        { status: 400 },
+      );
     }
 
     const parentName = clean(payload.parentName, 120);
@@ -32,6 +46,15 @@ export async function POST(request: Request) {
     }
 
     const enquiryId = await createEnquiry({
+      parentName,
+      email,
+      phone,
+      childAge,
+      yearGroup,
+      message,
+    });
+
+    await notifyNewEnquiry({
       parentName,
       email,
       phone,

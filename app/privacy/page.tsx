@@ -81,10 +81,13 @@ const sections = [
       <>
         <p>
           The website uses Vercel for hosting and Supabase for database,
-          storage and staff authentication services. These providers process
-          information on the school’s behalf and may process it outside Kenya.
-          The school is responsible for ensuring that any cross-border
-          processing is covered by appropriate safeguards.
+          storage and staff authentication services. Cloudflare Turnstile may
+          process limited technical information to protect public forms from
+          automated abuse. When email notifications are enabled, Resend
+          delivers new-enquiry and comment-review notices to authorised staff.
+          These providers process information on the school’s behalf and may
+          process it outside Kenya. The school is responsible for ensuring that
+          any cross-border processing is covered by appropriate safeguards.
         </p>
       </>
     ),
@@ -163,7 +166,7 @@ export default function PrivacyPage() {
               and the choices available to you.
             </p>
             <p className="mt-5 text-[0.68rem] font-bold uppercase tracking-[0.14em] text-white/45">
-              Last updated 13 October 2026
+              Last updated 21 October 2026
             </p>
           </div>
         </section>

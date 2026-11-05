@@ -8,6 +8,10 @@ import {
 } from "lucide-react";
 import { useEffect, useState, type FormEvent } from "react";
 import type { PublicStoryComment, StoryEngagement as StoryEngagementData } from "@/db/story-engagement";
+import { TurnstileWidget } from "@/components/TurnstileWidget";
+
+const turnstileSiteKey =
+  process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY?.trim() ?? "";
 
 export function StoryEngagement({ storySlug }: { storySlug: string }) {
   const [engagement, setEngagement] = useState<StoryEngagementData | null>(null);
@@ -16,10 +20,19 @@ export function StoryEngagement({ storySlug }: { storySlug: string }) {
   const [commentBusy, setCommentBusy] = useState(false);
   const [notice, setNotice] = useState("");
   const [startedAt, setStartedAt] = useState(() => Date.now());
+  const [turnstileToken, setTurnstileToken] = useState("");
+  const [turnstileResetKey, setTurnstileResetKey] = useState(0);
 
   useEffect(() => {
     let active = true;
-    setReacted(window.localStorage.getItem(`slna-story-reaction:${storySlug}`) === "1");
+    queueMicrotask(() => {
+      if (active) {
+        setReacted(
+          window.localStorage.getItem(`slna-story-reaction:${storySlug}`) ===
+            "1",
+        );
+      }
+    });
     fetch(`/api/stories/${storySlug}/engagement`, { cache: "no-store" })
       .then(async (response) => {
         if (!response.ok) throw new Error("Unavailable");
@@ -81,6 +94,7 @@ export function StoryEngagement({ storySlug }: { storySlug: string }) {
           comment: values.get("comment"),
           website: values.get("website"),
           startedAt,
+          turnstileToken,
         }),
       });
       const result = (await response.json()) as { message?: string; error?: string };
@@ -91,6 +105,8 @@ export function StoryEngagement({ storySlug }: { storySlug: string }) {
     } catch (error) {
       setNotice(error instanceof Error ? error.message : "Your comment could not be submitted.");
     } finally {
+      setTurnstileToken("");
+      setTurnstileResetKey((current) => current + 1);
       setCommentBusy(false);
     }
   }
@@ -135,7 +151,13 @@ export function StoryEngagement({ storySlug }: { storySlug: string }) {
                 <span className="text-[0.62rem] font-bold uppercase tracking-[0.14em] text-school-navy">Comment</span>
                 <textarea name="comment" required minLength={10} maxLength={1500} rows={5} className="mt-2 w-full resize-y border border-school-navy/15 bg-white px-4 py-3 text-sm leading-6 outline-none focus:border-school-red" />
               </label>
-              <button disabled={commentBusy} className="inline-flex min-h-12 items-center justify-center gap-3 bg-school-red px-6 text-[0.66rem] font-bold uppercase tracking-[0.13em] text-white hover:bg-school-red-dark disabled:cursor-wait disabled:opacity-65">
+              <TurnstileWidget
+                siteKey={turnstileSiteKey}
+                action="story-comment"
+                resetKey={turnstileResetKey}
+                onToken={setTurnstileToken}
+              />
+              <button disabled={commentBusy || (Boolean(turnstileSiteKey) && !turnstileToken)} className="inline-flex min-h-12 items-center justify-center gap-3 bg-school-red px-6 text-[0.66rem] font-bold uppercase tracking-[0.13em] text-white hover:bg-school-red-dark disabled:cursor-wait disabled:opacity-65">
                 <Send aria-hidden="true" className="size-4" />
                 {commentBusy ? "Submitting…" : "Submit for review"}
               </button>

@@ -4,6 +4,8 @@ import {
   submitStoryComment,
   submitStoryReaction,
 } from "@/db/story-engagement";
+import { notifyPendingStoryComment } from "@/lib/admin-notifications";
+import { verifyTurnstile } from "@/lib/turnstile";
 
 const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -72,6 +74,17 @@ export async function POST(
       if (clean(payload.website, 120)) {
         return NextResponse.json({ ok: true }, { status: 201 });
       }
+      const verification = await verifyTurnstile(
+        request,
+        payload.turnstileToken,
+        "story-comment",
+      );
+      if (!verification.ok) {
+        return NextResponse.json(
+          { error: "Please complete the security check and try again." },
+          { status: 400 },
+        );
+      }
       if (!allowRequest(commentWindows, clientKey, 3, 10 * 60_000)) {
         return NextResponse.json(
           { error: "Please wait before submitting another comment." },
@@ -95,6 +108,7 @@ export async function POST(
       }
 
       await submitStoryComment(slug, { name, body });
+      await notifyPendingStoryComment({ storySlug: slug, name, body });
       return NextResponse.json(
         { ok: true, message: "Thank you. Your comment is awaiting review." },
         { status: 201 },
