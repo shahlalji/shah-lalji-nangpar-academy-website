@@ -263,22 +263,22 @@ insert into public.stories (
 values
 (
   'learning-through-discovery',
-  'Early Years',
+  'EYFS',
   'Learning Through Discovery',
   'How purposeful, hands-on experiences help young learners build language, confidence and curiosity from the very beginning.',
   '/images/school/early-years-fruit-learning.webp',
-  'Teachers and Early Years learners exploring fruit in the classroom',
+  'Teachers and EYFS learners exploring fruit in the classroom',
   '4 minute read',
   'When children can touch, talk, compare and create, learning becomes something they understand—not simply something they are told.',
   $story$[
     {
       "heading": "Learning begins with curiosity",
       "paragraphs": [
-        "In Early Years, the most meaningful questions often begin with something familiar. A piece of fruit, a colour, a sound or a story can become the starting point for language, number, observation and conversation.",
+        "In EYFS, the most meaningful questions often begin with something familiar. A piece of fruit, a colour, a sound or a story can become the starting point for language, number, observation and conversation.",
         "Purposeful activities give young learners room to notice differences, describe what they see and make connections with the world around them. The teacher guides the experience while each child remains an active participant."
       ],
       "image": "/images/school/early-years-fruit-learning.webp",
-      "imageAlt": "Early Years learners choosing and discussing fruit with their teachers"
+      "imageAlt": "EYFS learners choosing and discussing fruit with their teachers"
     },
     {
       "heading": "Confidence grows through participation",
@@ -292,11 +292,11 @@ values
     {
       "heading": "A foundation for the journey ahead",
       "paragraphs": [
-        "The Early Years experience is designed to prepare children for far more than the next classroom. Curiosity, communication, self-belief and the ability to work with others form a foundation that supports every later stage of learning.",
+        "The EYFS experience is designed to prepare children for far more than the next classroom. Curiosity, communication, self-belief and the ability to work with others form a foundation that supports every later stage of learning.",
         "At SLNA, those foundations grow within one connected community, allowing learners to move forward with familiarity, encouragement and a growing sense of possibility."
       ],
       "image": "/images/school/early-years-taekwondo.webp",
-      "imageAlt": "Early Years learners practising taekwondo together"
+      "imageAlt": "EYFS learners practising taekwondo together"
     }
   ]$story$::jsonb,
   'published'

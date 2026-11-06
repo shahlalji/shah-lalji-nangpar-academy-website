@@ -7,13 +7,12 @@ Academy. Built with Next.js, TypeScript, Tailwind CSS and Lucide icons.
 
 - Homepage: `/`
 - Our School: `/our-school`
-  - About Us: `/our-school/about-us`
+  - About Us & School History: `/our-school/about-us`
   - Message from the Board Chair: `/our-school/board-chair-message`
   - Message from the School Administrator: `/our-school/school-administrator-message`
   - Senior Management Team: `/our-school/senior-management-team`
 - Education: `/education`
-  - School Profile: `/education/school-profile`
-  - Early Years & Nursery: `/education/nursery`
+  - EYFS: `/education/eyfs`
   - Junior School: `/education/junior-school`
   - Senior School: `/education/senior-school`
   - IGCSE: `/education/igcse`

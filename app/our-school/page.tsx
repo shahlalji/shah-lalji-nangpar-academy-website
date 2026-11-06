@@ -86,7 +86,7 @@ export default function OurSchoolPage() {
               <p>
                 {school.name} is a co-educational day school serving families
                 from Nakuru and the surrounding region. The academy provides a
-                connected educational journey from Early Years through Junior
+                connected educational journey from EYFS through Junior
                 School, Senior School and A-Level.
               </p>
               <p>
@@ -97,10 +97,7 @@ export default function OurSchoolPage() {
               </p>
               <div className="flex flex-wrap gap-3 pt-2">
                 <ButtonLink href="/our-school/about-us" variant="ghost">
-                  About our leadership
-                </ButtonLink>
-                <ButtonLink href="/education/school-profile" variant="ghost">
-                  Read school profile
+                  Discover our story
                 </ButtonLink>
                 <ButtonLink
                   href="/our-school/senior-management-team"

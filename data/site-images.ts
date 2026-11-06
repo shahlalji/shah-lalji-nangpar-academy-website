@@ -1,5 +1,8 @@
 import { academicJourney, gallery, heroSlides, photoLibrary } from "@/data/site";
-import { contentPages } from "@/data/content-pages";
+import {
+  contentPages,
+  type ContentPage,
+} from "@/data/content-pages";
 
 export type SiteImageSlot = {
   key: string;
@@ -76,9 +79,21 @@ export const siteImageSlots: readonly SiteImageSlot[] = [
   ...Object.values(contentPages).map((page) => ({
     key: `content.${page.route.slice(1).replaceAll("/", ".")}.hero`,
     label: `${page.hero.eyebrow} hero`,
-    group: page.route.startsWith("/education") ? "Education" : "Other pages",
+    group: page.route.startsWith("/education")
+      ? "Education"
+      : page.route.startsWith("/our-school")
+        ? "Our School"
+        : "Other pages",
     defaultUrl: page.hero.image,
   })),
+  ...(Object.values(contentPages) as ContentPage[]).flatMap((page) =>
+    page.photoStory?.cards.map((card, index) => ({
+      key: `content.${page.route.slice(1).replaceAll("/", ".")}.development.${index + 1}`,
+      label: `${page.hero.eyebrow} development image ${index + 1} — ${card.title}`,
+      group: "Our School",
+      defaultUrl: card.image,
+    })) ?? [],
+  ),
 ];
 
 const managedImageKeys = new Set(siteImageSlots.map((slot) => slot.key));

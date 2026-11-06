@@ -128,8 +128,8 @@ export const seniorManagementTeam = [
   {
     slug: "head-of-early-years",
     name: "Ms Pheoby Marimu",
-    role: "Head of Early Years",
-    area: "Early Years",
+    role: "Head of EYFS",
+    area: "EYFS",
     description:
       "Leads the academy’s youngest learning community and its child-centred foundation programme.",
     confirmed: true,

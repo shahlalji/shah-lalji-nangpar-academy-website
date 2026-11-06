@@ -12,7 +12,7 @@ import { academicJourney } from "@/data/site";
 export const metadata: Metadata = {
   title: "Education | Shah Lalji Nangpar Academy",
   description:
-    "Explore the Cambridge Curriculum pathway at Shah Lalji Nangpar Academy, from Early Years through IGCSE and A-Level.",
+    "Explore the Cambridge Curriculum pathway at Shah Lalji Nangpar Academy, from EYFS through IGCSE and A-Level.",
   alternates: { canonical: "/education" },
 };
 

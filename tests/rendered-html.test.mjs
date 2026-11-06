@@ -25,13 +25,12 @@ async function render(pathname) {
 const routes = [
   ["/", /An Education That Inspires/],
   ["/our-school", /A community with a/],
-  ["/our-school/about-us", /Leadership grounded in/],
+  ["/our-school/about-us", /A Nakuru legacy with a/],
   ["/our-school/board-chair-message", /A shared commitment to/],
   ["/our-school/school-administrator-message", /A safe place to learn/],
   ["/our-school/senior-management-team", /Leadership across/],
   ["/education", /Learning that moves/],
-  ["/education/school-profile", /A Nakuru legacy with a/],
-  ["/education/nursery", /Curiosity starts/],
+  ["/education/eyfs", /Curiosity starts/],
   ["/education/junior-school", /Strong foundations for/],
   ["/education/senior-school", /Depth, direction and/],
   ["/education/igcse", /Globally recognised/],
@@ -63,6 +62,21 @@ for (const [pathname, heading] of routes) {
   });
 }
 
+test("the former School Profile URL redirects to the combined About Us page", async () => {
+  const response = await render("/education/school-profile");
+  assert.equal(response.status, 308);
+  assert.equal(
+    response.headers.get("location"),
+    "http://localhost/our-school/about-us",
+  );
+});
+
+test("the former Nursery URL redirects to the EYFS page", async () => {
+  const response = await render("/education/nursery");
+  assert.equal(response.status, 308);
+  assert.equal(response.headers.get("location"), "http://localhost/education/eyfs");
+});
+
 test("main navigation exposes every public detail page", async () => {
   const response = await render("/");
   const html = await response.text();
@@ -71,8 +85,7 @@ test("main navigation exposes every public detail page", async () => {
     "/our-school/board-chair-message",
     "/our-school/school-administrator-message",
     "/our-school/senior-management-team",
-    "/education/school-profile",
-    "/education/nursery",
+    "/education/eyfs",
     "/education/junior-school",
     "/education/senior-school",
     "/education/igcse",

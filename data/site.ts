@@ -3,7 +3,7 @@ export const school = {
   shortName: "SLNA",
   motto: "Striving for Excellence",
   description:
-    "A Cambridge Curriculum International School in Nakuru, Kenya, serving learners from Early Years to A-Level.",
+    "A Cambridge Curriculum International School in Nakuru, Kenya, serving more than 800 learners from EYFS to A-Level.",
   address: "P.O. Box 55 - 20100, Nakuru, Kenya",
   location: "Nakuru, Kenya",
   phoneDisplay: "+254 (0) 757 361 200",
@@ -43,7 +43,6 @@ export const navigation = [
         label: "Senior Management Team",
         href: "/our-school/senior-management-team",
       },
-      { label: "School Profile", href: "/education/school-profile" },
     ],
   },
   {
@@ -51,7 +50,7 @@ export const navigation = [
     href: "/education",
     children: [
       { label: "Education Overview", href: "/education" },
-      { label: "Early Years", href: "/education/nursery" },
+      { label: "EYFS", href: "/education/eyfs" },
       { label: "Junior School", href: "/education/junior-school" },
       { label: "Senior School", href: "/education/senior-school" },
       { label: "IGCSE", href: "/education/igcse" },
@@ -91,20 +90,20 @@ export const heroSlides = [
     src: "/images/school/senior-students-community.webp",
     alt: "Senior students gathered together in their red school blazers",
     label: "Our Community",
-    caption: "Growing with confidence from Early Years to A-Level",
+    caption: "Growing with confidence from EYFS to A-Level",
   },
 ] as const;
 
 export const academicJourney = [
   {
     index: "01",
-    title: "Early Years",
-    stage: "From age 2 · Early foundations",
+    title: "EYFS",
+    stage: "Playgroup · Nursery · Kindergarten · Reception",
     description:
       "A warm, purposeful start where play, curiosity and early learning build confidence for the journey ahead.",
     image: "/images/school/early-years-fruit-learning.webp",
-    alt: "Early Years learners exploring different fruits with their teachers",
-    href: "/education/nursery",
+    alt: "EYFS learners exploring different fruits with their teachers",
+    href: "/education/eyfs",
   },
   {
     index: "02",
@@ -139,7 +138,7 @@ export const academicJourney = [
 ] as const;
 
 export const educationLinks = [
-  { label: "Early Years", href: "/education/nursery" },
+  { label: "EYFS", href: "/education/eyfs" },
   { label: "Junior School", href: "/education/junior-school" },
   { label: "Senior School", href: "/education/senior-school" },
   { label: "IGCSE", href: "/education/igcse" },
@@ -187,7 +186,7 @@ export const statistics = [
   {
     label: "Academic divisions",
     value: "4",
-    note: "Early Years to A-Level",
+    note: "EYFS to A-Level",
   },
   {
     label: "Learner age range",
@@ -213,7 +212,7 @@ export const gallery = [
   },
   {
     src: "/images/school/early-years-taekwondo.webp",
-    alt: "Early Years learners practising taekwondo together",
+    alt: "EYFS learners practising taekwondo together",
   },
   {
     src: "/images/school/netball-training.webp",
@@ -242,9 +241,9 @@ export const photoLibrary = [
   },
   {
     src: "/images/school/early-years-fruit-learning.webp",
-    alt: "Early Years learners exploring different fruits with their teachers",
+    alt: "EYFS learners exploring different fruits with their teachers",
     title: "Learning through discovery",
-    category: "Early Years",
+    category: "EYFS",
   },
   {
     src: "/images/school/chess-club.webp",
@@ -278,15 +277,15 @@ export const photoLibrary = [
   },
   {
     src: "/images/school/early-years-taekwondo.webp",
-    alt: "Early Years learners practising taekwondo together",
+    alt: "EYFS learners practising taekwondo together",
     title: "Confidence in motion",
-    category: "Early Years",
+    category: "EYFS",
   },
   {
     src: "/images/school/careers-day.webp",
     alt: "Young learners dressed for different careers during a school activity",
     title: "Imagining the future",
-    category: "Early Years",
+    category: "EYFS",
   },
   {
     src: "/images/school/basketball-team.webp",

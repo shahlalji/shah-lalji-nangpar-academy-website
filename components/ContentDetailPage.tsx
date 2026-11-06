@@ -5,6 +5,7 @@ import { ButtonLink } from "@/components/ButtonLink";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { InteriorHero } from "@/components/InteriorHero";
+import { ManagedImage as Image } from "@/components/ManagedImage";
 import { SectionHeading } from "@/components/SectionHeading";
 import type { ContentPage } from "@/data/content-pages";
 
@@ -84,7 +85,76 @@ export function ContentDetailPage({ page }: ContentDetailPageProps) {
           </div>
         </section>
 
-        <section className="bg-white py-20 sm:py-24 lg:py-32">
+        {page.photoStory ? (
+          <section className="bg-school-stone pb-14 pt-20 sm:pb-16 sm:pt-24 lg:pb-16 lg:pt-32">
+            <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
+              <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-20">
+                <div className="lg:col-span-6">
+                  <SectionHeading
+                    eyebrow={page.photoStory.eyebrow}
+                    title={page.photoStory.title}
+                  />
+                </div>
+                <p className="text-base leading-8 text-school-muted lg:col-span-5 lg:col-start-8">
+                  {page.photoStory.description}
+                </p>
+              </div>
+
+              <div className="mt-14 grid gap-px overflow-hidden border border-school-navy/15 bg-school-navy/15 lg:grid-cols-12">
+                {page.photoStory.cards.map((card, index) => (
+                  <figure
+                    key={card.title}
+                    className={`group flex h-full flex-col bg-white ${
+                      index === 0
+                        ? "lg:col-span-7 lg:row-span-2"
+                        : "lg:col-span-5"
+                    }`}
+                  >
+                    <div
+                      className={`relative bg-school-cream ${
+                        index === 0
+                          ? "aspect-[4/3] lg:aspect-auto lg:min-h-[610px] lg:flex-1"
+                          : "aspect-[16/9] lg:min-h-[280px]"
+                      }`}
+                    >
+                      <Image
+                        src={card.image}
+                        imageKey={`content.${page.route
+                          .slice(1)
+                          .replaceAll("/", ".")}.development.${index + 1}`}
+                        alt={card.imageAlt}
+                        fill
+                        unoptimized
+                        sizes={
+                          index === 0
+                            ? "(max-width: 1024px) 100vw, 58vw"
+                            : "(max-width: 1024px) 100vw, 42vw"
+                        }
+                        className="object-contain"
+                      />
+                    </div>
+                    <figcaption className="border-t border-school-navy/10 p-6 sm:p-7">
+                      <p className="text-[0.64rem] font-bold uppercase tracking-[0.17em] text-school-red">
+                        {card.eyebrow}
+                      </p>
+                      <p className="mt-3 font-serif text-2xl leading-tight text-school-ink sm:text-3xl">
+                        {card.title}
+                      </p>
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
+            </div>
+          </section>
+        ) : null}
+
+        <section
+          className={
+            page.photoStory
+              ? "bg-white pb-20 pt-14 sm:pb-24 sm:pt-16 lg:pb-32 lg:pt-16"
+              : "bg-white py-20 sm:py-24 lg:py-32"
+          }
+        >
           <div className="mx-auto max-w-[1440px] divide-y divide-school-navy/15 px-4 sm:px-6 lg:px-10">
             {page.sections.map((section, index) => (
               <article

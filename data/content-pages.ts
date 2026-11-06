@@ -29,6 +29,17 @@ export type ContentPage = {
     value: string;
     note: string;
   }[];
+  photoStory?: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    cards: readonly {
+      eyebrow: string;
+      title: string;
+      image: string;
+      imageAlt: string;
+    }[];
+  };
   sections: readonly ContentPageSection[];
   relatedLinks?: readonly {
     eyebrow: string;
@@ -50,64 +61,109 @@ export const contentPages = {
     route: "/our-school/about-us",
     metaTitle: "About Us | Shah Lalji Nangpar Academy",
     metaDescription:
-      "Meet the leadership vision behind Shah Lalji Nangpar Academy and learn how care, partnership and excellence shape the school community.",
+      "Explore the history of Shah Lalji Nangpar Academy and the learning community it has grown into in Nakuru.",
     hero: {
       eyebrow: "About Us",
-      title: "Leadership grounded in",
-      accent: "purpose.",
+      title: "A Nakuru legacy with a",
+      accent: "global outlook.",
       description:
-        "A school community shaped by academic ambition, strong character, attentive pastoral care and a shared commitment to every learner.",
-      image: "/images/school/school-event-leadership.webp",
-      imageAlt: "School leaders speaking with learners during an academy event",
+        "A non-profit, co-educational day school serving more than 800 learners from EYFS through A-Level within one connected community.",
+      image: "/images/school/campus-assembly.webp",
+      imageAlt: "SLNA learners gathered in the academy courtyard",
       imagePosition: "object-center",
     },
     introduction: {
-      eyebrow: "A warm welcome",
-      title: "Learning, character and",
-      accent: "community.",
+      eyebrow: "Our history",
+      title: "A shared vision became",
+      accent: "a school.",
       paragraphs: [
-        "The Board of Governors and school leadership share a clear conviction: education should develop thoughtful, confident and compassionate young people, not academic results alone.",
-        "Teachers, families and leaders work in partnership to create a nurturing environment where learners can discover their strengths, grow in confidence and prepare for a changing world.",
+        "The vision for Shah Lalji Nangpar Academy took shape in 1988–1989 through the educational work of the Visa Oshwal Community. The Nangpar Raimal family of Nakuru Industries supported the project with land and substantial assistance.",
+        "Community contributions helped the original Nursery, Primary and Secondary blocks open in January 1994 with approximately 200 learners. From that beginning, the academy has grown into a connected school community serving more than 800 learners from EYFS through A-Level.",
       ],
     },
     highlights: [
       {
-        label: "Our standard",
-        value: "Excellence",
-        note: "Purposeful learning and continuous improvement",
+        label: "Opened",
+        value: "1994",
+        note: "The original three school blocks opened together",
       },
       {
-        label: "Our promise",
-        value: "Care",
-        note: "Safeguarding, wellbeing and pastoral support",
+        label: "Learners",
+        value: "800+",
+        note: "From EYFS through A-Level",
       },
       {
-        label: "Our strength",
-        value: "Partnership",
-        note: "Families, staff and learners working together",
+        label: "Pathway",
+        value: "Cambridge",
+        note: "Early learning to Sixth Form",
+      },
+      {
+        label: "School type",
+        value: "Non-profit",
+        note: "A co-educational day school in Nakuru",
       },
     ],
+    photoStory: {
+      eyebrow: "A school in motion",
+      title: "Growth you can see.",
+      description:
+        "The academy’s development is reflected in a campus that brings learning, community life and wider opportunity together. These spaces tell the story of a school that has continued to grow around its learners.",
+      cards: [
+        {
+          eyebrow: "The campus",
+          title: "A place built around community",
+          image: "/images/school/campus-assembly.webp",
+          imageAlt: "Learners gathered for assembly in the school courtyard",
+        },
+        {
+          eyebrow: "Wider opportunity",
+          title: "Facilities that extend learning",
+          image: "/images/school/swimming-competition.webp",
+          imageAlt: "Learners competing in the school swimming pool",
+        },
+        {
+          eyebrow: "Today",
+          title: "One journey from EYFS to A-Level",
+          image: "/images/school/senior-students-community.webp",
+          imageAlt: "Senior students together in their red school blazers",
+        },
+      ],
+    },
     sections: [
       {
-        eyebrow: "From the Board",
-        title: "An education that reaches beyond achievement.",
+        eyebrow: "How the campus grew",
+        title: "Development with purpose.",
         paragraphs: [
-          "The Board’s vision places each learner at the centre of school life. Strong values, modern facilities and quality programmes create the conditions for students to become capable contributors to society.",
-          "Investment in teaching, innovation and the wider school experience is guided by one goal: helping every learner develop the knowledge, skills and character needed for the opportunities ahead.",
+          "The campus expanded beyond its original teaching blocks to include an international-standard auditorium, a swimming pool and broad indoor and outdoor sports facilities.",
+          "Each stage of development has supported the same purpose: widening access to high-quality education and giving learners space to study, create, compete and grow.",
         ],
       },
       {
-        eyebrow: "From the school leadership",
-        title: "A safe and ambitious learning community.",
+        eyebrow: "The academy today",
+        title: "One community across every stage.",
         paragraphs: [
-          "Academic excellence and personal wellbeing are treated as inseparable. A rigorous curriculum, committed educators and varied co-curricular opportunities help learners build confidence and a lasting love of learning.",
-          "Safeguarding and pastoral care are central to the academy. Regular staff development, open communication with families and proactive student support help create a culture where children feel secure, respected and ready to learn.",
+          "Learners progress through a connected Cambridge educational journey while benefiting from specialist teaching, attentive pastoral care and opportunities beyond the classroom.",
+          "The academy continues to balance affordability, educational quality and preparation for further study, leadership and life.",
         ],
         points: [
-          "Respect, integrity and service",
-          "Strong relationships with parents and guardians",
-          "Support for emotional, social and academic growth",
-          "Curiosity, kindness and lifelong learning",
+          "EYFS: Playgroup, Nursery, Kindergarten and Reception",
+          "Junior School",
+          "Senior School and IGCSE",
+          "A-Level Sixth Form",
+        ],
+      },
+      {
+        eyebrow: "What guides us",
+        title: "Excellence supported by care.",
+        paragraphs: [
+          "Academic ambition and personal wellbeing are treated as inseparable. Committed educators, varied co-curricular opportunities and strong relationships with families help learners build confidence and a lasting love of learning.",
+          "Safeguarding, respect and service remain central to school life, creating an environment where young people feel secure, challenged and ready for the opportunities ahead.",
+        ],
+        points: [
+          "Purposeful learning and continuous improvement",
+          "Safeguarding, wellbeing and pastoral support",
+          "Partnership between learners, families and staff",
+          "Character, responsibility and service",
         ],
       },
     ],
@@ -135,106 +191,35 @@ export const contentPages = {
       },
     ],
   },
-  schoolProfile: {
-    route: "/education/school-profile",
-    metaTitle: "School Profile | Shah Lalji Nangpar Academy",
+  eyfs: {
+    route: "/education/eyfs",
+    metaTitle: "EYFS | Shah Lalji Nangpar Academy",
     metaDescription:
-      "Explore the history, community and Cambridge educational pathway of Shah Lalji Nangpar Academy in Nakuru.",
+      "Discover the child-centred EYFS programme across Playgroup, Nursery, Kindergarten and Reception at Shah Lalji Nangpar Academy.",
     hero: {
-      eyebrow: "School Profile",
-      title: "A Nakuru legacy with a",
-      accent: "global outlook.",
-      description:
-        "A non-profit, co-educational day school serving learners from Nursery through A-Level within one connected community.",
-      image: "/images/school/campus-assembly.webp",
-      imageAlt: "SLNA learners gathered in the academy courtyard",
-      imagePosition: "object-center",
-    },
-    introduction: {
-      eyebrow: "A legacy of quality education",
-      title: "Rooted in service.",
-      accent: "Built for possibility.",
-      paragraphs: [
-        "Shah Lalji Nangpar Academy serves approximately 700 learners from Nursery to A-Level. Its Cambridge pathway is supported by academic, creative and sporting opportunities across the school.",
-        "As a non-profit institution, the academy was established to broaden access to high-quality education in Nakuru while creating a learning environment equipped for the future.",
-      ],
-    },
-    highlights: [
-      {
-        label: "Learners",
-        value: "700",
-        note: "From Nursery through A-Level",
-      },
-      {
-        label: "School type",
-        value: "Co-educational",
-        note: "A day school in Nakuru",
-      },
-      {
-        label: "Opened",
-        value: "1994",
-        note: "Nursery, Primary and Secondary together",
-      },
-      {
-        label: "Pathway",
-        value: "Cambridge",
-        note: "Early learning to Sixth Form",
-      },
-    ],
-    sections: [
-      {
-        eyebrow: "Our history",
-        title: "A shared vision became a school.",
-        paragraphs: [
-          "The vision for the academy took shape in 1988–1989 through the educational work of the Visa Oshwal Community. The Nangpar Raimal family of Nakuru Industries supported the project with land and substantial assistance.",
-          "Community contributions helped the Nursery, Primary and Secondary blocks open in January 1994 with approximately 200 learners. The campus later expanded to include an international-standard auditorium, swimming pool and broad indoor and outdoor sports facilities.",
-        ],
-      },
-      {
-        eyebrow: "Today",
-        title: "One community across every stage.",
-        paragraphs: [
-          "Learners progress through a connected educational journey while benefiting from specialist teaching, strong facilities and opportunities beyond the classroom.",
-          "The academy continues to balance affordability, educational quality and a commitment to preparing young people for further study, leadership and life.",
-        ],
-        points: [
-          "Nursery and Early Years",
-          "Junior School",
-          "Senior School and IGCSE",
-          "A-Level Sixth Form",
-        ],
-      },
-    ],
-  },
-  nursery: {
-    route: "/education/nursery",
-    metaTitle: "Early Years & Nursery | Shah Lalji Nangpar Academy",
-    metaDescription:
-      "Discover the child-centred Early Years and Nursery programme for learners aged 2–6 at Shah Lalji Nangpar Academy.",
-    hero: {
-      eyebrow: "Early Years",
+      eyebrow: "EYFS",
       title: "Curiosity starts",
       accent: "here.",
       description:
-        "A warm, play-rich and inquiry-led beginning for children aged 2–6, with both half-day and full-day options.",
+        "A warm, play-rich and inquiry-led beginning across Playgroup, Nursery, Kindergarten and Reception.",
       image: "/images/school/early-years-fruit-learning.webp",
-      imageAlt: "Early Years learners exploring fruit with their teachers",
+      imageAlt: "EYFS learners exploring fruit with their teachers",
       imagePosition: "object-center",
     },
     introduction: {
-      eyebrow: "Nursery School",
+      eyebrow: "Four connected classes",
       title: "A confident first",
       accent: "step.",
       paragraphs: [
-        "The Early Years programme combines the Cambridge Early Years Foundation approach with Reggio Emilia-inspired learning in a secure, inclusive and stimulating environment.",
+        "The EYFS programme spans Playgroup, Nursery, Kindergarten and Reception, giving every child a clear and carefully supported progression into Junior School.",
         "Children learn through purposeful play, investigation, creative expression and positive relationships. The programme supports communication, early literacy and numeracy, physical development and growing independence.",
       ],
     },
     highlights: [
       {
-        label: "Age range",
-        value: "2–6",
-        note: "Playgroup, Nursery and Kindergarten",
+        label: "Classes",
+        value: "Four",
+        note: "Playgroup, Nursery, Kindergarten and Reception",
       },
       {
         label: "Timetable",
@@ -248,6 +233,19 @@ export const contentPages = {
       },
     ],
     sections: [
+      {
+        eyebrow: "Progression",
+        title: "Four classes, one thoughtful journey.",
+        paragraphs: [
+          "Each class builds naturally on the last, with experiences shaped around children’s changing language, social, physical and learning needs.",
+        ],
+        points: [
+          "Playgroup",
+          "Nursery",
+          "Kindergarten",
+          "Reception",
+        ],
+      },
       {
         eyebrow: "How children learn",
         title: "Active discovery, thoughtful guidance.",
@@ -281,13 +279,13 @@ export const contentPages = {
     route: "/education/junior-school",
     metaTitle: "Junior School | Shah Lalji Nangpar Academy",
     metaDescription:
-      "Explore the broad, inquiry-led Junior School programme from Kindergarten to Year 6 at Shah Lalji Nangpar Academy.",
+      "Explore the broad, inquiry-led Junior School programme from Year 1 to Year 6 at Shah Lalji Nangpar Academy.",
     hero: {
       eyebrow: "Junior School",
       title: "Strong foundations for",
       accent: "growing minds.",
       description:
-        "An engaging primary programme from Kindergarten to Year 6 that builds knowledge, inquiry, confidence and independence.",
+        "An engaging primary programme from Year 1 to Year 6 that builds knowledge, inquiry, confidence and independence.",
       image: "/images/school/chess-club.webp",
       imageAlt: "Junior School learners concentrating during a chess activity",
       imagePosition: "object-center",
@@ -304,7 +302,7 @@ export const contentPages = {
     highlights: [
       {
         label: "Year groups",
-        value: "KG–Year 6",
+        value: "Year 1–6",
         note: "A connected primary journey",
       },
       {
@@ -685,7 +683,7 @@ export const contentPages = {
           "Caution money is described as a one-time refundable payment. The school will confirm the applicable terms and refund conditions.",
         ],
         points: [
-          "Nursery School — KSh 40,000",
+          "EYFS — KSh 40,000",
           "Junior School — KSh 60,000",
           "Senior School — KSh 100,000",
         ],
@@ -699,8 +697,8 @@ export const contentPages = {
         points: [
           "Junior School interview — KSh 3,000",
           "Senior School interview — KSh 5,000",
-          "Nursery and KG afternoon classes — KSh 6,000",
-          "Nursery and Junior workbooks — KSh 2,000 annually",
+          "Nursery and Kindergarten afternoon classes — KSh 6,000",
+          "EYFS and Junior workbooks — KSh 2,000 annually",
         ],
       },
     ],

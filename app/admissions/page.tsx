@@ -86,7 +86,7 @@ export default function AdmissionsPage() {
                     </span>
                   </>
                 }
-                description="Applications are considered for Early Years, Junior School, Senior School and A-Level, subject to the availability of places."
+                description="Applications are considered for EYFS, Junior School, Senior School and A-Level, subject to the availability of places."
               />
             </div>
             <div className="self-end lg:col-span-4 lg:col-start-9">
@@ -95,7 +95,7 @@ export default function AdmissionsPage() {
                   Entry ages
                 </p>
                 <p className="mt-4 font-serif text-2xl leading-tight text-school-ink">
-                  Early Years to Junior School
+                  EYFS to Junior School
                 </p>
                 <p className="mt-2 text-sm text-school-muted">Ages 2–11</p>
                 <p className="mt-5 font-serif text-2xl leading-tight text-school-ink">

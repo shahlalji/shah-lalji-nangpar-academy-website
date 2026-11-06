@@ -18,7 +18,7 @@ const geistSans = Geist({
 
 const title = "Shah Lalji Nangpar Academy | Cambridge School in Nakuru";
 const description =
-  "Shah Lalji Nangpar Academy is a Cambridge Curriculum International School in Nakuru, Kenya, serving learners from Early Years to A-Level.";
+  "Shah Lalji Nangpar Academy is a Cambridge Curriculum International School in Nakuru, Kenya, serving more than 800 learners from EYFS to A-Level.";
 
 export async function generateMetadata(): Promise<Metadata> {
   const requestHeaders = await headers();
@@ -40,7 +40,7 @@ export async function generateMetadata(): Promise<Metadata> {
       "Cambridge school Nakuru",
       "international school Nakuru",
       "Cambridge Curriculum Kenya",
-      "Early Years to A-Level",
+      "EYFS to A-Level",
     ],
     authors: [{ name: "Shah Lalji Nangpar Academy" }],
     creator: "Shah Lalji Nangpar Academy",
