@@ -321,19 +321,15 @@ export async function getPublishedEvents(): Promise<DashboardEvent[]> {
   const now = Date.now();
   return (data as EventRow[])
     .map(mapEvent)
-    .sort((first, second) => {
-      const firstStart = new Date(first.startsAt).getTime();
-      const secondStart = new Date(second.startsAt).getTime();
-      const firstEnds = new Date(first.endsAt ?? first.startsAt).getTime();
-      const secondEnds = new Date(second.endsAt ?? second.startsAt).getTime();
-      const firstHasPassed = firstEnds < now;
-      const secondHasPassed = secondEnds < now;
-
-      if (firstHasPassed !== secondHasPassed) return firstHasPassed ? 1 : -1;
-      return firstHasPassed
-        ? secondStart - firstStart
-        : firstStart - secondStart;
-    });
+    .filter(
+      (event) =>
+        new Date(event.endsAt ?? event.startsAt).getTime() >= now,
+    )
+    .sort(
+      (first, second) =>
+        new Date(first.startsAt).getTime() -
+        new Date(second.startsAt).getTime(),
+    );
 }
 
 export async function createEvent(input: EventMutationInput, createdBy: string) {

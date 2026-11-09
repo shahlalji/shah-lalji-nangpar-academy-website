@@ -111,6 +111,13 @@ test("enrichment page presents the whole-school programme by section", async () 
   assert.match(html, /Message from/);
 });
 
+test("the public events page does not present expired events", async () => {
+  const response = await render("/events");
+  const html = await response.text();
+
+  assert.doesNotMatch(html, /Recently held/);
+});
+
 test("the former School Life URL redirects to Sports and Co-curricular", async () => {
   const response = await render("/school-life");
   assert.equal(response.status, 308);
