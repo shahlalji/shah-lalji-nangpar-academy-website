@@ -31,7 +31,7 @@ export async function PATCH(
     const input = parseStoryInput(payload);
     if (!input) {
       return Response.json(
-        { error: "Please complete the required story fields correctly." },
+        { error: "Please add the story title, author and content." },
         { status: 400 },
       );
     }

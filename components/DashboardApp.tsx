@@ -1028,24 +1028,39 @@ function StoryCreateForm({
     const formData = new FormData(event.currentTarget);
     const values = Object.fromEntries(formData.entries());
     const heroFile = formData.get("heroFile");
+    const title = String(values.title ?? "").trim();
+    const storyText = sections
+      .flatMap((section) => section.paragraphs)
+      .map((paragraph) => paragraph.trim())
+      .filter(Boolean)
+      .join(" ");
+    const excerpt = String(values.excerpt ?? "").trim() || buildStoryExcerpt(storyText);
+    const publishedAtValue = String(values.publishedAt ?? "").trim();
+    const image = String(values.image ?? "").trim() || "/images/school/campus-assembly.webp";
+    const alt = String(values.alt ?? "").trim() || `${title} at Shah Lalji Nangpar Academy`;
     onSubmit({
       values: {
-        title: String(values.title ?? ""),
-        author: String(values.author ?? ""),
-        publishedAt: new Date(String(values.publishedAt ?? "")).toISOString(),
-        slug: String(values.slug ?? ""),
-        category: String(values.category ?? ""),
-        readTime: String(values.readTime ?? ""),
-        image: String(values.image ?? ""),
-        alt: String(values.alt ?? ""),
-        excerpt: String(values.excerpt ?? ""),
-        quote: String(values.quote ?? ""),
+        title,
+        author: String(values.author ?? "").trim() || "SLNA Communications Team",
+        publishedAt: publishedAtValue
+          ? new Date(publishedAtValue).toISOString()
+          : new Date().toISOString(),
+        slug: String(values.slug ?? "").trim() || slugify(title),
+        category: String(values.category ?? "").trim() || "School News",
+        readTime: String(values.readTime ?? "").trim() || estimateStoryReadTime(storyText),
+        image,
+        alt,
+        excerpt,
+        quote: String(values.quote ?? "").trim() || excerpt,
         status: values.status === "published" ? "published" : "draft",
         sections: sections.map((section) => ({
-          heading: section.heading,
-          paragraphs: section.paragraphs.filter(Boolean),
+          heading: section.heading.trim() || "The story",
+          paragraphs: section.paragraphs.map((paragraph) => paragraph.trim()).filter(Boolean),
           ...(section.image
-            ? { image: section.image, imageAlt: section.imageAlt }
+            ? {
+                image: section.image,
+                imageAlt: section.imageAlt.trim() || `${title} supporting photograph`,
+              }
             : {}),
         })),
       },
@@ -1079,171 +1094,321 @@ function StoryCreateForm({
         />
       </div>
 
-      <div className="mt-7 grid gap-5 md:grid-cols-2">
-        <DashboardField label="Title">
-          <input
-            className={inputClass}
-            name="title"
-            defaultValue={story?.title}
-            required
-            onBlur={(event) => {
-              const form = event.currentTarget.form;
-              const slugInput = form?.elements.namedItem(
-                "slug",
-              ) as HTMLInputElement | null;
-              if (slugInput && !slugInput.value) {
-                slugInput.value = slugify(event.currentTarget.value);
-              }
-            }}
-          />
-        </DashboardField>
-        <DashboardField label="Web address">
-          <input
-            className={inputClass}
-            name="slug"
-            defaultValue={story?.slug}
-            placeholder="example-story-title"
-            pattern="[a-z0-9]+(?:-[a-z0-9]+)*"
-            required
-          />
-        </DashboardField>
-        <DashboardField label="Category">
-          <input
-            className={inputClass}
-            name="category"
-            defaultValue={story?.category}
-            placeholder="School Life"
-            required
-          />
-        </DashboardField>
-        <DashboardField label="Author">
-          <input
-            className={inputClass}
-            name="author"
-            defaultValue={story?.author ?? "SLNA Communications Team"}
-            placeholder="Writer or department name"
-            maxLength={120}
-            required
-          />
-        </DashboardField>
-        <DashboardField label="Published date">
-          <input
-            className={inputClass}
-            type="datetime-local"
-            name="publishedAt"
-            defaultValue={toLocalDateTime(story?.publishedAt ?? new Date().toISOString())}
-            required
-          />
-        </DashboardField>
-        <DashboardField label="Read time">
-          <input
-            className={inputClass}
-            name="readTime"
-            defaultValue={story?.readTime ?? "4 minute read"}
-          />
-        </DashboardField>
-        <DashboardField label="Current hero image path or URL">
-          <input
-            className={inputClass}
-            name="image"
-            defaultValue={story?.image ?? "/images/school/campus-assembly.webp"}
-            required
-          />
-        </DashboardField>
-        <DashboardField label="Upload a new hero image from this device">
-          <input
-            type="file"
-            name="heroFile"
-            accept="image/jpeg,image/png,image/webp,image/avif"
-            className="block min-h-11 w-full bg-white px-3 py-2 text-xs font-normal normal-case tracking-normal text-school-ink file:mr-3 file:border-0 file:bg-school-cream file:px-3 file:py-2 file:text-[0.6rem] file:font-bold file:uppercase file:text-school-navy"
-          />
-        </DashboardField>
-        <DashboardField label="Image description">
-          <input
-            className={inputClass}
-            name="alt"
-            defaultValue={story?.alt}
-            placeholder="Describe the photograph"
-            required
-          />
-        </DashboardField>
-      </div>
-
-      <div className="mt-5 grid gap-5">
-        <DashboardField label="Story introduction">
-          <textarea
-            className={`${inputClass} min-h-28 resize-y`}
-            name="excerpt"
-            defaultValue={story?.excerpt}
-            required
-          />
-        </DashboardField>
-        <DashboardField label="Pull quote">
-          <textarea
-            className={`${inputClass} min-h-24 resize-y`}
-            name="quote"
-            defaultValue={story?.quote}
-          />
-        </DashboardField>
-      </div>
-
-      <div className="mt-8 border-t border-white/15 pt-7">
-        <div className="flex items-center justify-between gap-4">
-          <div>
-            <p className="text-[0.62rem] font-bold uppercase tracking-[0.16em] text-school-gold">Full story</p>
-            <p className="mt-2 text-sm text-white/65">Edit every section. Separate paragraphs with a blank line.</p>
+      <div className="mt-7 rounded-sm border border-white/15 bg-white/6 p-5 sm:p-6">
+        <p className="text-[0.62rem] font-bold uppercase tracking-[0.16em] text-school-gold">
+          Only three things are required
+        </p>
+        <p className="mt-2 text-sm leading-6 text-white/65">
+          Add the title, author and story. The website prepares the address,
+          introduction, publication date and reading time automatically.
+        </p>
+        <div className="mt-5 grid gap-5 md:grid-cols-2">
+          <DashboardField label="Story title">
+            <input
+              className={inputClass}
+              name="title"
+              defaultValue={story?.title}
+              placeholder="Enter the story title"
+              required
+            />
+          </DashboardField>
+          <DashboardField label="Author">
+            <input
+              className={inputClass}
+              name="author"
+              defaultValue={story?.author ?? "SLNA Communications Team"}
+              placeholder="Writer or department name"
+              maxLength={120}
+              required
+            />
+          </DashboardField>
+          <div className="md:col-span-2">
+            <DashboardField label="Story content">
+              <textarea
+                className={`${inputClass} min-h-64 resize-y leading-7`}
+                value={sections[0]?.paragraphs.join("\n\n") ?? ""}
+                placeholder="Write or paste the full story here. Leave a blank line between paragraphs."
+                required
+                onChange={(event) =>
+                  setSections((items) =>
+                    items.map((item, itemIndex) =>
+                      itemIndex === 0
+                        ? {
+                            ...item,
+                            paragraphs: event.target.value
+                              .split(/\n\s*\n/)
+                              .map((paragraph) => paragraph.trim()),
+                          }
+                        : item,
+                    ),
+                  )
+                }
+              />
+            </DashboardField>
           </div>
-          <button
-            type="button"
-            onClick={() => setSections((items) => [...items, { heading: "", paragraphs: [""], image: "", imageAlt: "" }])}
-            className="inline-flex min-h-10 items-center gap-2 border border-white/25 px-4 text-[0.62rem] font-bold uppercase tracking-[0.1em] text-white hover:bg-white hover:text-school-navy"
-          >
-            <Plus aria-hidden="true" className="size-4" /> Add section
-          </button>
-        </div>
-        <div className="mt-5 grid gap-5">
-          {sections.map((section, index) => (
-            <section key={index} className="border border-white/15 bg-white/6 p-5">
-              <div className="flex items-center justify-between gap-4">
-                <p className="text-xs font-bold uppercase tracking-[0.12em] text-white/70">Section {index + 1}</p>
-                {sections.length > 1 ? (
-                  <button type="button" onClick={() => setSections((items) => items.filter((_, itemIndex) => itemIndex !== index))} className="inline-flex items-center gap-2 text-xs font-bold uppercase text-school-gold hover:text-white">
-                    <Trash2 aria-hidden="true" className="size-3.5" /> Remove
-                  </button>
-                ) : null}
-              </div>
-              <div className="mt-4 grid gap-4 md:grid-cols-2">
-                <DashboardField label="Section heading">
-                  <input className={inputClass} value={section.heading} required onChange={(event) => setSections((items) => items.map((item, itemIndex) => itemIndex === index ? { ...item, heading: event.target.value } : item))} />
-                </DashboardField>
-                <DashboardField label="Current section image path or URL (optional)">
-                  <input className={inputClass} value={section.image} onChange={(event) => setSections((items) => items.map((item, itemIndex) => itemIndex === index ? { ...item, image: event.target.value } : item))} />
-                </DashboardField>
-                <div className="md:col-span-2">
-                  <DashboardField label="Upload a new section image from this device (optional)">
-                    <input
-                      type="file"
-                      name={`sectionFile-${index}`}
-                      accept="image/jpeg,image/png,image/webp,image/avif"
-                      className="block min-h-11 w-full bg-white px-3 py-2 text-xs font-normal normal-case tracking-normal text-school-ink file:mr-3 file:border-0 file:bg-school-cream file:px-3 file:py-2 file:text-[0.6rem] file:font-bold file:uppercase file:text-school-navy"
-                    />
-                  </DashboardField>
-                </div>
-                <div className="md:col-span-2">
-                  <DashboardField label="Paragraphs">
-                    <textarea className={`${inputClass} min-h-32 resize-y`} value={section.paragraphs.join("\n\n")} required onChange={(event) => setSections((items) => items.map((item, itemIndex) => itemIndex === index ? { ...item, paragraphs: event.target.value.split(/\n\s*\n/).map((paragraph) => paragraph.trim()) } : item))} />
-                  </DashboardField>
-                </div>
-                <div className="md:col-span-2">
-                  <DashboardField label="Section image description">
-                    <input className={inputClass} value={section.imageAlt} onChange={(event) => setSections((items) => items.map((item, itemIndex) => itemIndex === index ? { ...item, imageAlt: event.target.value } : item))} />
-                  </DashboardField>
-                </div>
-              </div>
-            </section>
-          ))}
+          <div className="md:col-span-2">
+            <DashboardField label="Main photo (optional)">
+              <input
+                type="file"
+                name="heroFile"
+                accept="image/jpeg,image/png,image/webp,image/avif"
+                className="block min-h-11 w-full bg-white px-3 py-2 text-xs font-normal normal-case tracking-normal text-school-ink file:mr-3 file:border-0 file:bg-school-cream file:px-3 file:py-2 file:text-[0.6rem] file:font-bold file:uppercase file:text-school-navy"
+              />
+            </DashboardField>
+          </div>
         </div>
       </div>
+
+      <details className="mt-6 border border-white/15 bg-white/6">
+        <summary className="cursor-pointer px-5 py-4 text-[0.65rem] font-bold uppercase tracking-[0.13em] text-school-gold marker:text-white">
+          Optional publishing settings
+        </summary>
+        <div className="grid gap-5 border-t border-white/15 p-5 md:grid-cols-2">
+          <DashboardField label="Category">
+            <input
+              className={inputClass}
+              name="category"
+              defaultValue={story?.category ?? "School News"}
+              placeholder="School News"
+            />
+          </DashboardField>
+          <DashboardField label="Publication date">
+            <input
+              className={inputClass}
+              type="datetime-local"
+              name="publishedAt"
+              defaultValue={toLocalDateTime(story?.publishedAt ?? new Date().toISOString())}
+            />
+          </DashboardField>
+          <DashboardField label="Web address">
+            <input
+              className={inputClass}
+              name="slug"
+              defaultValue={story?.slug}
+              placeholder="Created automatically from the title"
+              pattern="[a-z0-9]+(?:-[a-z0-9]+)*"
+            />
+          </DashboardField>
+          <DashboardField label="Read time">
+            <input
+              className={inputClass}
+              name="readTime"
+              defaultValue={story?.readTime}
+              placeholder="Calculated automatically"
+            />
+          </DashboardField>
+          <div className="md:col-span-2">
+            <DashboardField label="Short introduction">
+              <textarea
+                className={`${inputClass} min-h-24 resize-y`}
+                name="excerpt"
+                defaultValue={story?.excerpt}
+                placeholder="Generated from the story if left empty"
+              />
+            </DashboardField>
+          </div>
+          <div className="md:col-span-2">
+            <DashboardField label="Pull quote">
+              <textarea
+                className={`${inputClass} min-h-24 resize-y`}
+                name="quote"
+                defaultValue={story?.quote}
+                placeholder="Optional highlighted sentence"
+              />
+            </DashboardField>
+          </div>
+          <DashboardField label="Current main image path or URL">
+            <input
+              className={inputClass}
+              name="image"
+              defaultValue={story?.image ?? "/images/school/campus-assembly.webp"}
+            />
+          </DashboardField>
+          <DashboardField label="Main image description">
+            <input
+              className={inputClass}
+              name="alt"
+              defaultValue={story?.alt}
+              placeholder="Generated from the title if left empty"
+            />
+          </DashboardField>
+          <DashboardField label="First section heading">
+            <input
+              className={inputClass}
+              value={sections[0]?.heading ?? "The story"}
+              placeholder="The story"
+              onChange={(event) =>
+                setSections((items) =>
+                  items.map((item, itemIndex) =>
+                    itemIndex === 0 ? { ...item, heading: event.target.value } : item,
+                  ),
+                )
+              }
+            />
+          </DashboardField>
+          <DashboardField label="First section image (optional)">
+            <input
+              type="file"
+              name="sectionFile-0"
+              accept="image/jpeg,image/png,image/webp,image/avif"
+              className="block min-h-11 w-full bg-white px-3 py-2 text-xs font-normal normal-case tracking-normal text-school-ink file:mr-3 file:border-0 file:bg-school-cream file:px-3 file:py-2 file:text-[0.6rem] file:font-bold file:uppercase file:text-school-navy"
+            />
+          </DashboardField>
+          <DashboardField label="Current first section image path or URL">
+            <input
+              className={inputClass}
+              value={sections[0]?.image ?? ""}
+              onChange={(event) =>
+                setSections((items) =>
+                  items.map((item, itemIndex) =>
+                    itemIndex === 0 ? { ...item, image: event.target.value } : item,
+                  ),
+                )
+              }
+            />
+          </DashboardField>
+          <DashboardField label="First section image description">
+            <input
+              className={inputClass}
+              value={sections[0]?.imageAlt ?? ""}
+              onChange={(event) =>
+                setSections((items) =>
+                  items.map((item, itemIndex) =>
+                    itemIndex === 0 ? { ...item, imageAlt: event.target.value } : item,
+                  ),
+                )
+              }
+            />
+          </DashboardField>
+
+          <div className="md:col-span-2 border-t border-white/15 pt-5">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <p className="text-[0.62rem] font-bold uppercase tracking-[0.16em] text-school-gold">
+                  Additional sections
+                </p>
+                <p className="mt-2 text-sm text-white/65">
+                  Optional divisions for longer stories.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() =>
+                  setSections((items) => [
+                    ...items,
+                    { heading: "", paragraphs: [""], image: "", imageAlt: "" },
+                  ])
+                }
+                className="inline-flex min-h-10 items-center gap-2 border border-white/25 px-4 text-[0.62rem] font-bold uppercase tracking-[0.1em] text-white hover:bg-white hover:text-school-navy"
+              >
+                <Plus aria-hidden="true" className="size-4" /> Add section
+              </button>
+            </div>
+            <div className="mt-5 grid gap-5">
+              {sections.slice(1).map((section, sectionIndex) => {
+                const index = sectionIndex + 1;
+                return (
+                  <section key={index} className="border border-white/15 bg-white/6 p-5">
+                    <div className="flex items-center justify-between gap-4">
+                      <p className="text-xs font-bold uppercase tracking-[0.12em] text-white/70">
+                        Additional section {index}
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setSections((items) =>
+                            items.filter((_, itemIndex) => itemIndex !== index),
+                          )
+                        }
+                        className="inline-flex items-center gap-2 text-xs font-bold uppercase text-school-gold hover:text-white"
+                      >
+                        <Trash2 aria-hidden="true" className="size-3.5" /> Remove
+                      </button>
+                    </div>
+                    <div className="mt-4 grid gap-4 md:grid-cols-2">
+                      <DashboardField label="Section heading">
+                        <input
+                          className={inputClass}
+                          value={section.heading}
+                          onChange={(event) =>
+                            setSections((items) =>
+                              items.map((item, itemIndex) =>
+                                itemIndex === index
+                                  ? { ...item, heading: event.target.value }
+                                  : item,
+                              ),
+                            )
+                          }
+                        />
+                      </DashboardField>
+                      <DashboardField label="Section photo (optional)">
+                        <input
+                          type="file"
+                          name={`sectionFile-${index}`}
+                          accept="image/jpeg,image/png,image/webp,image/avif"
+                          className="block min-h-11 w-full bg-white px-3 py-2 text-xs font-normal normal-case tracking-normal text-school-ink file:mr-3 file:border-0 file:bg-school-cream file:px-3 file:py-2 file:text-[0.6rem] file:font-bold file:uppercase file:text-school-navy"
+                        />
+                      </DashboardField>
+                      <div className="md:col-span-2">
+                        <DashboardField label="Section content">
+                          <textarea
+                            className={`${inputClass} min-h-32 resize-y`}
+                            value={section.paragraphs.join("\n\n")}
+                            onChange={(event) =>
+                              setSections((items) =>
+                                items.map((item, itemIndex) =>
+                                  itemIndex === index
+                                    ? {
+                                        ...item,
+                                        paragraphs: event.target.value
+                                          .split(/\n\s*\n/)
+                                          .map((paragraph) => paragraph.trim()),
+                                      }
+                                    : item,
+                                ),
+                              )
+                            }
+                          />
+                        </DashboardField>
+                      </div>
+                      <DashboardField label="Current section image path or URL">
+                        <input
+                          className={inputClass}
+                          value={section.image}
+                          onChange={(event) =>
+                            setSections((items) =>
+                              items.map((item, itemIndex) =>
+                                itemIndex === index
+                                  ? { ...item, image: event.target.value }
+                                  : item,
+                              ),
+                            )
+                          }
+                        />
+                      </DashboardField>
+                      <DashboardField label="Section image description">
+                        <input
+                          className={inputClass}
+                          value={section.imageAlt}
+                          onChange={(event) =>
+                            setSections((items) =>
+                              items.map((item, itemIndex) =>
+                                itemIndex === index
+                                  ? { ...item, imageAlt: event.target.value }
+                                  : item,
+                              ),
+                            )
+                          }
+                        />
+                      </DashboardField>
+                    </div>
+                  </section>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </details>
 
       <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <label className="flex items-center gap-3 text-sm text-white/72">
@@ -2706,4 +2871,16 @@ function slugify(value: string) {
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
+}
+
+function buildStoryExcerpt(value: string) {
+  const trimmed = value.trim();
+  if (trimmed.length <= 260) return trimmed;
+  return `${trimmed.slice(0, 257).replace(/\s+\S*$/, "")}…`;
+}
+
+function estimateStoryReadTime(value: string) {
+  const words = value.trim() ? value.trim().split(/\s+/).length : 0;
+  const minutes = Math.max(1, Math.ceil(words / 200));
+  return `${minutes} minute read`;
 }
