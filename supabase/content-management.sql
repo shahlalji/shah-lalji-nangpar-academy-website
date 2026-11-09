@@ -1,8 +1,23 @@
 -- Run once in Supabase Dashboard > SQL Editor.
--- Repeatable: adds story publication dates and editable core website pages.
+-- Repeatable: adds story publication dates, authors and editable core website pages.
 
 alter table public.stories
   add column if not exists published_at timestamptz;
+
+alter table public.stories
+  add column if not exists author_name text not null
+  default 'SLNA Communications Team';
+
+alter table public.stories
+  drop constraint if exists stories_author_name_check;
+
+alter table public.stories
+  add constraint stories_author_name_check
+  check (char_length(author_name) between 2 and 120);
+
+update public.stories
+set author_name = 'SLNA Communications Team'
+where btrim(author_name) = '';
 
 update public.stories
 set published_at = created_at

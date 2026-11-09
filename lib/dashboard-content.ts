@@ -9,6 +9,7 @@ export function parseStoryInput(payload: Record<string, unknown>): StoryMutation
   const publishedAt = payload.publishedAt ? parseDate(payload.publishedAt) : null;
   const slug = clean(payload.slug, 140).toLowerCase();
   const category = clean(payload.category, 80);
+  const author = clean(payload.author, 120);
   const excerpt = clean(payload.excerpt, 500);
   const image = clean(payload.image, 500);
   const alt = clean(payload.alt, 220);
@@ -26,6 +27,7 @@ export function parseStoryInput(payload: Record<string, unknown>): StoryMutation
     !title ||
     !validSlug(slug) ||
     !category ||
+    !author ||
     !excerpt ||
     !validImageUrl(image) ||
     !alt ||
@@ -39,6 +41,7 @@ export function parseStoryInput(payload: Record<string, unknown>): StoryMutation
     publishedAt: publishedAt ?? undefined,
     slug,
     category,
+    author,
     excerpt,
     image,
     alt,

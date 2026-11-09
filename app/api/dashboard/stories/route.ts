@@ -36,6 +36,12 @@ export async function POST(request: Request) {
     return Response.json({ story }, { status: 201 });
   } catch (error) {
     const message = error instanceof Error ? error.message : "";
+    if (message.toLowerCase().includes("author_name")) {
+      return Response.json(
+        { error: "Story authors are not ready. Run supabase/content-management.sql again." },
+        { status: 503 },
+      );
+    }
     if (message.toLowerCase().includes("unique")) {
       return Response.json(
         { error: "A story already uses that web address." },

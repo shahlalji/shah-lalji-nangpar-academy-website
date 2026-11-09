@@ -118,6 +118,16 @@ test("the public events page does not present expired events", async () => {
   assert.doesNotMatch(html, /Recently held/);
 });
 
+test("story cards and articles display their authors", async () => {
+  const listingResponse = await render("/stories");
+  const listingHtml = await listingResponse.text();
+  assert.match(listingHtml, /SLNA Communications Team/);
+
+  const articleResponse = await render("/stories/learning-through-discovery");
+  const articleHtml = await articleResponse.text();
+  assert.match(articleHtml, /SLNA Communications Team/);
+});
+
 test("the former School Life URL redirects to Sports and Co-curricular", async () => {
   const response = await render("/school-life");
   assert.equal(response.status, 308);

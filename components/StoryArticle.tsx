@@ -1,6 +1,6 @@
 import { ManagedImage as Image } from "@/components/ManagedImage";
 import Link from "next/link";
-import { ArrowLeft, CalendarDays, Clock3 } from "lucide-react";
+import { ArrowLeft, CalendarDays, Clock3, UserRound } from "lucide-react";
 import { ButtonLink } from "@/components/ButtonLink";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
@@ -49,6 +49,10 @@ export function StoryArticle({ story }: StoryArticleProps) {
                   {formatPublishedDate(story.publishedAt)}
                 </span>
               ) : null}
+              <span className="flex items-center gap-2 text-white/70">
+                <UserRound aria-hidden="true" className="size-4" />
+                By {story.author}
+              </span>
             </div>
             <h1 className="mt-6 max-w-[980px] font-serif text-[clamp(3.5rem,8vw,7.7rem)] leading-[0.88] tracking-[-0.055em]">
               {story.title}

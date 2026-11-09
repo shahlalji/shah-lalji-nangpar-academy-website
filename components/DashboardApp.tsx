@@ -693,7 +693,8 @@ function StoriesPanel({
       ? stories.filter(
           (story) =>
             story.title.toLowerCase().includes(query) ||
-            story.category.toLowerCase().includes(query),
+            story.category.toLowerCase().includes(query) ||
+            story.author.toLowerCase().includes(query),
         )
       : stories;
   }, [search, stories]);
@@ -914,7 +915,7 @@ function StoriesPanel({
                     {story.title}
                   </h3>
                   <p className="mt-2 text-xs text-school-muted">
-                    Published {formatDate(story.publishedAt ?? story.createdAt)}
+                    By {story.author} · Published {formatDate(story.publishedAt ?? story.createdAt)}
                   </p>
                 </div>
                 <div className="flex flex-wrap gap-2 sm:flex-col sm:items-stretch">
@@ -974,6 +975,7 @@ function StoriesPanel({
 
 type StoryEditorPayload = {
   title: string;
+  author: string;
   publishedAt: string;
   slug: string;
   category: string;
@@ -1029,6 +1031,7 @@ function StoryCreateForm({
     onSubmit({
       values: {
         title: String(values.title ?? ""),
+        author: String(values.author ?? ""),
         publishedAt: new Date(String(values.publishedAt ?? "")).toISOString(),
         slug: String(values.slug ?? ""),
         category: String(values.category ?? ""),
@@ -1110,6 +1113,16 @@ function StoryCreateForm({
             name="category"
             defaultValue={story?.category}
             placeholder="School Life"
+            required
+          />
+        </DashboardField>
+        <DashboardField label="Author">
+          <input
+            className={inputClass}
+            name="author"
+            defaultValue={story?.author ?? "SLNA Communications Team"}
+            placeholder="Writer or department name"
+            maxLength={120}
             required
           />
         </DashboardField>

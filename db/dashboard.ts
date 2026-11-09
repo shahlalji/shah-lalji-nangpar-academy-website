@@ -54,6 +54,7 @@ export type StoryMutationInput = Pick<
   | "slug"
   | "category"
   | "title"
+  | "author"
   | "publishedAt"
   | "excerpt"
   | "image"
@@ -104,6 +105,7 @@ type StoryRow = {
   slug: string;
   category: string;
   title: string;
+  author_name: string | null;
   published_at: string | null;
   excerpt: string;
   hero_image: string;
@@ -247,6 +249,7 @@ export async function createStory(
       slug: input.slug,
       category: input.category,
       title: input.title,
+      author_name: input.author,
       published_at: input.publishedAt,
       excerpt: input.excerpt,
       hero_image: input.image,
@@ -272,6 +275,7 @@ export async function updateStory(id: number, input: StoryMutationInput) {
       slug: input.slug,
       category: input.category,
       title: input.title,
+      author_name: input.author,
       published_at: input.publishedAt,
       excerpt: input.excerpt,
       hero_image: input.image,
@@ -715,6 +719,7 @@ function mapStory(row: StoryRow): DashboardStory {
     href: `/stories/${row.slug}`,
     category: row.category,
     title: row.title,
+    author: row.author_name?.trim() || "SLNA Communications Team",
     publishedAt: row.published_at ?? undefined,
     excerpt: row.excerpt,
     image: row.hero_image,

@@ -36,9 +36,16 @@ export async function PATCH(
       );
     }
     return Response.json({ story: await updateStory(id, input) });
-  } catch {
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "";
+    if (message.toLowerCase().includes("author_name")) {
+      return Response.json(
+        { error: "Story authors are not ready. Run supabase/content-management.sql again." },
+        { status: 503 },
+      );
+    }
     return Response.json(
-      { error: "The story status could not be updated." },
+      { error: "The story could not be updated." },
       { status: 500 },
     );
   }

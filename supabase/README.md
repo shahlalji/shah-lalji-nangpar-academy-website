@@ -12,15 +12,17 @@
 5. Run media-library.sql in a second SQL Editor query to enable independent
    editing for every image placement and the Senior Management Team profiles.
    The file is repeatable; run it again after pulling an updated version.
-6. Run story-engagement.sql to enable positive story reactions, moderated
+6. Run content-management.sql to enable story publication dates and authors,
+   editable leadership messages, fee information and Sports & Co. content.
+7. Run story-engagement.sql to enable positive story reactions, moderated
    comments and staff replies. This file is also repeatable.
-7. When updating an existing project, run leadership-hierarchy.sql to add the
+8. When updating an existing project, run leadership-hierarchy.sql to add the
    five-level leadership tree: Board Chair, School Administration, School
    Heads, Deputies and Co-curricular Leadership, and Operational Leadership.
-8. Sign out and back in if the user existed before the SQL ran. This refreshes
+9. Sign out and back in if the user existed before the SQL ran. This refreshes
    the JWT with the new administrator role.
-9. Open /login, sign in, and test Stories, Comments, Enquiries, Media and Leadership.
-10. Add the same two environment variables to Vercel for Production, Preview
+10. Open /login, sign in, and test Stories, Comments, Enquiries, Media and Leadership.
+11. Add the same two environment variables to Vercel for Production, Preview
    and Development, then redeploy.
 
 Never place a secret key, service-role key or database password in a

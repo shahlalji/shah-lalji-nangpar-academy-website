@@ -7,6 +7,8 @@ create table if not exists public.stories (
   slug text not null unique check (slug ~ '^[a-z0-9]+(-[a-z0-9]+)*$'),
   category text not null check (char_length(category) between 1 and 80),
   title text not null check (char_length(title) between 1 and 140),
+  author_name text not null default 'SLNA Communications Team'
+    check (char_length(author_name) between 2 and 120),
   published_at timestamptz,
   excerpt text not null check (char_length(excerpt) between 1 and 500),
   hero_image text not null check (char_length(hero_image) between 1 and 500),
@@ -257,7 +259,7 @@ using (
 );
 
 insert into public.stories (
-  slug, category, title, excerpt, hero_image, hero_alt,
+  slug, category, title, author_name, excerpt, hero_image, hero_alt,
   read_time, quote, body_json, status
 )
 values
@@ -265,6 +267,7 @@ values
   'learning-through-discovery',
   'EYFS',
   'Learning Through Discovery',
+  'SLNA Communications Team',
   'How purposeful, hands-on experiences help young learners build language, confidence and curiosity from the very beginning.',
   '/images/school/early-years-fruit-learning.webp',
   'Teachers and EYFS learners exploring fruit in the classroom',
@@ -305,6 +308,7 @@ values
   'confidence-to-compete',
   'Sport',
   'Confidence to Compete',
+  'SLNA Communications Team',
   'Sport gives learners a practical language for discipline, teamwork, resilience and the courage to keep improving.',
   '/images/school/swimming-competition.webp',
   'SLNA swimmers competing in marked lanes during a school event',
@@ -345,6 +349,7 @@ values
   'learning-beyond-the-classroom',
   'School Life',
   'Learning Beyond the Classroom',
+  'SLNA Communications Team',
   'Visits, creative projects and shared experiences help learners connect knowledge with the wider world.',
   '/images/school/museum-learning-trip.webp',
   'Senior learners taking part in an educational museum visit',

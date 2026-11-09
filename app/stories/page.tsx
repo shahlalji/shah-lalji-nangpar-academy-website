@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { ManagedImage as Image } from "@/components/ManagedImage";
 import Link from "next/link";
-import { ArrowUpRight, CalendarDays, Clock3, ThumbsUp } from "lucide-react";
+import { ArrowUpRight, CalendarDays, Clock3, ThumbsUp, UserRound } from "lucide-react";
 import { AdmissionsCta } from "@/components/AdmissionsCta";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
@@ -112,6 +112,10 @@ export default async function StoriesPage() {
                             {formatPublishedDate(story.publishedAt)}
                           </span>
                         ) : null}
+                        <span className="flex items-center gap-2 text-school-muted">
+                          <UserRound aria-hidden="true" className="size-4" />
+                          By {story.author}
+                        </span>
                         <span className="flex items-center gap-2 text-school-navy">
                           <ThumbsUp aria-hidden="true" className="size-4 text-school-red" />
                           {formatReactionCount(reactionCounts[story.slug] ?? 0)}

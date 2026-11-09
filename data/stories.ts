@@ -10,6 +10,7 @@ export type Story = {
   href: string;
   category: string;
   title: string;
+  author: string;
   publishedAt?: string;
   excerpt: string;
   image: string;
@@ -25,6 +26,7 @@ export const stories: readonly Story[] = [
     href: "/stories/learning-through-discovery",
     category: "EYFS",
     title: "Learning Through Discovery",
+    author: "SLNA Communications Team",
     publishedAt: "2026-10-13T09:00:00+03:00",
     excerpt:
       "How purposeful, hands-on experiences help young learners build language, confidence and curiosity from the very beginning.",
@@ -70,6 +72,7 @@ export const stories: readonly Story[] = [
     href: "/stories/confidence-to-compete",
     category: "Sport",
     title: "Confidence to Compete",
+    author: "SLNA Communications Team",
     publishedAt: "2026-10-13T09:00:00+03:00",
     excerpt:
       "Sport gives learners a practical language for discipline, teamwork, resilience and the courage to keep improving.",
@@ -115,6 +118,7 @@ export const stories: readonly Story[] = [
     href: "/stories/learning-beyond-the-classroom",
     category: "School Life",
     title: "Learning Beyond the Classroom",
+    author: "SLNA Communications Team",
     publishedAt: "2026-10-13T09:00:00+03:00",
     excerpt:
       "Visits, creative projects and shared experiences help learners connect knowledge with the wider world.",
