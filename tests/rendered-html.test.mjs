@@ -109,6 +109,7 @@ test("enrichment page presents the whole-school programme by section", async () 
   assert.match(html, /Senior School/);
   assert.doesNotMatch(html, /Section leadership/);
   assert.match(html, /Message from/);
+  assert.doesNotMatch(html, /Profile to be confirmed/);
 });
 
 test("the public events page does not present expired events", async () => {

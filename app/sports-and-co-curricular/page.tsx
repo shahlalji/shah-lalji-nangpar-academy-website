@@ -68,9 +68,16 @@ export default async function SportsAndCoCurricularPage() {
     ];
   }
 
-  const departmentHead = team.find(
-    (member) => member.slug === "head-co-curricular",
-  );
+  const departmentHead =
+    team.find((member) => member.slug === "head-co-curricular") ??
+    team.find((member) => {
+      const leadershipTitle = `${member.role} ${member.area}`.toLowerCase();
+      return (
+        /co[-\s]?curricular/.test(leadershipTitle) ||
+        leadershipTitle.includes("head of sports") ||
+        leadershipTitle.includes("sports head")
+      );
+    });
   const departmentHeadName = departmentHead?.name ?? page.person;
   const departmentHeadRole = departmentHead?.role ?? page.role;
 

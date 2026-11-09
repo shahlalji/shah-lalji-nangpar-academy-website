@@ -205,7 +205,7 @@ function EnrichmentEditor({
           </h3>
         </div>
         <p className="max-w-md border-l-2 border-school-gold pl-4 text-xs leading-6 text-school-muted">
-          Replace this page&apos;s six activity photographs from Media → Sports & Co. The Sports Head&apos;s name, role and portrait are managed under Leadership.
+          Replace this page&apos;s six activity photographs from Media → Sports & Co. The name, role and portrait are taken automatically from the Sports or Co-curricular Head under Leadership.
         </p>
       </div>
 
@@ -300,9 +300,9 @@ function EnrichmentEditor({
           </Field>
         </div>
         <p className="text-sm leading-7 text-white/70 md:col-span-2">
-          The department head shown beside the opening message is the Head
-          Co-curricular profile under Leadership. Edit that profile to change
-          the person, role or portrait.
+          The department head shown beside the opening message is linked
+          automatically to the Sports or Co-curricular Head under Leadership.
+          Edit that profile to change the person, role or portrait.
         </p>
       </div>
 
