@@ -231,16 +231,16 @@ export default async function Home() {
             <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
               <div className="lg:col-span-7">
                 <SectionHeading
-                  eyebrow="Beyond the classroom"
+                  eyebrow="Sports & co-curricular"
                   title={
                     <>
-                      A school life full of{" "}
+                      Beyond the classroom,{" "}
                       <span className="italic text-school-navy">
-                        possibility.
+                        beyond limits.
                       </span>
                     </>
                   }
-                  description="Learners are encouraged to discover strengths, contribute to their community and develop the confidence to take part."
+                  description="Sport, swimming, clubs and co-curricular experiences give every learner space to discover strengths, build confidence and take part."
                 />
                 <div className="relative mt-10 aspect-[7/5] overflow-hidden bg-school-navy">
                   <Image
@@ -284,9 +284,14 @@ export default async function Home() {
                 </div>
                 <div className="mt-8 border-l-2 border-school-gold bg-white p-6">
                   <p className="text-sm leading-7 text-school-muted">
-                    From sport and creative activities to clubs and leadership,
-                    learners have many ways to discover their strengths.
+                    The programme is organised across EYFS, Junior School and
+                    Senior School so families can see what is available at each stage.
                   </p>
+                  <div className="mt-5">
+                    <ButtonLink href="/sports-and-co-curricular" variant="ghost">
+                      Explore Sports & Co.
+                    </ButtonLink>
+                  </div>
                 </div>
               </div>
             </div>

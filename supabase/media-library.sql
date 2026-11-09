@@ -177,9 +177,28 @@ create table if not exists public.leadership_profiles (
   photo_url text check (photo_url is null or photo_url like 'https://%'),
   photo_alt text not null default '' check (char_length(photo_alt) <= 220),
   confirmed boolean not null default false,
+  hierarchy_group text not null default 'operations'
+    check (hierarchy_group in ('governance', 'administration', 'heads', 'deputies', 'operations')),
   sort_order integer not null default 0 check (sort_order >= 0),
   updated_at timestamptz not null default now()
 );
+
+alter table public.leadership_profiles
+  add column if not exists hierarchy_group text not null default 'operations';
+alter table public.leadership_profiles
+  drop constraint if exists leadership_profiles_hierarchy_group_check;
+
+update public.leadership_profiles
+set hierarchy_group = case
+  when slug = 'school-administrator' then 'administration'
+  when slug in ('senior-school-head', 'junior-school-head', 'head-of-early-years') then 'heads'
+  else 'operations'
+end
+where hierarchy_group = 'executive';
+
+alter table public.leadership_profiles
+  add constraint leadership_profiles_hierarchy_group_check
+  check (hierarchy_group in ('governance', 'administration', 'heads', 'deputies', 'operations'));
 
 drop trigger if exists leadership_profiles_set_updated_at on public.leadership_profiles;
 create trigger leadership_profiles_set_updated_at
@@ -218,9 +237,19 @@ grant select on table public.leadership_profiles to anon, authenticated;
 grant insert, update, delete on table public.leadership_profiles to authenticated;
 
 insert into public.leadership_profiles (
-  slug, name, role, area, description, confirmed, sort_order
+  slug, name, role, area, description, confirmed, hierarchy_group, sort_order
 )
 values
+  (
+    'board-chair',
+    'Mr Rajen Shah',
+    'Chair, Board of Governors',
+    'Governance',
+    'Provides governance, stewardship and long-term direction for the academy.',
+    true,
+    'governance',
+    1
+  ),
   (
     'school-administrator',
     'Ms Alice Okidia',
@@ -228,25 +257,28 @@ values
     'Executive leadership',
     'Leads whole-school operations, strategy, safeguarding and the coordination of academic and administrative teams.',
     true,
+    'administration',
     1
   ),
   (
     'senior-school-head',
     'Ms Molly Okumu',
-    'Senior School Head',
+    'Head Senior School',
     'Senior School',
     'Leads teaching, learning, pastoral care and student progress across Senior School, IGCSE and Sixth Form.',
     true,
-    2
+    'heads',
+    1
   ),
   (
     'junior-school-head',
     'Mr George Gasper',
-    'Junior School Head',
+    'Head Junior School',
     'Junior School',
     'Leads the Junior School''s academic programme, learner development and partnership with families.',
     true,
-    3
+    'heads',
+    2
   ),
   (
     'head-of-early-years',
@@ -255,7 +287,48 @@ values
     'EYFS',
     'Leads the academy''s youngest learning community and its child-centred foundation programme.',
     true,
-    4
+    'heads',
+    3
+  ),
+  (
+    'deputy-head-senior-school',
+    'Profile to be confirmed',
+    'Deputy Head Senior School',
+    'Senior School',
+    'Supports Senior School leadership, academic coordination, student progress and pastoral care.',
+    false,
+    'deputies',
+    1
+  ),
+  (
+    'deputy-head-junior-school',
+    'Profile to be confirmed',
+    'Deputy Head Junior School',
+    'Junior School',
+    'Supports Junior School leadership, teaching quality, learner development and daily coordination.',
+    false,
+    'deputies',
+    2
+  ),
+  (
+    'head-co-curricular',
+    'Profile to be confirmed',
+    'Head Co-curricular',
+    'Whole-school enrichment',
+    'Coordinates sport, clubs, arts and enrichment opportunities across the academy.',
+    false,
+    'deputies',
+    3
+  ),
+  (
+    'human-resources-manager',
+    'Profile to be confirmed',
+    'Human Resources',
+    'People and culture',
+    'Supports staff wellbeing, recruitment, professional practice and the academy''s people operations.',
+    false,
+    'operations',
+    1
   ),
   (
     'head-of-information-technology',
@@ -264,7 +337,8 @@ values
     'Digital systems',
     'Oversees technology infrastructure, digital learning systems, data security and school-wide IT support.',
     false,
-    5
+    'operations',
+    2
   ),
   (
     'facilities-manager',
@@ -273,18 +347,25 @@ values
     'Campus operations',
     'Coordinates campus facilities, maintenance, safety, utilities and the readiness of learning spaces.',
     false,
-    6
-  ),
-  (
-    'school-accountant',
-    'Profile to be confirmed',
-    'School Accountant',
-    'Finance',
-    'Supports financial stewardship, reporting, fee administration, budgeting and operational accountability.',
-    false,
-    7
+    'operations',
+    3
   )
 on conflict (slug) do update
-set sort_order = excluded.sort_order;
+set
+  hierarchy_group = excluded.hierarchy_group,
+  sort_order = excluded.sort_order;
+
+update public.leadership_profiles
+set role = 'Head Senior School'
+where slug = 'senior-school-head' and role = 'Senior School Head';
+
+update public.leadership_profiles
+set role = 'Head Junior School'
+where slug = 'junior-school-head' and role = 'Junior School Head';
+
+delete from public.leadership_profiles
+where slug = 'school-accountant'
+  and name = 'Profile to be confirmed'
+  and confirmed = false;
 
 notify pgrst, 'reload schema';

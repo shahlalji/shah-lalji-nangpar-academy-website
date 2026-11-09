@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { AdmissionsCta } from "@/components/AdmissionsCta";
@@ -6,8 +7,14 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { InteriorHero } from "@/components/InteriorHero";
 import { SectionHeading } from "@/components/SectionHeading";
-import { seniorManagementTeam } from "@/data/leadership";
+import { ManagedImage as Image } from "@/components/ManagedImage";
 import {
+  leadershipHierarchyGroups,
+  leadershipMessages,
+  seniorManagementTeam,
+} from "@/data/leadership";
+import {
+  getPublicEditablePage,
   getPublicLeadershipProfiles,
   type LeadershipProfile,
 } from "@/db/dashboard";
@@ -15,9 +22,9 @@ import {
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Senior Management Team | Shah Lalji Nangpar Academy",
+  title: "Leadership and Management | Shah Lalji Nangpar Academy",
   description:
-    "Meet the academic and operational leaders who form the Senior Management Team at Shah Lalji Nangpar Academy.",
+    "Explore the governance, academic and operational leadership structure at Shah Lalji Nangpar Academy.",
   alternates: { canonical: "/our-school/senior-management-team" },
 };
 
@@ -27,13 +34,20 @@ export default async function SeniorManagementTeamPage() {
     id: index + 1,
     photoUrl: null as string | null,
     photoAlt: "",
-    sortOrder: index + 1,
     updatedAt: "",
   }));
+  let boardChair = leadershipMessages.boardChair;
   try {
     team = await getPublicLeadershipProfiles();
   } catch {
     // The bundled profiles keep the page available before the migration runs.
+  }
+  try {
+    boardChair = (await getPublicEditablePage(
+      "board-chair-message",
+    )) as typeof boardChair;
+  } catch {
+    // The bundled Board Chair profile remains available before setup completes.
   }
 
   return (
@@ -41,14 +55,14 @@ export default async function SeniorManagementTeamPage() {
       <Header />
       <main>
         <InteriorHero
-          eyebrow="Senior Management Team"
+          eyebrow="Leadership and Management"
           title={
             <>
-              Leadership across{" "}
-              <span className="italic text-school-gold">every function.</span>
+              A clear structure for{" "}
+              <span className="italic text-school-gold">every responsibility.</span>
             </>
           }
-          description="Academic and operational leaders working together to keep learning, wellbeing, technology, facilities and finance moving in one clear direction."
+          description="From governance and school administration to academic and operational leadership, each level works together in service of learners and families."
           image="/images/school/school-event-leadership.webp"
           imageKey="leadership.smt.hero"
           imageAlt="School leaders engaging with learners during an academy event"
@@ -59,12 +73,12 @@ export default async function SeniorManagementTeamPage() {
           <div className="mx-auto grid max-w-[1440px] gap-12 px-4 sm:px-6 lg:grid-cols-12 lg:gap-20 lg:px-10">
             <div className="lg:col-span-6">
               <SectionHeading
-                eyebrow="One leadership team"
+                eyebrow="How leadership connects"
                 title={
                   <>
-                    Academic vision.{" "}
+                    Clear responsibility.{" "}
                     <span className="italic text-school-navy">
-                      Operational strength.
+                      Shared direction.
                     </span>
                   </>
                 }
@@ -72,14 +86,13 @@ export default async function SeniorManagementTeamPage() {
             </div>
             <div className="space-y-5 text-base leading-8 text-school-muted lg:col-span-5 lg:col-start-8">
               <p>
-                The Senior Management Team brings school-stage leadership
-                together with the functions that support a safe, organised and
-                future-ready academy.
+                The Board provides governance, the School Administrator leads
+                whole-school execution, and academic heads guide each stage of
+                the learner journey.
               </p>
               <p>
-                The structure includes academic and operational roles so
-                families can see how leadership responsibilities connect
-                across the academy.
+                Deputy, co-curricular and operational leaders then turn that
+                direction into consistent daily practice across the academy.
               </p>
             </div>
           </div>
@@ -87,70 +100,42 @@ export default async function SeniorManagementTeamPage() {
 
         <section className="bg-white py-20 sm:py-24 lg:py-32">
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
-            <div className="grid border-l border-t border-school-navy/15 sm:grid-cols-2 xl:grid-cols-3">
-              {team.map((member, index) => {
-                const initials = member.confirmed
-                  ? member.name
-                      .replace(/^(Mr|Ms|Mrs|Dr)\.?\s+/i, "")
-                      .split(/\s+/)
-                      .map((part) => part[0])
-                      .join("")
-                      .slice(0, 2)
-                      .toUpperCase()
-                  : member.role
-                      .split(/\s+/)
-                      .filter((part) => !["of", "the"].includes(part.toLowerCase()))
-                      .map((part) => part[0])
-                      .join("")
-                      .slice(0, 2)
-                      .toUpperCase();
+            <div className="relative before:absolute before:bottom-16 before:left-1/2 before:top-16 before:w-px before:-translate-x-1/2 before:bg-school-navy/25">
+              {leadershipHierarchyGroups.map((group, groupIndex) => {
+                const members = team.filter(
+                  (member) => member.hierarchyGroup === group.key,
+                );
+                if (members.length === 0) return null;
+                const singleLevel =
+                  group.key === "governance" ||
+                  group.key === "administration";
                 return (
-                  <article
-                    key={member.slug}
-                    className={`overflow-hidden border-b border-r border-school-navy/15 ${
-                      member.confirmed ? "bg-white" : "bg-school-cream/60"
-                    }`}
+                  <HierarchyLevel
+                    key={group.key}
+                    number={String(groupIndex + 1).padStart(2, "0")}
+                    title={group.label}
+                    description={group.description}
+                    single={singleLevel}
                   >
-                    <div className="relative aspect-square overflow-hidden bg-white">
-                      {member.photoUrl ? (
-                        // Contain the complete upload inside an equal card frame.
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img
-                          src={member.photoUrl}
-                          alt={member.photoAlt || `${member.name}, ${member.role}`}
-                          loading="lazy"
-                          decoding="async"
-                          className="absolute inset-0 h-full w-full object-contain"
-                        />
-                      ) : (
-                        <span
-                          aria-hidden="true"
-                          className="flex h-full items-center justify-center bg-school-navy font-serif text-6xl text-white/85"
-                        >
-                          {initials}
-                        </span>
-                      )}
-                      <span className="text-[0.62rem] font-bold tracking-[0.16em] text-school-navy/30">
-                        <span className="absolute right-4 top-4 bg-white px-3 py-2">
-                          {String(index + 1).padStart(2, "0")}
-                        </span>
-                      </span>
-                    </div>
-                    <div className="p-7 sm:p-8">
-                      <p className="text-[0.64rem] font-bold uppercase tracking-[0.16em] text-school-red">
-                        {member.area}
-                      </p>
-                      <h2 className="mt-3 font-serif text-3xl leading-tight text-school-ink">
-                        {member.name}
-                      </h2>
-                      <p className="mt-2 text-sm font-bold uppercase tracking-[0.11em] text-school-navy">
-                        {member.role}
-                      </p>
-                      <p className="mt-5 text-sm leading-7 text-school-muted">
-                        {member.description}
-                      </p>
-                    </div>
-                  </article>
+                    {members.map((member, index) => (
+                      <LeadershipCard
+                        key={member.slug}
+                        member={member}
+                        position={index + 1}
+                        fallbackImage={
+                          member.slug === "board-chair"
+                            ? {
+                                src: boardChair.image,
+                                alt: boardChair.imageAlt,
+                                imageKey: "leadership.board-chair.portrait",
+                                position:
+                                  boardChair.imagePosition ?? "object-center",
+                              }
+                            : undefined
+                        }
+                      />
+                    ))}
+                  </HierarchyLevel>
                 );
               })}
             </div>
@@ -199,4 +184,151 @@ export default async function SeniorManagementTeamPage() {
       <Footer />
     </>
   );
+}
+
+function HierarchyLevel({
+  number,
+  title,
+  description,
+  single,
+  children,
+}: {
+  number: string;
+  title: string;
+  description: string;
+  single: boolean;
+  children: ReactNode;
+}) {
+  return (
+    <section className="relative z-10 py-10 sm:py-12 lg:py-14">
+      <div className="mx-auto w-fit max-w-2xl bg-white px-5 text-center sm:px-8">
+        <span className="mx-auto flex size-11 items-center justify-center rounded-full border border-school-navy/20 bg-school-cream text-[0.62rem] font-bold tracking-[0.12em] text-school-navy">
+          {number}
+        </span>
+        <div className="mt-4">
+          <p className="text-[0.65rem] font-bold uppercase tracking-[0.17em] text-school-red">
+            Leadership level
+          </p>
+          <h2 className="mt-3 font-serif text-3xl leading-tight tracking-[-0.025em] text-school-ink sm:text-4xl">
+            {title}
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-school-muted">
+            {description}
+          </p>
+        </div>
+      </div>
+      <div
+        className={`relative mx-auto mt-8 grid gap-6 pt-8 sm:mt-10 ${
+          single
+            ? "max-w-md grid-cols-1"
+            : "max-w-6xl sm:grid-cols-3 sm:before:absolute sm:before:inset-x-[16.666%] sm:before:top-0 sm:before:h-px sm:before:bg-school-navy/25"
+        }`}
+      >
+        {Array.isArray(children)
+          ? children.map((child, index) => (
+              <div
+                key={index}
+                className={`relative ${
+                  single
+                    ? "before:absolute before:-top-8 before:left-1/2 before:h-8 before:w-px before:-translate-x-1/2 before:bg-school-navy/25"
+                    : "sm:before:absolute sm:before:-top-8 sm:before:left-1/2 sm:before:h-8 sm:before:w-px sm:before:-translate-x-1/2 sm:before:bg-school-navy/25"
+                }`}
+              >
+                {child}
+              </div>
+            ))
+          : (
+              <div className="relative before:absolute before:-top-8 before:left-1/2 before:h-8 before:w-px before:-translate-x-1/2 before:bg-school-navy/25">
+                {children}
+              </div>
+            )}
+      </div>
+    </section>
+  );
+}
+
+function LeadershipCard({
+  member,
+  position,
+  fallbackImage,
+}: {
+  member: LeadershipProfile;
+  position: number;
+  fallbackImage?: {
+    src: string;
+    alt: string;
+    imageKey: string;
+    position: string;
+  };
+}) {
+  const memberInitials = member.confirmed
+    ? initials(member.name)
+    : initials(member.role);
+
+  return (
+    <article
+      className={`overflow-hidden border-b border-r border-school-navy/15 ${
+        member.confirmed ? "bg-white" : "bg-school-cream/60"
+      }`}
+    >
+      <div className="relative aspect-square overflow-hidden bg-white">
+        {member.photoUrl ? (
+          // Preserve the complete uploaded portrait in a consistent frame.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={member.photoUrl}
+            alt={member.photoAlt || `${member.name}, ${member.role}`}
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 h-full w-full object-contain"
+          />
+        ) : fallbackImage ? (
+          <Image
+            src={fallbackImage.src}
+            imageKey={fallbackImage.imageKey}
+            alt={fallbackImage.alt}
+            fill
+            unoptimized
+            sizes="(max-width: 640px) 100vw, 420px"
+            className={`object-contain ${fallbackImage.position}`}
+          />
+        ) : (
+          <span
+            aria-hidden="true"
+            className="flex h-full items-center justify-center bg-school-navy font-serif text-5xl text-white/85"
+          >
+            {memberInitials}
+          </span>
+        )}
+        <span className="absolute right-4 top-4 bg-white px-3 py-2 text-[0.62rem] font-bold tracking-[0.16em] text-school-navy/35">
+          {String(position).padStart(2, "0")}
+        </span>
+      </div>
+      <div className="p-6 sm:p-7">
+        <p className="text-[0.62rem] font-bold uppercase tracking-[0.15em] text-school-red">
+          {member.area}
+        </p>
+        <h3 className="mt-3 font-serif text-2xl leading-tight text-school-ink">
+          {member.name}
+        </h3>
+        <p className="mt-2 text-xs font-bold uppercase tracking-[0.1em] text-school-navy">
+          {member.role}
+        </p>
+        <p className="mt-5 text-sm leading-7 text-school-muted">
+          {member.description}
+        </p>
+      </div>
+    </article>
+  );
+}
+
+function initials(value: string) {
+  return value
+    .replace(/^(Mr|Ms|Mrs|Dr)\.?\s+/i, "")
+    .split(/\s+/)
+    .filter((part) => !["of", "the", "and"].includes(part.toLowerCase()))
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 }

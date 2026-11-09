@@ -14,10 +14,13 @@
    The file is repeatable; run it again after pulling an updated version.
 6. Run story-engagement.sql to enable positive story reactions, moderated
    comments and staff replies. This file is also repeatable.
-7. Sign out and back in if the user existed before the SQL ran. This refreshes
+7. When updating an existing project, run leadership-hierarchy.sql to add the
+   five-level leadership tree: Board Chair, School Administration, School
+   Heads, Deputies and Co-curricular Leadership, and Operational Leadership.
+8. Sign out and back in if the user existed before the SQL ran. This refreshes
    the JWT with the new administrator role.
-8. Open /login, sign in, and test Stories, Comments, Enquiries, Media and Leadership.
-9. Add the same two environment variables to Vercel for Production, Preview
+9. Open /login, sign in, and test Stories, Comments, Enquiries, Media and Leadership.
+10. Add the same two environment variables to Vercel for Production, Preview
    and Development, then redeploy.
 
 Never place a secret key, service-role key or database password in a

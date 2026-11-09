@@ -40,6 +40,7 @@ import type {
   SiteImage,
 } from "@/db/dashboard";
 import type { DashboardStoryComment } from "@/db/story-engagement";
+import { leadershipHierarchyGroups } from "@/data/leadership";
 import {
   getDashboardImageExtension,
   prepareDashboardImage,
@@ -1717,6 +1718,19 @@ function MediaPanel({
   );
 }
 
+function sortLeadershipProfiles(profiles: LeadershipProfile[]) {
+  const groupOrder = new Map(
+    leadershipHierarchyGroups.map((group, index) => [group.key, index]),
+  );
+  return [...profiles].sort(
+    (first, second) =>
+      (groupOrder.get(first.hierarchyGroup) ?? 99) -
+        (groupOrder.get(second.hierarchyGroup) ?? 99) ||
+      first.sortOrder - second.sortOrder ||
+      first.name.localeCompare(second.name),
+  );
+}
+
 function LeadershipPanel({
   profiles,
   loading,
@@ -1753,6 +1767,8 @@ function LeadershipPanel({
           name: String(formData.get("name") ?? ""),
           role: String(formData.get("role") ?? ""),
           area: String(formData.get("area") ?? ""),
+          hierarchyGroup: String(formData.get("hierarchyGroup") ?? ""),
+          sortOrder: Number(formData.get("sortOrder") ?? 1),
           description: String(formData.get("description") ?? ""),
           photoAlt: String(formData.get("photoAlt") ?? ""),
           confirmed: formData.get("confirmed") === "on",
@@ -1768,9 +1784,7 @@ function LeadershipPanel({
       }
       const createdProfile = result.profile;
       onProfilesChange(
-        [...profiles, createdProfile].sort(
-          (first, second) => first.sortOrder - second.sortOrder,
-        ),
+        sortLeadershipProfiles([...profiles, createdProfile]),
       );
       form.reset();
       setShowCreateForm(false);
@@ -1808,6 +1822,8 @@ function LeadershipPanel({
           name: String(formData.get("name") ?? ""),
           role: String(formData.get("role") ?? ""),
           area: String(formData.get("area") ?? ""),
+          hierarchyGroup: String(formData.get("hierarchyGroup") ?? ""),
+          sortOrder: Number(formData.get("sortOrder") ?? 1),
           description: String(formData.get("description") ?? ""),
           photoAlt: String(formData.get("photoAlt") ?? ""),
           confirmed: formData.get("confirmed") === "on",
@@ -1822,9 +1838,9 @@ function LeadershipPanel({
         throw new Error(result.error || "The leadership profile could not be saved.");
       }
       onProfilesChange(
-        profiles.map((item) =>
+        sortLeadershipProfiles(profiles.map((item) =>
           item.slug === result.profile?.slug ? result.profile : item,
-        ),
+        )),
       );
       onNotice(`${result.profile.name}'s leadership profile has been updated.`);
     } catch (error) {
@@ -1878,8 +1894,8 @@ function LeadershipPanel({
             Leadership profiles
           </h2>
           <p className="mt-4 max-w-3xl text-sm leading-7 text-school-muted">
-            Add or update each leader’s name, role, biography and portrait.
-            Every profile has its own independent photo.
+            Add or update each leader’s details and portrait, then assign the
+            profile to its hierarchy group and position within that group.
           </p>
         </div>
         <button
@@ -1939,6 +1955,31 @@ function LeadershipPanel({
             </DashboardField>
             <DashboardField label="Leadership area">
               <input name="area" required maxLength={80} className={profileInputClass} />
+            </DashboardField>
+            <DashboardField label="Hierarchy group">
+              <select
+                name="hierarchyGroup"
+                defaultValue="operations"
+                required
+                className={profileInputClass}
+              >
+                {leadershipHierarchyGroups.map((group) => (
+                  <option key={group.key} value={group.key}>
+                    {group.label}
+                  </option>
+                ))}
+              </select>
+            </DashboardField>
+            <DashboardField label="Position within group">
+              <input
+                type="number"
+                name="sortOrder"
+                min={1}
+                max={99}
+                defaultValue={1}
+                required
+                className={profileInputClass}
+              />
             </DashboardField>
             <div className="md:col-span-2">
               <DashboardField label="Biography">
@@ -2046,6 +2087,31 @@ function LeadershipPanel({
                         className={profileInputClass}
                       />
                     </DashboardField>
+                    <DashboardField label="Hierarchy group">
+                      <select
+                        name="hierarchyGroup"
+                        defaultValue={profile.hierarchyGroup}
+                        required
+                        className={profileInputClass}
+                      >
+                        {leadershipHierarchyGroups.map((group) => (
+                          <option key={group.key} value={group.key}>
+                            {group.label}
+                          </option>
+                        ))}
+                      </select>
+                    </DashboardField>
+                    <DashboardField label="Position within group">
+                      <input
+                        type="number"
+                        name="sortOrder"
+                        min={1}
+                        max={99}
+                        defaultValue={profile.sortOrder}
+                        required
+                        className={profileInputClass}
+                      />
+                    </DashboardField>
                   </div>
                 </div>
                 <div className="grid gap-4 border-t border-school-navy/10 p-5">
@@ -2108,7 +2174,7 @@ function LeadershipPanel({
         <EmptyState
           Icon={UsersRound}
           title="Leadership setup required"
-          description="Run supabase/media-library.sql again, then reopen this section."
+          description="Run supabase/leadership-hierarchy.sql, then reopen this section."
         />
       )}
     </div>

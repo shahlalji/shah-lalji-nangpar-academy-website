@@ -28,17 +28,16 @@ const routes = [
   ["/our-school/about-us", /A Nakuru legacy with a/],
   ["/our-school/board-chair-message", /A shared commitment to/],
   ["/our-school/school-administrator-message", /A safe place to learn/],
-  ["/our-school/senior-management-team", /Leadership across/],
+  ["/our-school/senior-management-team", /A clear structure for/],
   ["/education", /Learning that moves/],
   ["/education/eyfs", /Curiosity starts/],
   ["/education/junior-school", /Strong foundations for/],
   ["/education/senior-school", /Depth, direction and/],
   ["/education/igcse", /Globally recognised/],
   ["/education/a-level", /Focused study/],
-  ["/education/homework-policy", /Purposeful practice/],
   ["/admissions", /Your family’s journey/],
   ["/admissions/fee-structure", /Clear information for/],
-  ["/school-life", /Space to discover/],
+  ["/sports-and-co-curricular", /Beyond the classroom/],
   ["/stories", /Experiences that shape/],
   ["/stories/learning-through-discovery", /Learning Through Discovery/],
   ["/stories/confidence-to-compete", /Confidence to Compete/],
@@ -61,6 +60,65 @@ for (const [pathname, heading] of routes) {
     assert.doesNotMatch(html, /https?:\/\/shahlalji\.ac\.ke/i);
   });
 }
+
+test("leadership page presents the complete management hierarchy", async () => {
+  const response = await render("/our-school/senior-management-team");
+  const html = await response.text();
+
+  assert.match(html, /Board Chair/);
+  assert.match(html, /School Administration/);
+  assert.match(html, /School Heads/);
+  assert.match(html, /Deputies and Co-curricular Leadership/);
+  assert.match(html, /Operational Leadership/);
+  assert.match(html, /Head Senior School/);
+  assert.match(html, /Head Junior School/);
+  assert.match(html, /Head of EYFS/);
+  assert.match(html, /Deputy Head Senior School/);
+  assert.match(html, /Deputy Head Junior School/);
+  assert.match(html, /Head Co-curricular/);
+  assert.match(html, /Human Resources/);
+  assert.match(html, /Head of Information Technology/);
+  assert.match(html, /Facilities Manager/);
+});
+
+test("the standalone Homework Policy page has been removed", async () => {
+  const response = await render("/education/homework-policy");
+  assert.equal(response.status, 404);
+});
+
+test("the fee structure publishes the current schedule and downloadable PDF", async () => {
+  const response = await render("/admissions/fee-structure");
+  const html = await response.text();
+
+  assert.match(html, /2026-2027/);
+  assert.match(html, /Playgroup/);
+  assert.match(html, /Year 11/);
+  assert.match(html, /Download PDF/);
+  assert.match(html, /fees-structure-2026-2027[.]pdf/);
+});
+
+test("enrichment page presents the whole-school programme by section", async () => {
+  const response = await render("/sports-and-co-curricular");
+  const html = await response.text();
+
+  assert.match(html, /Sports, Swimming and Co-curricular Department/);
+  assert.match(html, /Physical education &amp; sport/i);
+  assert.match(html, /Swimming/);
+  assert.match(html, /Playgroup/);
+  assert.match(html, /Junior School/);
+  assert.match(html, /Senior School/);
+  assert.doesNotMatch(html, /Section leadership/);
+  assert.match(html, /Message from/);
+});
+
+test("the former School Life URL redirects to Sports and Co-curricular", async () => {
+  const response = await render("/school-life");
+  assert.equal(response.status, 308);
+  assert.equal(
+    response.headers.get("location"),
+    "http://localhost/sports-and-co-curricular",
+  );
+});
 
 test("the former School Profile URL redirects to the combined About Us page", async () => {
   const response = await render("/education/school-profile");
@@ -90,17 +148,20 @@ test("main navigation exposes every public detail page", async () => {
     "/education/senior-school",
     "/education/igcse",
     "/education/a-level",
-    "/education/homework-policy",
     "/admissions/fee-structure",
+    "/sports-and-co-curricular",
   ];
 
   for (const route of detailRoutes) {
     assert.match(html, new RegExp(`href="${route}"`));
   }
 
+  assert.doesNotMatch(html, /education\/homework-policy/i);
   assert.doesNotMatch(html, /https?:\/\/shahlalji\.ac\.ke/i);
   assert.match(html, /Created by/);
   assert.match(html, /Mwangi Ngugi/);
+  assert.match(html, /Sports &amp; Co[.]/);
+  assert.match(html, /Back to the main navigation/);
 });
 
 test("sitemap is host-configurable and includes every leadership page", async () => {
@@ -119,6 +180,7 @@ test("sitemap is host-configurable and includes every leadership page", async ()
     /http:\/\/localhost:3000\/our-school\/senior-management-team/,
   );
   assert.match(xml, /http:\/\/localhost:3000\/education\/igcse/);
+  assert.match(xml, /http:\/\/localhost:3000\/sports-and-co-curricular/);
   assert.doesNotMatch(xml, /shahlalji\.ac\.ke/i);
 });
 

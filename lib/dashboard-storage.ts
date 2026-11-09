@@ -21,3 +21,18 @@ export async function resolveDashboardImage(
 
   return supabase.storage.from("site-images").getPublicUrl(objectPath).data.publicUrl;
 }
+
+export async function resolveDashboardDocument(objectPath: string) {
+  if (!/^documents\/[a-z0-9][a-z0-9_-]*[.]pdf$/i.test(objectPath)) return null;
+
+  const separator = objectPath.lastIndexOf("/");
+  const directory = objectPath.slice(0, separator);
+  const fileName = objectPath.slice(separator + 1);
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase.storage
+    .from("site-documents")
+    .list(directory, { limit: 10, search: fileName });
+  if (error || !data?.some((file) => file.name === fileName)) return null;
+
+  return supabase.storage.from("site-documents").getPublicUrl(objectPath).data.publicUrl;
+}

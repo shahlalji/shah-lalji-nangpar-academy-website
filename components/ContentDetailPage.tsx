@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Check } from "lucide-react";
+import { ArrowUpRight, Check, FileDown } from "lucide-react";
 import { AdmissionsCta } from "@/components/AdmissionsCta";
 import { ButtonLink } from "@/components/ButtonLink";
 import { Footer } from "@/components/Footer";
@@ -83,6 +83,35 @@ export function ContentDetailPage({ page }: ContentDetailPageProps) {
               </article>
             ))}
           </div>
+
+          {page.document ? (
+            <div className="mx-auto mt-12 max-w-[1360px] px-4 sm:px-6 lg:px-0">
+              <div className="grid gap-7 border-l-4 border-school-gold bg-school-navy p-7 text-white sm:p-9 lg:grid-cols-[1fr_auto] lg:items-center">
+                <div>
+                  <p className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-school-gold">
+                    Official document
+                  </p>
+                  <h2 className="mt-3 font-serif text-3xl leading-tight sm:text-4xl">
+                    {page.document.label}
+                  </h2>
+                  <p className="mt-4 max-w-3xl text-sm leading-7 text-white/68 sm:text-base">
+                    {page.document.description}
+                  </p>
+                </div>
+                <a
+                  href={downloadableDocumentUrl(
+                    page.document.url,
+                    page.document.fileName,
+                  )}
+                  download={page.document.fileName}
+                  className="inline-flex min-h-12 items-center justify-center gap-3 rounded-[3px] bg-white px-6 py-3 text-[0.7rem] font-bold uppercase tracking-[0.14em] text-school-navy transition-colors hover:bg-school-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+                >
+                  <FileDown aria-hidden="true" className="size-4" />
+                  Download PDF
+                </a>
+              </div>
+            </div>
+          ) : null}
         </section>
 
         {page.photoStory ? (
@@ -278,4 +307,10 @@ export function ContentDetailPage({ page }: ContentDetailPageProps) {
       <Footer />
     </>
   );
+}
+
+function downloadableDocumentUrl(url: string, fileName: string) {
+  if (!url.startsWith("https://")) return url;
+  const separator = url.includes("?") ? "&" : "?";
+  return `${url}${separator}download=${encodeURIComponent(fileName)}`;
 }

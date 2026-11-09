@@ -1,6 +1,7 @@
 "use client";
 
 import NextImage, { type ImageProps } from "next/image";
+import { normalizePublicImageUrl } from "@/lib/public-image-url";
 import {
   createContext,
   type ReactNode,
@@ -68,15 +69,57 @@ export function ManagedImage({
   const registry = useContext(ImageRegistryContext);
   const registryKey = imageKey ?? (typeof src === "string" ? src : "");
   const override = registryKey ? registry[registryKey] : undefined;
+  const normalizedOverride = override
+    ? { ...override, url: normalizePublicImageUrl(override.url) }
+    : undefined;
   const [failedOverrideUrl, setFailedOverrideUrl] = useState("");
   const activeOverride =
-    override?.url === failedOverrideUrl ? undefined : override;
+    normalizedOverride?.url === failedOverrideUrl ? undefined : normalizedOverride;
   const resolvedAlt = alt === "" ? "" : activeOverride?.alt || alt;
+  const resolvedSrc =
+    typeof src === "string" ? normalizePublicImageUrl(src) : src;
+  const activeSrc = activeOverride?.url || resolvedSrc;
+  const isSupabasePublicImage =
+    typeof activeSrc === "string" &&
+    activeSrc.includes(".supabase.co/storage/v1/object/public/");
+
+  if (isSupabasePublicImage) {
+    const fillStyle = props.fill
+      ? {
+          position: "absolute" as const,
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          ...props.style,
+        }
+      : props.style;
+
+    return (
+      // Supabase's render endpoint may reject otherwise public uploads. Serve
+      // the original public object while retaining the same responsive frame.
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={activeSrc}
+        alt={resolvedAlt}
+        className={props.className}
+        style={fillStyle}
+        width={typeof props.width === "number" ? props.width : undefined}
+        height={typeof props.height === "number" ? props.height : undefined}
+        sizes={props.sizes}
+        loading={props.priority ? "eager" : props.loading}
+        decoding={props.decoding}
+        onError={(event) => {
+          if (activeOverride) setFailedOverrideUrl(activeOverride.url);
+          onError?.(event);
+        }}
+      />
+    );
+  }
 
   return (
     <NextImage
       {...props}
-      src={activeOverride?.url || src}
+      src={activeSrc}
       alt={resolvedAlt}
       onError={(event) => {
         if (activeOverride) setFailedOverrideUrl(activeOverride.url);

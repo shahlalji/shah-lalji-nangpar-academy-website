@@ -1,9 +1,10 @@
 "use client";
 
-import { FileText, Save, Upload } from "lucide-react";
+import { FileDown, FileText, Save, Upload } from "lucide-react";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 import type {
   DashboardEditablePage,
+  DashboardEnrichmentPage,
   DashboardFeePage,
   DashboardLeadershipMessagePage,
 } from "@/data/editable-pages";
@@ -12,6 +13,7 @@ import {
   prepareDashboardImage,
 } from "@/lib/dashboard-image-upload";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
+import { normalizePublicImageUrl } from "@/lib/public-image-url";
 
 type DashboardPagesPanelProps = {
   onNotice: (message: string) => void;
@@ -48,18 +50,22 @@ export function DashboardPagesPanel({ onNotice }: DashboardPagesPanelProps) {
     page: DashboardEditablePage,
     content: DashboardEditablePage["content"],
     photo?: File | null,
+    feeDocument?: File | null,
   ) {
-    let uploadedPath = "";
+    let uploadedImagePath = "";
+    let uploadedDocumentPath = "";
     setSavingKey(page.key);
     try {
-      if (photo?.size) uploadedPath = await uploadPageImage(photo, page.key);
+      if (photo?.size) uploadedImagePath = await uploadPageImage(photo, page.key);
+      if (feeDocument?.size) uploadedDocumentPath = await uploadFeeDocument(feeDocument);
       const response = await fetch("/api/dashboard/pages", {
         method: "PATCH",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           key: page.key,
           content,
-          photoObjectPath: uploadedPath || null,
+          photoObjectPath: uploadedImagePath || null,
+          documentObjectPath: uploadedDocumentPath || null,
         }),
       });
       const text = await response.text();
@@ -74,8 +80,11 @@ export function DashboardPagesPanel({ onNotice }: DashboardPagesPanelProps) {
       );
       onNotice(`${page.label} has been updated on the website.`);
     } catch (error) {
-      if (uploadedPath) {
-        await createSupabaseBrowserClient().storage.from("site-images").remove([uploadedPath]);
+      if (uploadedImagePath) {
+        await createSupabaseBrowserClient().storage.from("site-images").remove([uploadedImagePath]);
+      }
+      if (uploadedDocumentPath) {
+        await createSupabaseBrowserClient().storage.from("site-documents").remove([uploadedDocumentPath]);
       }
       onNotice(error instanceof Error ? error.message : "The page could not be saved.");
     } finally {
@@ -92,7 +101,7 @@ export function DashboardPagesPanel({ onNotice }: DashboardPagesPanelProps) {
       <p className="text-[0.66rem] font-bold uppercase tracking-[0.17em] text-school-red">Website content</p>
       <h2 className="mt-3 font-serif text-4xl tracking-[-0.035em] sm:text-5xl">Core pages</h2>
       <p className="mt-4 max-w-3xl text-sm leading-7 text-school-muted">
-        Update the two leadership messages and the published fee information without changing code.
+        Update leadership messages, enrichment programmes and published fee information without changing code.
       </p>
 
       {pages.length ? (
@@ -105,8 +114,15 @@ export function DashboardPagesPanel({ onNotice }: DashboardPagesPanelProps) {
                 saving={savingKey === page.key}
                 onSave={savePage}
               />
-            ) : (
+            ) : page.kind === "fee-structure" ? (
               <FeeStructureEditor
+                key={`${page.key}-${page.updatedAt}`}
+                page={page}
+                saving={savingKey === page.key}
+                onSave={savePage}
+              />
+            ) : (
+              <EnrichmentEditor
                 key={`${page.key}-${page.updatedAt}`}
                 page={page}
                 saving={savingKey === page.key}
@@ -122,6 +138,178 @@ export function DashboardPagesPanel({ onNotice }: DashboardPagesPanelProps) {
         </div>
       )}
     </div>
+  );
+}
+
+function EnrichmentEditor({
+  page,
+  saving,
+  onSave,
+}: {
+  page: DashboardEnrichmentPage;
+  saving: boolean;
+  onSave: (
+    page: DashboardEditablePage,
+    content: DashboardEditablePage["content"],
+  ) => void;
+}) {
+  const content = page.content;
+
+  function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const values = new FormData(event.currentTarget);
+    onSave(page, {
+      ...content,
+      hero: {
+        eyebrow: field(values, "heroEyebrow"),
+        title: field(values, "heroTitle"),
+        accent: field(values, "heroAccent"),
+        description: field(values, "heroDescription"),
+      },
+      introduction: {
+        eyebrow: field(values, "introEyebrow"),
+        title: field(values, "introTitle"),
+        accent: field(values, "introAccent"),
+        paragraphs: paragraphs(field(values, "introParagraphs")),
+      },
+      programmeAreas: content.programmeAreas.map((area, index) => ({
+        label: field(values, `programmeLabel${index}`),
+        title: field(values, `programmeTitle${index}`),
+        description: field(values, `programmeDescription${index}`),
+      })),
+      schoolSections: content.schoolSections.map((section, index) => ({
+        label: field(values, `schoolLabel${index}`),
+        stage: field(values, `schoolStage${index}`),
+        title: field(values, `schoolTitle${index}`),
+        description: field(values, `schoolDescription${index}`),
+        points: lines(field(values, `schoolPoints${index}`)),
+      })),
+      statement: field(values, "statement"),
+      person: content.person,
+      role: content.role,
+    });
+  }
+
+  return (
+    <form
+      onSubmit={submit}
+      className="border-t-4 border-school-red bg-white p-6 shadow-sm sm:p-8"
+    >
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p className="text-[0.62rem] font-bold uppercase tracking-[0.14em] text-school-red">
+            Sports & co-curricular programme
+          </p>
+          <h3 className="mt-2 font-serif text-3xl">
+            Sports, swimming & co-curricular
+          </h3>
+        </div>
+        <p className="max-w-md border-l-2 border-school-gold pl-4 text-xs leading-6 text-school-muted">
+          Replace this page&apos;s six activity photographs from Media → Sports & Co. The Sports Head&apos;s name, role and portrait are managed under Leadership.
+        </p>
+      </div>
+
+      <div className="mt-7 grid gap-4 md:grid-cols-2">
+        <Field label="Hero label">
+          <input name="heroEyebrow" defaultValue={content.hero.eyebrow} required className={inputClass} />
+        </Field>
+        <Field label="Hero headline">
+          <input name="heroTitle" defaultValue={content.hero.title} required className={inputClass} />
+        </Field>
+        <Field label="Highlighted words">
+          <input name="heroAccent" defaultValue={content.hero.accent} className={inputClass} />
+        </Field>
+        <Field label="Hero description">
+          <textarea name="heroDescription" defaultValue={content.hero.description} required className={`${inputClass} min-h-24 resize-y`} />
+        </Field>
+      </div>
+
+      <div className="mt-7 grid gap-4 border border-school-navy/10 bg-school-cream/45 p-5 md:grid-cols-2">
+        <Field label="Introduction label">
+          <input name="introEyebrow" defaultValue={content.introduction.eyebrow} required className={inputClass} />
+        </Field>
+        <Field label="Introduction heading">
+          <input name="introTitle" defaultValue={content.introduction.title} required className={inputClass} />
+        </Field>
+        <Field label="Introduction highlighted words">
+          <input name="introAccent" defaultValue={content.introduction.accent} className={inputClass} />
+        </Field>
+        <div className="md:col-span-2">
+          <Field label="Introduction paragraphs (leave a blank line between them)">
+            <textarea name="introParagraphs" defaultValue={content.introduction.paragraphs.join("\n\n")} required className={`${inputClass} min-h-64 resize-y`} />
+          </Field>
+        </div>
+      </div>
+
+      <div className="mt-7">
+        <p className="text-[0.64rem] font-bold uppercase tracking-[0.14em] text-school-red">
+          Programme areas
+        </p>
+        <div className="mt-4 grid gap-4 lg:grid-cols-2">
+          {content.programmeAreas.map((area, index) => (
+            <section key={index} className="grid gap-4 border border-school-navy/10 p-5">
+              <div className="grid gap-4 sm:grid-cols-[90px_1fr]">
+                <Field label="Number">
+                  <input name={`programmeLabel${index}`} defaultValue={area.label} required className={inputClass} />
+                </Field>
+                <Field label="Title">
+                  <input name={`programmeTitle${index}`} defaultValue={area.title} required className={inputClass} />
+                </Field>
+              </div>
+              <Field label="Description">
+                <textarea name={`programmeDescription${index}`} defaultValue={area.description} required className={`${inputClass} min-h-24 resize-y`} />
+              </Field>
+            </section>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-7">
+        <p className="text-[0.64rem] font-bold uppercase tracking-[0.14em] text-school-red">
+          School sections
+        </p>
+        <div className="mt-4 grid gap-5">
+          {content.schoolSections.map((section, index) => (
+            <section key={index} className="grid gap-4 border border-school-navy/10 bg-school-cream/45 p-5 md:grid-cols-2">
+              <Field label="School section">
+                <input name={`schoolLabel${index}`} defaultValue={section.label} required className={inputClass} />
+              </Field>
+              <Field label="Classes / years">
+                <input name={`schoolStage${index}`} defaultValue={section.stage} required className={inputClass} />
+              </Field>
+              <Field label="Section headline">
+                <input name={`schoolTitle${index}`} defaultValue={section.title} required className={inputClass} />
+              </Field>
+              <Field label="Programme labels (one per line)">
+                <textarea name={`schoolPoints${index}`} defaultValue={section.points.join("\n")} required className={`${inputClass} min-h-24 resize-y`} />
+              </Field>
+              <div className="md:col-span-2">
+                <Field label="Section introduction">
+                  <textarea name={`schoolDescription${index}`} defaultValue={section.description} required className={`${inputClass} min-h-28 resize-y`} />
+                </Field>
+              </div>
+            </section>
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-7 grid gap-4 border-l-4 border-school-gold bg-school-navy p-5 text-white md:grid-cols-2">
+        <div className="md:col-span-2">
+          <Field label="Closing statement">
+            <textarea name="statement" defaultValue={content.statement} required className={`${inputClass} min-h-24 resize-y`} />
+          </Field>
+        </div>
+        <p className="text-sm leading-7 text-white/70 md:col-span-2">
+          The department head shown beside the opening message is the Head
+          Co-curricular profile under Leadership. Edit that profile to change
+          the person, role or portrait.
+        </p>
+      </div>
+
+      <div className="mt-7 flex justify-end">
+        <SaveButton saving={saving} label="Save Sports & Co. page" />
+      </div>
+    </form>
   );
 }
 
@@ -166,7 +354,7 @@ function LeadershipMessageEditor({
         <div className="bg-school-navy p-6 text-white">
           <div className="relative aspect-square overflow-hidden bg-white">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={message.image} alt="" className="h-full w-full object-contain" />
+            <img src={normalizePublicImageUrl(message.image)} alt="" className="h-full w-full object-contain" />
           </div>
           <label className="mt-5 grid gap-2 text-[0.62rem] font-bold uppercase tracking-[0.12em] text-school-gold">
             Replace portrait
@@ -215,51 +403,120 @@ function FeeStructureEditor({
 }: {
   page: DashboardFeePage;
   saving: boolean;
-  onSave: (page: DashboardEditablePage, content: DashboardEditablePage["content"]) => void;
+  onSave: (
+    page: DashboardEditablePage,
+    content: DashboardEditablePage["content"],
+    photo?: File | null,
+    feeDocument?: File | null,
+  ) => void;
 }) {
   const content = page.content;
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const values = new FormData(event.currentTarget);
-    onSave(page, {
-      ...content,
-      hero: {
-        ...content.hero,
-        title: field(values, "heroTitle"),
-        accent: field(values, "heroAccent"),
-        description: field(values, "heroDescription"),
+    const feeDocument = values.get("feeDocument");
+    onSave(
+      page,
+      {
+        ...content,
+        hero: {
+          ...content.hero,
+          title: field(values, "heroTitle"),
+          accent: field(values, "heroAccent"),
+          description: field(values, "heroDescription"),
+        },
+        introduction: {
+          ...content.introduction,
+          title: field(values, "introTitle"),
+          accent: field(values, "introAccent"),
+          paragraphs: paragraphs(field(values, "introParagraphs")),
+        },
+        highlights: content.highlights.map((highlight, index) => ({
+          label: field(values, `highlightLabel${index}`),
+          value: field(values, `highlightValue${index}`),
+          note: field(values, `highlightNote${index}`),
+        })),
+        sections: content.sections.map((section, index) => ({
+          eyebrow: field(values, `feeEyebrow${index}`),
+          title: field(values, `feeTitle${index}`),
+          paragraphs: paragraphs(field(values, `feeParagraphs${index}`)),
+          points: lines(field(values, `feePoints${index}`)),
+        })),
+        document: content.document
+          ? {
+              ...content.document,
+              label: field(values, "documentLabel"),
+              fileName: field(values, "documentFileName"),
+              description: field(values, "documentDescription"),
+            }
+          : undefined,
+        notice: content.notice
+          ? {
+              ...content.notice,
+              title: field(values, "noticeTitle"),
+              description: field(values, "noticeDescription"),
+            }
+          : undefined,
       },
-      introduction: {
-        ...content.introduction,
-        title: field(values, "introTitle"),
-        accent: field(values, "introAccent"),
-        paragraphs: paragraphs(field(values, "introParagraphs")),
-      },
-      highlights: content.highlights.map((highlight, index) => ({
-        label: field(values, `highlightLabel${index}`),
-        value: field(values, `highlightValue${index}`),
-        note: field(values, `highlightNote${index}`),
-      })),
-      sections: content.sections.map((section, index) => ({
-        eyebrow: field(values, `feeEyebrow${index}`),
-        title: field(values, `feeTitle${index}`),
-        paragraphs: paragraphs(field(values, `feeParagraphs${index}`)),
-        points: lines(field(values, `feePoints${index}`)),
-      })),
-      notice: content.notice
-        ? {
-            ...content.notice,
-            title: field(values, "noticeTitle"),
-            description: field(values, "noticeDescription"),
-          }
-        : undefined,
-    });
+      null,
+      feeDocument instanceof File ? feeDocument : null,
+    );
   }
 
   return (
     <form onSubmit={submit} className="border-t-4 border-school-gold bg-white p-6 shadow-sm sm:p-8">
       <p className="text-[0.62rem] font-bold uppercase tracking-[0.14em] text-school-red">Admissions information</p>
       <h3 className="mt-2 font-serif text-3xl">Fee structure</h3>
+
+      {content.document ? (
+        <div className="mt-6 grid gap-5 border-l-4 border-school-gold bg-school-cream/60 p-5 text-school-ink md:grid-cols-2">
+          <div className="md:col-span-2">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <p className="text-[0.62rem] font-bold uppercase tracking-[0.14em] text-school-red">
+                  Downloadable fee document
+                </p>
+                <p className="mt-2 text-sm text-school-muted">
+                  Upload a new PDF whenever the official schedule changes.
+                </p>
+              </div>
+              <a
+                href={content.document.url}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.12em] text-school-navy hover:text-school-red"
+              >
+                <FileDown aria-hidden="true" className="size-4" />
+                View current PDF
+              </a>
+            </div>
+          </div>
+          <Field label="Replace PDF">
+            <input
+              type="file"
+              name="feeDocument"
+              accept="application/pdf,.pdf"
+              className="text-xs font-normal normal-case tracking-normal text-school-muted file:mr-3 file:border-0 file:bg-school-navy file:px-3 file:py-2 file:text-[0.6rem] file:font-bold file:uppercase file:text-white"
+            />
+          </Field>
+          <Field label="Downloaded file name">
+            <input
+              name="documentFileName"
+              defaultValue={content.document.fileName}
+              required
+              pattern="[A-Za-z0-9][A-Za-z0-9._-]*[.]pdf"
+              className={inputClass}
+            />
+          </Field>
+          <Field label="Download section heading">
+            <input name="documentLabel" defaultValue={content.document.label} required className={inputClass} />
+          </Field>
+          <Field label="Document description">
+            <textarea name="documentDescription" defaultValue={content.document.description} required className={`${inputClass} min-h-24 resize-y`} />
+          </Field>
+        </div>
+      ) : null}
+
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         <Field label="Hero headline"><input name="heroTitle" defaultValue={content.hero.title} required className={inputClass} /></Field>
         <Field label="Highlighted words"><input name="heroAccent" defaultValue={content.hero.accent} className={inputClass} /></Field>
@@ -324,6 +581,22 @@ async function uploadPageImage(file: File, stem: string) {
     upsert: false,
   });
   if (error) throw new Error(error.message || "The portrait upload failed.");
+  return objectPath;
+}
+
+async function uploadFeeDocument(file: File) {
+  if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+    throw new Error("Choose a PDF fee structure document.");
+  }
+  const objectPath = `documents/fee-structure-${Date.now()}-${crypto.randomUUID()}.pdf`;
+  const { error } = await createSupabaseBrowserClient().storage
+    .from("site-documents")
+    .upload(objectPath, file, {
+      contentType: "application/pdf",
+      cacheControl: "3600",
+      upsert: false,
+    });
+  if (error) throw new Error(error.message || "The fee document upload failed.");
   return objectPath;
 }
 

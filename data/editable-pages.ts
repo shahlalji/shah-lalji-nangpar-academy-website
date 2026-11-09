@@ -2,11 +2,14 @@ import type { ContentPage } from "@/data/content-pages";
 import { contentPages } from "@/data/content-pages";
 import type { LeadershipMessage } from "@/data/leadership";
 import { leadershipMessages } from "@/data/leadership";
+import type { EnrichmentPage } from "@/data/enrichment";
+import { enrichmentPage } from "@/data/enrichment";
 
 export type EditablePageKey =
   | "board-chair-message"
   | "school-administrator-message"
-  | "fee-structure";
+  | "fee-structure"
+  | "sports-co-curricular";
 
 export type DashboardLeadershipMessagePage = {
   key: "board-chair-message" | "school-administrator-message";
@@ -24,9 +27,18 @@ export type DashboardFeePage = {
   updatedAt: string;
 };
 
+export type DashboardEnrichmentPage = {
+  key: "sports-co-curricular";
+  label: string;
+  kind: "enrichment";
+  content: EnrichmentPage;
+  updatedAt: string;
+};
+
 export type DashboardEditablePage =
   | DashboardLeadershipMessagePage
-  | DashboardFeePage;
+  | DashboardFeePage
+  | DashboardEnrichmentPage;
 
 export const editablePageDefinitions: readonly DashboardEditablePage[] = [
   {
@@ -48,6 +60,13 @@ export const editablePageDefinitions: readonly DashboardEditablePage[] = [
     label: "Fee structure",
     kind: "fee-structure",
     content: contentPages.feeStructure,
+    updatedAt: "",
+  },
+  {
+    key: "sports-co-curricular",
+    label: "Sports, swimming & co-curricular",
+    kind: "enrichment",
+    content: enrichmentPage,
     updatedAt: "",
   },
 ];

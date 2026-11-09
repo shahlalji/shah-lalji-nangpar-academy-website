@@ -25,7 +25,7 @@ export function Header() {
   }, []);
 
   return (
-    <header>
+    <header id="site-navigation">
       <div className="bg-school-navy text-white">
         <div className="mx-auto flex min-h-10 max-w-[1440px] items-center justify-between gap-5 px-4 text-[0.68rem] font-semibold uppercase tracking-[0.11em] sm:px-6 lg:px-10">
           <div className="flex items-center gap-5">

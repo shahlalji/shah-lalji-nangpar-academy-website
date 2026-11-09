@@ -231,11 +231,6 @@ export default function EducationPage() {
                 </article>
               ))}
             </div>
-            <div className="mt-10 flex">
-              <ButtonLink href="/education/homework-policy" variant="outline">
-                Read homework & assessment policy
-              </ButtonLink>
-            </div>
           </div>
         </section>
 

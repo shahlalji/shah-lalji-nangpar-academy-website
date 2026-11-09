@@ -41,6 +41,12 @@ export type ContentPage = {
     }[];
   };
   sections: readonly ContentPageSection[];
+  document?: {
+    url: string;
+    label: string;
+    fileName: string;
+    description: string;
+  };
   relatedLinks?: readonly {
     eyebrow: string;
     title: string;
@@ -184,9 +190,9 @@ export const contentPages = {
       },
       {
         eyebrow: "Our people",
-        title: "Senior Management Team",
+        title: "Leadership and Management",
         description:
-          "Meet the academic and operational leaders responsible for the academy’s day-to-day direction.",
+          "See how governance, academic and operational leaders connect across the academy.",
         href: "/our-school/senior-management-team",
       },
     ],
@@ -564,150 +570,165 @@ export const contentPages = {
       },
     ],
   },
-  homeworkPolicy: {
-    route: "/education/homework-policy",
-    metaTitle: "Homework & Assessment Policy | Shah Lalji Nangpar Academy",
-    metaDescription:
-      "Learn how homework and assessment support balanced, independent learning at Shah Lalji Nangpar Academy.",
-    hero: {
-      eyebrow: "Homework & Assessment",
-      title: "Purposeful practice.",
-      accent: "Balanced growth.",
-      description:
-        "Homework and assessment are designed to reinforce understanding, develop independence and give every learner useful feedback.",
-      image: "/images/school/student-portrait.webp",
-      imageAlt: "A smiling SLNA learner ready for class",
-      imagePosition: "object-center",
-    },
-    introduction: {
-      eyebrow: "Homework policy",
-      title: "Learning continues with",
-      accent: "purpose.",
-      paragraphs: [
-        "SLNA balances academic rigour with the time children need for family, rest, interests and personal growth. Homework is selected to reinforce classroom learning rather than simply add volume.",
-        "Expectations increase gradually as learners progress. In Senior School, private study and effective time management become increasingly important in preparation for examinations and advanced study.",
-      ],
-    },
-    highlights: [
-      {
-        label: "Primary",
-        value: "Reinforce",
-        note: "Regular, age-appropriate practice",
-      },
-      {
-        label: "Secondary",
-        value: "Prepare",
-        note: "Independent study and examination readiness",
-      },
-      {
-        label: "Assessment",
-        value: "Inform",
-        note: "Teaching and next-step planning",
-      },
-    ],
-    sections: [
-      {
-        eyebrow: "Why homework matters",
-        title: "Practice that builds independence.",
-        paragraphs: [
-          "Well-designed tasks help learners revisit important ideas, apply skills in a new context and take increasing responsibility for their progress.",
-        ],
-        points: [
-          "Strengthen understanding of classroom concepts",
-          "Develop independent learning habits",
-          "Prepare for assessment and real-world challenges",
-          "Build organisation and time-management skills",
-        ],
-      },
-      {
-        eyebrow: "Assessment at SLNA",
-        title: "Evidence that guides the next step.",
-        paragraphs: [
-          "Assessment helps teachers identify achievement, recognise strengths, plan support and evaluate the effectiveness of teaching. A range of methods provides a fuller picture than a single test.",
-        ],
-        points: [
-          "Formal and internal assessments",
-          "Homework and classwork review",
-          "Research projects and fieldwork",
-          "Practical work, discussion and presentation",
-        ],
-      },
-    ],
-  },
   feeStructure: {
     route: "/admissions/fee-structure",
     metaTitle: "Fee Structure | Shah Lalji Nangpar Academy",
     metaDescription:
-      "Review the published 2025/26 fee components for Shah Lalji Nangpar Academy and contact admissions for the current schedule.",
+      "Review the official 2026-2027 fee structure for Shah Lalji Nangpar Academy and download the complete schedule.",
     hero: {
       eyebrow: "Fee Structure",
       title: "Clear information for",
       accent: "families.",
       description:
-        "A guide to the fee components published for the 2025/26 academic year, with direct support from the admissions team.",
+        "The published September 2026-2027 fee schedule, with tuition by school stage, additional charges and payment guidance.",
       image: "/images/school/campus-assembly.webp",
       imageAlt: "The SLNA learning community gathered on campus",
       imagePosition: "object-center",
     },
     introduction: {
-      eyebrow: "Published fee components",
+      eyebrow: "September 2026-2027",
       title: "Plan with",
       accent: "confidence.",
       paragraphs: [
-        "The figures below reproduce the additional fee components published by the academy for the 2025/26 academic year. Tuition varies by school stage and the admissions office provides the complete current schedule.",
-        "Because fees and payment arrangements can change between academic years, families should confirm all amounts, due dates and refund conditions directly with admissions before making a payment.",
+        "The figures below reproduce the academy's official fee structure for the 2026-2027 academic year, covering EYFS, Junior School, Senior School and optional activities.",
+        "Please use the downloadable official document for payment guidelines, important notes and account details. The Accounts Office can clarify which charges apply to an individual learner.",
       ],
     },
     highlights: [
       {
-        label: "Admission / registration",
-        value: "KSh 10,000",
-        note: "One-time charge across the three schools",
+        label: "Interview / assessment",
+        value: "KES 5,000",
+        note: "Applicable across the three schools",
       },
       {
-        label: "Insurance",
-        value: "KSh 965",
-        note: "Published annual charge",
+        label: "Admission fee",
+        value: "KES 10,000",
+        note: "Applicable across the three schools",
       },
       {
         label: "Academic year",
-        value: "2025/26",
-        note: "Contact admissions for the latest schedule",
+        value: "2026-2027",
+        note: "Published September schedule",
       },
     ],
     sections: [
       {
-        eyebrow: "Refundable caution money",
-        title: "Published one-time deposits.",
+        eyebrow: "EYFS",
+        title: "Early learning fees.",
         paragraphs: [
-          "Caution money is described as a one-time refundable payment. The school will confirm the applicable terms and refund conditions.",
+          "Published fees for the academy's four EYFS classes.",
         ],
         points: [
-          "EYFS — KSh 40,000",
-          "Junior School — KSh 60,000",
-          "Senior School — KSh 100,000",
+          "Playgroup - KES 33,100",
+          "Nursery - KES 47,100",
+          "Kindergarten - KES 51,500",
+          "Reception - KES 56,700",
         ],
       },
       {
-        eyebrow: "Other published charges",
-        title: "Stage-specific application and learning costs.",
+        eyebrow: "Junior School",
+        title: "Years 1 to 6.",
         paragraphs: [
-          "Some additional charges apply only to particular school stages or activities. Admissions will confirm which items apply to an individual learner.",
+          "Published fees are grouped by year level within Junior School.",
         ],
         points: [
-          "Junior School interview — KSh 3,000",
-          "Senior School interview — KSh 5,000",
-          "Nursery and Kindergarten afternoon classes — KSh 6,000",
-          "EYFS and Junior workbooks — KSh 2,000 annually",
+          "Years 1 and 2 - KES 58,800",
+          "Years 3 and 4 - KES 70,200",
+          "Years 5 and 6 - KES 84,800",
+        ],
+      },
+      {
+        eyebrow: "Senior School",
+        title: "Years 7 to 13.",
+        paragraphs: [
+          "Published fees for Senior School, IGCSE and Sixth Form year groups.",
+        ],
+        points: [
+          "Year 7 - KES 90,750",
+          "Year 8 - KES 101,200",
+          "Year 9 - KES 115,940",
+          "Year 10 - KES 122,500",
+          "Year 11 - KES 127,300",
+          "Years 12 and 13 - KES 129,500",
+        ],
+      },
+      {
+        eyebrow: "Additional charges",
+        title: "Learning and enrolment costs.",
+        paragraphs: [
+          "These charges apply according to school stage, programme or service.",
+        ],
+        points: [
+          "Junior School caution money - KES 30,000",
+          "Senior School caution money - KES 40,000",
+          "Student accident policy - KES 1,000 annually",
+          "Nursery afternoon programme - KES 6,000",
+          "Nursery workbooks - KES 2,500 annually",
+          "Kindergarten and Reception workbooks - KES 7,500 annually",
+          "Junior School workbooks - KES 5,500 annually",
+          "Digital learning resources (Numbots and Bug Club) - KES 1,500 annually",
+        ],
+      },
+      {
+        eyebrow: "Optional extras",
+        title: "Ten lessons per term.",
+        paragraphs: [
+          "Optional activities are billed separately. The published examples below cover ten lessons per term.",
+        ],
+        points: [
+          "Peri lessons - KES 7,500",
+          "Robotics - KES 6,000",
+          "Speech and Drama (LAMDA), excluding exam fees - KES 7,000",
+          "Tae Kwo Ndo - KES 3,500",
+          "Ballet - KES 3,500",
+          "Dance - KES 3,500",
+          "Chess - KES 3,500",
+          "Tennis - KES 4,500",
+        ],
+      },
+      {
+        eyebrow: "Payment guidelines",
+        title: "When fees are due.",
+        paragraphs: [
+          "Individual pupil invoices are issued at the end of each term. All invoices must be settled in full on or before the first day of term, and cash payments are not accepted.",
+        ],
+        points: [
+          "Years 6, 11 and 13 pay the full year's fees in two equal instalments",
+          "The first instalment is due on the first day of the academic year",
+          "The second instalment is due at the beginning of Term Two",
+          "Sibling discounts apply to basic fees for the second and subsequent children",
+          "Extra-curricular activities are billed in advance for the following term",
+        ],
+      },
+      {
+        eyebrow: "Important notes",
+        title: "Please read before payment.",
+        paragraphs: [
+          "The Board of Governors' complete conditions are contained in the official downloadable document.",
+        ],
+        points: [
+          "The Board may revise fees termly if economic conditions change significantly",
+          "Bank charges and dishonoured payment charges are debited to the family fee account",
+          "Dishonoured cheques attract a KES 5,000 administration fee",
+          "Workbook costs may vary annually because the materials are imported",
+          "Caution money is adjusted as learners progress to the next school section",
+          "A 3% monthly interest charge may apply to overdue balances under the published conditions",
         ],
       },
     ],
-    notice: {
-      eyebrow: "Before you pay",
-      title: "Please request the current official fee schedule.",
+    document: {
+      url: "/documents/fees-structure-2026-2027.pdf",
+      label: "Download the official fee structure",
+      fileName: "SLNA-Fee-Structure-2026-2027.pdf",
       description:
-        "The figures on this page are clearly marked as the school’s published 2025/26 information. Admissions will confirm current tuition, extras, payment details and refund terms in writing.",
-      actionLabel: "Confirm current fees",
+        "Download the complete two-page 2026-2027 schedule, including payment guidelines, important notes and official payment details.",
+    },
+    notice: {
+      eyebrow: "Need clarification?",
+      title: "Speak with the Accounts Office before payment.",
+      description:
+        "For clarification about invoices, applicable charges or payment arrangements, contact the school and request guidance from the Accounts Office.",
+      actionLabel: "Contact the school",
       actionHref: "/contact",
     },
   },

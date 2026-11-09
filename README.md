@@ -17,10 +17,9 @@ Academy. Built with Next.js, TypeScript, Tailwind CSS and Lucide icons.
   - Senior School: `/education/senior-school`
   - IGCSE: `/education/igcse`
   - A-Level: `/education/a-level`
-  - Homework & Assessment Policy: `/education/homework-policy`
 - Admissions: `/admissions`
   - Fee Structure: `/admissions/fee-structure`
-- School Life: `/school-life`
+- Sports & Co-curricular: `/sports-and-co-curricular`
 - School Stories: `/stories`
   - Learning Through Discovery: `/stories/learning-through-discovery`
   - Confidence to Compete: `/stories/confidence-to-compete`

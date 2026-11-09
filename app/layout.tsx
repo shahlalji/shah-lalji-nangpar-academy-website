@@ -6,6 +6,7 @@ import {
   type ImageRegistry,
 } from "@/components/ManagedImage";
 import { PrivacyNotice } from "@/components/PrivacyNotice";
+import { BackToTop } from "@/components/BackToTop";
 import { getPublicSiteImageOverrides } from "@/db/dashboard";
 import { getSiteOrigin } from "@/lib/site-origin";
 import "./globals.css";
@@ -106,6 +107,7 @@ export default async function RootLayout({
       <body className={`${geistSans.variable} antialiased`}>
         <ManagedImageProvider initialRegistry={imageRegistry}>
           {children}
+          <BackToTop />
           <PrivacyNotice />
         </ManagedImageProvider>
       </body>

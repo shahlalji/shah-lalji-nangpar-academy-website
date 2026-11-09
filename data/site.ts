@@ -40,7 +40,7 @@ export const navigation = [
         href: "/our-school/school-administrator-message",
       },
       {
-        label: "Senior Management Team",
+        label: "Leadership & Management",
         href: "/our-school/senior-management-team",
       },
     ],
@@ -55,7 +55,6 @@ export const navigation = [
       { label: "Senior School", href: "/education/senior-school" },
       { label: "IGCSE", href: "/education/igcse" },
       { label: "A-Level", href: "/education/a-level" },
-      { label: "Homework Policy", href: "/education/homework-policy" },
     ],
   },
   {
@@ -66,7 +65,7 @@ export const navigation = [
       { label: "Fee Structure", href: "/admissions/fee-structure" },
     ],
   },
-  { label: "School Life", href: "/school-life" },
+  { label: "Sports & Co.", href: "/sports-and-co-curricular" },
   { label: "Stories", href: "/stories" },
   { label: "Events", href: "/events" },
   { label: "Gallery", href: "/gallery" },
@@ -143,7 +142,6 @@ export const educationLinks = [
   { label: "Senior School", href: "/education/senior-school" },
   { label: "IGCSE", href: "/education/igcse" },
   { label: "A-Level", href: "/education/a-level" },
-  { label: "Homework Policy", href: "/education/homework-policy" },
 ] as const;
 
 export const strengths = [
@@ -174,12 +172,12 @@ export const strengths = [
 ] as const;
 
 export const schoolLife = [
-  "Academics",
   "Sports",
-  "Arts",
+  "Swimming",
   "Clubs",
-  "Leadership",
-  "Community engagement",
+  "Competition",
+  "Performance",
+  "Co-curricular",
 ] as const;
 
 export const statistics = [

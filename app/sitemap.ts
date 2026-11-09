@@ -11,7 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/our-school",
     "/education",
     "/admissions",
-    "/school-life",
+    "/sports-and-co-curricular",
     "/stories",
     "/events",
     "/gallery",

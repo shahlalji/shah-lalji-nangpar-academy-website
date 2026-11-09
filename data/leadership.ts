@@ -97,7 +97,54 @@ export const leadershipMessages = {
   },
 } as const satisfies Record<string, LeadershipMessage>;
 
+export const leadershipHierarchyGroups = [
+  {
+    key: "governance",
+    label: "Board Chair",
+    description:
+      "Governance, stewardship and long-term direction for the academy.",
+  },
+  {
+    key: "administration",
+    label: "School Administration",
+    description:
+      "Whole-school execution, coordination, safeguarding and strategic delivery.",
+  },
+  {
+    key: "heads",
+    label: "School Heads",
+    description:
+      "The leaders responsible for Senior School, Junior School and EYFS.",
+  },
+  {
+    key: "deputies",
+    label: "Deputies and Co-curricular Leadership",
+    description:
+      "Leaders who strengthen day-to-day academic coordination and the wider student experience.",
+  },
+  {
+    key: "operations",
+    label: "Operational Leadership",
+    description:
+      "Specialist functions that keep people, technology and facilities working well.",
+  },
+] as const;
+
+export type LeadershipHierarchyGroup =
+  (typeof leadershipHierarchyGroups)[number]["key"];
+
 export const seniorManagementTeam = [
+  {
+    slug: "board-chair",
+    name: "Mr Rajen Shah",
+    role: "Chair, Board of Governors",
+    area: "Governance",
+    description:
+      "Provides governance, stewardship and long-term direction for the academy.",
+    confirmed: true,
+    hierarchyGroup: "governance",
+    sortOrder: 1,
+  },
   {
     slug: "school-administrator",
     name: "Ms Alice Okidia",
@@ -106,24 +153,30 @@ export const seniorManagementTeam = [
     description:
       "Leads whole-school operations, strategy, safeguarding and the coordination of academic and administrative teams.",
     confirmed: true,
+    hierarchyGroup: "administration",
+    sortOrder: 1,
   },
   {
     slug: "senior-school-head",
     name: "Ms Molly Okumu",
-    role: "Senior School Head",
+    role: "Head Senior School",
     area: "Senior School",
     description:
       "Leads teaching, learning, pastoral care and student progress across Senior School, IGCSE and Sixth Form.",
     confirmed: true,
+    hierarchyGroup: "heads",
+    sortOrder: 1,
   },
   {
     slug: "junior-school-head",
     name: "Mr George Gasper",
-    role: "Junior School Head",
+    role: "Head Junior School",
     area: "Junior School",
     description:
       "Leads the Junior School’s academic programme, learner development and partnership with families.",
     confirmed: true,
+    hierarchyGroup: "heads",
+    sortOrder: 2,
   },
   {
     slug: "head-of-early-years",
@@ -133,6 +186,52 @@ export const seniorManagementTeam = [
     description:
       "Leads the academy’s youngest learning community and its child-centred foundation programme.",
     confirmed: true,
+    hierarchyGroup: "heads",
+    sortOrder: 3,
+  },
+  {
+    slug: "deputy-head-senior-school",
+    name: "Profile to be confirmed",
+    role: "Deputy Head Senior School",
+    area: "Senior School",
+    description:
+      "Supports Senior School leadership, academic coordination, student progress and pastoral care.",
+    confirmed: false,
+    hierarchyGroup: "deputies",
+    sortOrder: 1,
+  },
+  {
+    slug: "deputy-head-junior-school",
+    name: "Profile to be confirmed",
+    role: "Deputy Head Junior School",
+    area: "Junior School",
+    description:
+      "Supports Junior School leadership, teaching quality, learner development and daily coordination.",
+    confirmed: false,
+    hierarchyGroup: "deputies",
+    sortOrder: 2,
+  },
+  {
+    slug: "head-co-curricular",
+    name: "Profile to be confirmed",
+    role: "Head Co-curricular",
+    area: "Whole-school enrichment",
+    description:
+      "Coordinates sport, clubs, arts and enrichment opportunities across the academy.",
+    confirmed: false,
+    hierarchyGroup: "deputies",
+    sortOrder: 3,
+  },
+  {
+    slug: "human-resources-manager",
+    name: "Profile to be confirmed",
+    role: "Human Resources",
+    area: "People and culture",
+    description:
+      "Supports staff wellbeing, recruitment, professional practice and the academy’s people operations.",
+    confirmed: false,
+    hierarchyGroup: "operations",
+    sortOrder: 1,
   },
   {
     slug: "head-of-information-technology",
@@ -142,6 +241,8 @@ export const seniorManagementTeam = [
     description:
       "Oversees technology infrastructure, digital learning systems, data security and school-wide IT support.",
     confirmed: false,
+    hierarchyGroup: "operations",
+    sortOrder: 2,
   },
   {
     slug: "facilities-manager",
@@ -151,15 +252,8 @@ export const seniorManagementTeam = [
     description:
       "Coordinates campus facilities, maintenance, safety, utilities and the readiness of learning spaces.",
     confirmed: false,
-  },
-  {
-    slug: "school-accountant",
-    name: "Profile to be confirmed",
-    role: "School Accountant",
-    area: "Finance",
-    description:
-      "Supports financial stewardship, reporting, fee administration, budgeting and operational accountability.",
-    confirmed: false,
+    hierarchyGroup: "operations",
+    sortOrder: 3,
   },
 ] as const;
 

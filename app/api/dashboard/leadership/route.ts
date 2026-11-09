@@ -6,6 +6,7 @@ import {
 } from "@/db/dashboard";
 import { requireDashboardApiUser } from "@/lib/dashboard-auth";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import type { LeadershipHierarchyGroup } from "@/data/leadership";
 
 export async function GET() {
   const access = await requireDashboardApiUser();
@@ -15,7 +16,7 @@ export async function GET() {
     return Response.json({ profiles: await getDashboardLeadershipProfiles() });
   } catch {
     return Response.json(
-      { error: "Leadership editing is not ready. Run supabase/media-library.sql again." },
+      { error: "Leadership hierarchy is not ready. Run supabase/leadership-hierarchy.sql." },
       { status: 503 },
     );
   }
@@ -70,9 +71,11 @@ export async function PUT(request: Request) {
     const area = field(payload, "area", 80);
     const description = field(payload, "description", 600);
     const photoAlt = field(payload, "photoAlt", 220, false);
-    if (!name || !role || !area || !description) {
+    const hierarchyGroup = parseHierarchyGroup(payload.hierarchyGroup);
+    const requestedSortOrder = parseSortOrder(payload.sortOrder);
+    if (!name || !role || !area || !description || !hierarchyGroup) {
       return Response.json(
-        { error: "Name, role, leadership area and biography are required." },
+        { error: "Name, role, leadership area, hierarchy group and biography are required." },
         { status: 400 },
       );
     }
@@ -97,8 +100,10 @@ export async function PUT(request: Request) {
         .publicUrl;
     }
 
-    const sortOrder =
-      profiles.reduce(
+    const sortOrder = requestedSortOrder ??
+      profiles
+        .filter((profile) => profile.hierarchyGroup === hierarchyGroup)
+        .reduce(
         (highest, profile) => Math.max(highest, profile.sortOrder),
         0,
       ) + 1;
@@ -111,6 +116,7 @@ export async function PUT(request: Request) {
       photoUrl,
       photoAlt,
       confirmed: payload.confirmed === true,
+      hierarchyGroup,
       sortOrder,
     });
     return Response.json({ profile }, { status: 201 });
@@ -150,9 +156,11 @@ export async function POST(request: Request) {
     const area = field(payload, "area", 80);
     const description = field(payload, "description", 600);
     const photoAlt = field(payload, "photoAlt", 220, false);
-    if (!name || !role || !area || !description) {
+    const hierarchyGroup = parseHierarchyGroup(payload.hierarchyGroup);
+    const sortOrder = parseSortOrder(payload.sortOrder);
+    if (!name || !role || !area || !description || !hierarchyGroup || !sortOrder) {
       return Response.json(
-        { error: "Name, role, leadership area and biography are required." },
+        { error: "Name, role, leadership area, hierarchy group, position and biography are required." },
         { status: 400 },
       );
     }
@@ -185,6 +193,8 @@ export async function POST(request: Request) {
       photoUrl,
       photoAlt,
       confirmed: payload.confirmed === true,
+      hierarchyGroup,
+      sortOrder,
     });
     return Response.json({ profile });
   } catch {
@@ -203,6 +213,24 @@ function field(
 ) {
   const value = String(payload[name] ?? "").trim().slice(0, maxLength);
   return required || value ? value : "";
+}
+
+function parseHierarchyGroup(value: unknown): LeadershipHierarchyGroup | null {
+  return value === "governance" ||
+    value === "administration" ||
+    value === "heads" ||
+    value === "deputies" ||
+    value === "operations"
+    ? value
+    : null;
+}
+
+function parseSortOrder(value: unknown) {
+  if (value === undefined || value === null || value === "") return null;
+  const parsed = Number(value);
+  return Number.isInteger(parsed) && parsed >= 1 && parsed <= 99
+    ? parsed
+    : null;
 }
 
 function isValidLeadershipPath(path: string) {

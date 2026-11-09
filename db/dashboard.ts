@@ -1,4 +1,5 @@
 import type { Story } from "@/data/stories";
+import type { LeadershipHierarchyGroup } from "@/data/leadership";
 import {
   editablePageDefinitions,
   getEditablePageDefinition,
@@ -93,6 +94,7 @@ export type LeadershipProfile = {
   photoUrl: string | null;
   photoAlt: string;
   confirmed: boolean;
+  hierarchyGroup: LeadershipHierarchyGroup;
   sortOrder: number;
   updatedAt: string;
 };
@@ -165,6 +167,7 @@ type LeadershipProfileRow = {
   photo_url: string | null;
   photo_alt: string;
   confirmed: boolean;
+  hierarchy_group: LeadershipHierarchyGroup;
   sort_order: number;
   updated_at: string;
 };
@@ -531,22 +534,26 @@ export async function getDashboardLeadershipProfiles() {
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase
     .from("leadership_profiles")
-    .select("*")
+    .select("*, hierarchy_group")
     .order("sort_order")
     .order("id");
   if (error) throw error;
-  return (data as LeadershipProfileRow[]).map(mapLeadershipProfile);
+  return sortLeadershipProfiles(
+    (data as LeadershipProfileRow[]).map(mapLeadershipProfile),
+  );
 }
 
 export async function getPublicLeadershipProfiles() {
   const supabase = createSupabasePublicClient();
   const { data, error } = await supabase
     .from("leadership_profiles")
-    .select("*")
+    .select("*, hierarchy_group")
     .order("sort_order")
     .order("id");
   if (error) throw error;
-  return (data as LeadershipProfileRow[]).map(mapLeadershipProfile);
+  return sortLeadershipProfiles(
+    (data as LeadershipProfileRow[]).map(mapLeadershipProfile),
+  );
 }
 
 export async function createLeadershipProfile(input: {
@@ -558,6 +565,7 @@ export async function createLeadershipProfile(input: {
   photoUrl: string | null;
   photoAlt: string;
   confirmed: boolean;
+  hierarchyGroup: LeadershipHierarchyGroup;
   sortOrder: number;
 }) {
   const supabase = await createSupabaseServerClient();
@@ -572,6 +580,7 @@ export async function createLeadershipProfile(input: {
       photo_url: input.photoUrl,
       photo_alt: input.photoAlt,
       confirmed: input.confirmed,
+      hierarchy_group: input.hierarchyGroup,
       sort_order: input.sortOrder,
     })
     .select("*")
@@ -589,6 +598,8 @@ export async function updateLeadershipProfile(input: {
   photoUrl: string | null;
   photoAlt: string;
   confirmed: boolean;
+  hierarchyGroup: LeadershipHierarchyGroup;
+  sortOrder: number;
 }) {
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase
@@ -601,6 +612,8 @@ export async function updateLeadershipProfile(input: {
       photo_url: input.photoUrl,
       photo_alt: input.photoAlt,
       confirmed: input.confirmed,
+      hierarchy_group: input.hierarchyGroup,
+      sort_order: input.sortOrder,
     })
     .eq("slug", input.slug)
     .select("*")
@@ -633,7 +646,11 @@ export async function getDashboardEditablePages(): Promise<DashboardEditablePage
       : null;
     return {
       ...definition,
-      content: parsed ?? definition.content,
+      content: currentEditablePageContent(
+        definition.key,
+        parsed,
+        definition.content,
+      ),
       updatedAt: row?.updated_at ?? "",
     } as DashboardEditablePage;
   });
@@ -650,9 +667,8 @@ export async function getPublicEditablePage(key: EditablePageKey) {
     .maybeSingle();
   if (error) throw error;
   const row = data as EditablePageRow | null;
-  return row
-    ? parseEditablePageContent(key, row.content) ?? definition.content
-    : definition.content;
+  const parsed = row ? parseEditablePageContent(key, row.content) : null;
+  return currentEditablePageContent(key, parsed, definition.content);
 }
 
 export async function updateEditablePage(input: {
@@ -682,6 +698,18 @@ export async function updateEditablePage(input: {
     content: parseEditablePageContent(input.key, row.content) ?? input.content,
     updatedAt: row.updated_at,
   } as DashboardEditablePage;
+}
+
+function currentEditablePageContent(
+  key: EditablePageKey,
+  parsed: DashboardEditablePage["content"] | null,
+  fallback: DashboardEditablePage["content"],
+) {
+  if (
+    key === "fee-structure" &&
+    (!parsed || !("document" in parsed) || !parsed.document)
+  ) return fallback;
+  return parsed ?? fallback;
 }
 
 function mapStory(row: StoryRow): DashboardStory {
@@ -762,9 +790,28 @@ function mapLeadershipProfile(row: LeadershipProfileRow): LeadershipProfile {
     photoUrl: row.photo_url,
     photoAlt: row.photo_alt,
     confirmed: row.confirmed,
+    hierarchyGroup: row.hierarchy_group,
     sortOrder: row.sort_order,
     updatedAt: row.updated_at,
   };
+}
+
+const leadershipGroupOrder: Record<LeadershipHierarchyGroup, number> = {
+  governance: 1,
+  administration: 2,
+  heads: 3,
+  deputies: 4,
+  operations: 5,
+};
+
+function sortLeadershipProfiles(profiles: LeadershipProfile[]) {
+  return profiles.sort(
+    (first, second) =>
+      leadershipGroupOrder[first.hierarchyGroup] -
+        leadershipGroupOrder[second.hierarchyGroup] ||
+      first.sortOrder - second.sortOrder ||
+      first.id - second.id,
+  );
 }
 
 function buildStoryImageSlots(rows: StoryRow[]): SiteImageSlot[] {

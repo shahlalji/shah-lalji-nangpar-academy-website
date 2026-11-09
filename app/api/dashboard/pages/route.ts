@@ -8,7 +8,10 @@ import {
 } from "@/data/editable-pages";
 import { requireDashboardApiUser } from "@/lib/dashboard-auth";
 import { parseEditablePageContent } from "@/lib/editable-page-content";
-import { resolveDashboardImage } from "@/lib/dashboard-storage";
+import {
+  resolveDashboardDocument,
+  resolveDashboardImage,
+} from "@/lib/dashboard-storage";
 
 export async function GET() {
   const access = await requireDashboardApiUser();
@@ -46,6 +49,28 @@ export async function PATCH(request: Request) {
         return Response.json({ error: "The uploaded portrait could not be verified." }, { status: 400 });
       }
       content = { ...(content as Record<string, unknown>), image: publicUrl };
+    }
+
+    const documentObjectPath = String(payload.documentObjectPath ?? "");
+    if (documentObjectPath) {
+      if (definition.kind !== "fee-structure") {
+        return Response.json({ error: "This page does not accept a PDF document." }, { status: 400 });
+      }
+      const publicUrl = await resolveDashboardDocument(documentObjectPath);
+      if (!publicUrl || !content || typeof content !== "object" || Array.isArray(content)) {
+        return Response.json({ error: "The uploaded fee document could not be verified." }, { status: 400 });
+      }
+      const currentDocument = (content as Record<string, unknown>).document;
+      if (!currentDocument || typeof currentDocument !== "object" || Array.isArray(currentDocument)) {
+        return Response.json({ error: "Complete the fee document details before uploading." }, { status: 400 });
+      }
+      content = {
+        ...(content as Record<string, unknown>),
+        document: {
+          ...(currentDocument as Record<string, unknown>),
+          url: publicUrl,
+        },
+      };
     }
 
     const parsed = parseEditablePageContent(key, content);
