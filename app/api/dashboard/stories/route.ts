@@ -1,6 +1,7 @@
 import { createStory, getDashboardSnapshot } from "@/db/dashboard";
 import { parseStoryInput } from "@/lib/dashboard-content";
 import { requireDashboardApiUser } from "@/lib/dashboard-auth";
+import { getDashboardErrorMessage } from "@/lib/dashboard-errors";
 
 export async function GET() {
   const access = await requireDashboardApiUser();
@@ -35,7 +36,7 @@ export async function POST(request: Request) {
 
     return Response.json({ story }, { status: 201 });
   } catch (error) {
-    const message = error instanceof Error ? error.message : "";
+    const message = getDashboardErrorMessage(error);
     if (message.toLowerCase().includes("author_name")) {
       return Response.json(
         { error: "Story authors are not ready. Run supabase/content-management.sql again." },
