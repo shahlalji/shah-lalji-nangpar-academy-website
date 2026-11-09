@@ -75,7 +75,7 @@ test("leadership page presents the complete management hierarchy", async () => {
   assert.match(html, /Head of EYFS/);
   assert.match(html, /Deputy Head Senior School/);
   assert.match(html, /Deputy Head Junior School/);
-  assert.match(html, /Head Co-curricular/);
+  assert.match(html, /Head (?:of )?Co-curricular(?: and Sports)?/);
   assert.match(html, /Human Resources/);
   assert.match(html, /Head of Information Technology/);
   assert.match(html, /Facilities Manager/);
@@ -109,6 +109,7 @@ test("enrichment page presents the whole-school programme by section", async () 
   assert.match(html, /Senior School/);
   assert.doesNotMatch(html, /Section leadership/);
   assert.match(html, /Message from/);
+  assert.match(html, /Ms Jacquline Ogot/);
   assert.doesNotMatch(html, /Profile to be confirmed/);
 });
 

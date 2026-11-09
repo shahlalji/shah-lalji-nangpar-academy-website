@@ -68,16 +68,21 @@ export default async function SportsAndCoCurricularPage() {
     ];
   }
 
+  const savedTeam = team.filter(
+    (member) => member.name.trim().toLowerCase() !== "profile to be confirmed",
+  );
+  const matchesSportsLeadership = (member: LeadershipProfile) => {
+    const leadershipTitle = `${member.role} ${member.area}`.toLowerCase();
+    return (
+      /co[-\s]?curricular/.test(leadershipTitle) ||
+      leadershipTitle.includes("head of sports") ||
+      leadershipTitle.includes("sports head")
+    );
+  };
   const departmentHead =
-    team.find((member) => member.slug === "head-co-curricular") ??
-    team.find((member) => {
-      const leadershipTitle = `${member.role} ${member.area}`.toLowerCase();
-      return (
-        /co[-\s]?curricular/.test(leadershipTitle) ||
-        leadershipTitle.includes("head of sports") ||
-        leadershipTitle.includes("sports head")
-      );
-    });
+    savedTeam.find((member) => member.slug === "head-co-curricular") ??
+    savedTeam.find(matchesSportsLeadership) ??
+    team.find((member) => member.slug === "head-co-curricular");
   const departmentHeadName = departmentHead?.name ?? page.person;
   const departmentHeadRole = departmentHead?.role ?? page.role;
 
