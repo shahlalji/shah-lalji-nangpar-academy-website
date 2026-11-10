@@ -365,7 +365,7 @@ function PersonPortrait({
           alt={photoAlt || `${name}, ${role}`}
           loading="lazy"
           decoding="async"
-          className="absolute inset-0 h-full w-full object-contain"
+          className="absolute inset-0 h-full w-full object-cover object-center"
         />
       ) : (
         <span
