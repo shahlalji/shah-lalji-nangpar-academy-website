@@ -94,6 +94,20 @@ export const siteImageSlots: readonly SiteImageSlot[] = [
       defaultUrl: card.image,
     })) ?? [],
   ),
+  ...(Object.values(contentPages) as ContentPage[]).flatMap((page) =>
+    page.sections.flatMap((section, sectionIndex) =>
+      section.media?.map((media, mediaIndex) => ({
+        key: `content.${page.route.slice(1).replaceAll("/", ".")}.section.${sectionIndex + 1}.image.${mediaIndex + 1}`,
+        label: `${page.hero.eyebrow} — ${section.eyebrow ?? section.title} image ${mediaIndex + 1}`,
+        group: page.route.startsWith("/education")
+          ? "Education"
+          : page.route.startsWith("/our-school")
+            ? "Our School"
+            : "Other pages",
+        defaultUrl: media.image,
+      })) ?? [],
+    ),
+  ),
 ];
 
 const managedImageKeys = new Set(siteImageSlots.map((slot) => slot.key));

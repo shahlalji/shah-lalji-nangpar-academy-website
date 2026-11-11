@@ -3,6 +3,11 @@ export type ContentPageSection = {
   title: string;
   paragraphs: readonly string[];
   points?: readonly string[];
+  media?: readonly {
+    image: string;
+    imageAlt: string;
+    imagePosition?: string;
+  }[];
 };
 
 export type ContentPage = {
@@ -41,6 +46,11 @@ export type ContentPage = {
     }[];
   };
   sections: readonly ContentPageSection[];
+  pullQuote?: {
+    eyebrow: string;
+    text: string;
+    afterSection: number;
+  };
   document?: {
     url: string;
     label: string;
@@ -238,32 +248,6 @@ export const contentPages = {
         note: "Play, exploration, problem-solving and critical thinking",
       },
     ],
-    photoStory: {
-      eyebrow: "A warm start to the day",
-      title: "Welcomed, known and ready to learn.",
-      description:
-        "Morning receiving helps every child settle with confidence, while a varied club programme gives learners more ways to discover their interests, practise new skills and enjoy learning with others.",
-      cards: [
-        {
-          eyebrow: "Morning receiving",
-          title: "A calm and caring welcome",
-          image: "/images/school/careers-day.webp",
-          imageAlt: "EYFS learners together outside the classroom",
-        },
-        {
-          eyebrow: "Movement",
-          title: "Confidence through active play",
-          image: "/images/school/early-years-taekwondo.webp",
-          imageAlt: "EYFS learners taking part in a movement activity",
-        },
-        {
-          eyebrow: "Creativity",
-          title: "Interests that grow beyond lessons",
-          image: "/images/school/creative-arts-masks.webp",
-          imageAlt: "Learners presenting their creative artwork",
-        },
-      ],
-    },
     sections: [
       {
         eyebrow: "Classes and curriculum",
@@ -277,6 +261,12 @@ export const contentPages = {
           "Nursery — Montessori and Cambridge",
           "Kindergarten — Cambridge",
           "Reception — Cambridge",
+        ],
+        media: [
+          {
+            image: "/images/school/early-years-fruit-learning.webp",
+            imageAlt: "EYFS learners exploring fruit during a classroom activity",
+          },
         ],
       },
       {
@@ -293,6 +283,12 @@ export const contentPages = {
           "Holistic physical, emotional and cognitive development",
           "A caring transition into Junior School",
         ],
+        media: [
+          {
+            image: "/images/school/creative-arts-masks.webp",
+            imageAlt: "Learners presenting masks created during an arts activity",
+          },
+        ],
       },
       {
         eyebrow: "The school day",
@@ -308,6 +304,23 @@ export const contentPages = {
         ],
       },
       {
+        eyebrow: "Morning receiving",
+        title: "A calm welcome into school.",
+        paragraphs: [
+          "Children are received warmly each morning and supported as they settle into the day. This reassuring routine helps families leave with confidence and allows every learner to begin feeling safe, seen and ready.",
+        ],
+        media: [
+          {
+            image: "/images/school/careers-day.webp",
+            imageAlt: "Young learners together outside their classroom",
+          },
+          {
+            image: "/images/school/campus-assembly.webp",
+            imageAlt: "Learners gathering together on the school campus",
+          },
+        ],
+      },
+      {
         eyebrow: "Pastoral care",
         title: "Care, love and support every day.",
         paragraphs: [
@@ -319,6 +332,12 @@ export const contentPages = {
           "Attentive emotional and social support",
           "Strong communication with families",
           "Every child known as an individual",
+        ],
+        media: [
+          {
+            image: "/images/school/sports-day-community.webp",
+            imageAlt: "Learners enjoying a shared school activity together",
+          },
         ],
       },
       {
@@ -334,15 +353,22 @@ export const contentPages = {
           "LAMDA",
           "Peripatetic music lessons",
         ],
+        media: [
+          {
+            image: "/images/school/early-years-taekwondo.webp",
+            imageAlt: "EYFS learners taking part in a movement club",
+          },
+          {
+            image: "/images/school/cycling-club.webp",
+            imageAlt: "Learners participating in a cycling activity",
+          },
+        ],
       },
     ],
-    notice: {
+    pullQuote: {
       eyebrow: "Our EYFS promise",
-      title: "No child is forgotten.",
-      description:
-        "At EYFS, every child is heard, given a chance and cared for.",
-      actionLabel: "Speak with admissions",
-      actionHref: "/contact",
+      text: "At EYFS, no child is forgotten. They are heard, given a chance and cared for.",
+      afterSection: 3,
     },
   },
   juniorSchool: {
