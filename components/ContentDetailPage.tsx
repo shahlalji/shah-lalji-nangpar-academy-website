@@ -191,78 +191,120 @@ export function ContentDetailPage({ page }: ContentDetailPageProps) {
 
               return (
                 <Fragment key={section.title}>
-                  <article
-                    className={`grid gap-7 py-11 first:pt-0 sm:gap-9 sm:py-14 lg:grid-cols-12 lg:py-20 ${
-                      hasMedia ? "lg:gap-10 xl:gap-14" : "lg:gap-20"
-                    }`}
-                  >
-                    <div className={hasMedia ? "lg:col-span-4" : "lg:col-span-5"}>
-                      <p className="text-[0.67rem] font-bold uppercase tracking-[0.18em] text-school-red">
-                        {section.eyebrow ?? `Section 0${index + 1}`}
-                      </p>
-                      <h2 className="mt-4 max-w-xl font-serif text-3xl leading-[1.04] tracking-[-0.03em] text-school-ink sm:text-5xl sm:leading-[1.02] sm:tracking-[-0.035em]">
-                        {section.title}
-                      </h2>
-                    </div>
-                    <div
-                      className={
-                        hasMedia
-                          ? "lg:col-span-4"
-                          : "lg:col-span-6 lg:col-start-7"
-                      }
-                    >
-                      <div className="space-y-5 text-base leading-8 text-school-muted">
-                        {section.paragraphs.map((paragraph) => (
-                          <p key={paragraph}>{paragraph}</p>
-                        ))}
-                      </div>
-                      {section.points?.length ? (
-                        <ul className="mt-8 border-t border-school-navy/15">
-                          {section.points.map((point) => (
-                            <li
-                              key={point}
-                              className="flex gap-4 border-b border-school-navy/15 py-4 text-sm leading-6 text-school-ink sm:text-base"
-                            >
-                              <Check
-                                aria-hidden="true"
-                                className="mt-0.5 size-5 shrink-0 text-school-red"
-                                strokeWidth={1.8}
-                              />
-                              {point}
-                            </li>
-                          ))}
-                        </ul>
-                      ) : null}
-                    </div>
-                    {section.media?.length ? (
+                  {hasMedia ? (
+                    <article className="grid gap-8 py-12 first:pt-0 sm:gap-12 sm:py-16 lg:grid-cols-12 lg:items-center lg:gap-14 lg:py-24 xl:gap-20">
                       <div
-                        className={`grid gap-3 self-start sm:gap-4 lg:col-span-4 ${
-                          section.media.length > 1
-                            ? "grid-cols-2 lg:grid-cols-1 xl:grid-cols-2"
-                            : "grid-cols-1"
+                        className={`lg:col-span-6 ${
+                          index % 2 === 0 ? "lg:order-1" : "lg:order-2"
                         }`}
                       >
-                        {section.media.map((media, mediaIndex) => (
-                          <figure
-                            key={`${media.image}-${mediaIndex}`}
-                            className="relative aspect-[4/3] overflow-hidden bg-school-cream"
-                          >
-                            <Image
-                              src={media.image}
-                              imageKey={`content.${page.route
-                                .slice(1)
-                                .replaceAll("/", ".")}.section.${index + 1}.image.${mediaIndex + 1}`}
-                              alt={media.imageAlt}
-                              fill
-                              unoptimized
-                              sizes="(max-width: 1024px) 100vw, 32vw"
-                              className={`object-contain ${media.imagePosition ?? "object-center"}`}
-                            />
-                          </figure>
-                        ))}
+                        <div
+                          className={`grid gap-4 ${
+                            section.media && section.media.length > 1
+                              ? "grid-cols-2"
+                              : "grid-cols-1"
+                          }`}
+                        >
+                          {section.media?.map((media, mediaIndex) => (
+                            <figure
+                              key={`${media.image}-${mediaIndex}`}
+                              className={`relative overflow-hidden bg-school-cream ${
+                                section.media && section.media.length > 1
+                                  ? "aspect-[3/4]"
+                                  : "aspect-[4/3]"
+                              }`}
+                            >
+                              <Image
+                                src={media.image}
+                                imageKey={`content.${page.route
+                                  .slice(1)
+                                  .replaceAll("/", ".")}.section.${index + 1}.image.${mediaIndex + 1}`}
+                                alt={media.imageAlt}
+                                fill
+                                unoptimized
+                                sizes="(max-width: 1024px) 100vw, 50vw"
+                                className={`object-contain ${media.imagePosition ?? "object-center"}`}
+                              />
+                            </figure>
+                          ))}
+                        </div>
                       </div>
-                    ) : null}
-                  </article>
+
+                      <div
+                        className={`lg:col-span-6 ${
+                          index % 2 === 0 ? "lg:order-2" : "lg:order-1"
+                        }`}
+                      >
+                        <p className="text-[0.67rem] font-bold uppercase tracking-[0.18em] text-school-red">
+                          {section.eyebrow ?? `Section 0${index + 1}`}
+                        </p>
+                        <h2 className="mt-4 max-w-2xl font-serif text-3xl leading-[1.04] tracking-[-0.03em] text-school-ink sm:text-5xl sm:leading-[1.02] sm:tracking-[-0.035em]">
+                          {section.title}
+                        </h2>
+                        <div className="mt-6 max-w-2xl space-y-4 text-base leading-8 text-school-muted">
+                          {section.paragraphs.map((paragraph) => (
+                            <p key={paragraph}>{paragraph}</p>
+                          ))}
+                        </div>
+                        {section.points?.length ? (
+                          <ul
+                            className={`mt-7 grid border-l border-t border-school-navy/15 ${
+                              section.points.length > 3 ? "sm:grid-cols-2" : ""
+                            }`}
+                          >
+                            {section.points.map((point) => (
+                              <li
+                                key={point}
+                                className="flex min-h-16 gap-3 border-b border-r border-school-navy/15 p-4 text-sm leading-6 text-school-ink"
+                              >
+                                <Check
+                                  aria-hidden="true"
+                                  className="mt-0.5 size-5 shrink-0 text-school-red"
+                                  strokeWidth={1.8}
+                                />
+                                {point}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : null}
+                      </div>
+                    </article>
+                  ) : (
+                    <article className="grid gap-7 py-11 first:pt-0 sm:gap-9 sm:py-14 lg:grid-cols-12 lg:gap-20 lg:py-20">
+                      <div className="lg:col-span-5">
+                        <p className="text-[0.67rem] font-bold uppercase tracking-[0.18em] text-school-red">
+                          {section.eyebrow ?? `Section 0${index + 1}`}
+                        </p>
+                        <h2 className="mt-4 max-w-xl font-serif text-3xl leading-[1.04] tracking-[-0.03em] text-school-ink sm:text-5xl sm:leading-[1.02] sm:tracking-[-0.035em]">
+                          {section.title}
+                        </h2>
+                      </div>
+                      <div className="lg:col-span-6 lg:col-start-7">
+                        <div className="space-y-5 text-base leading-8 text-school-muted">
+                          {section.paragraphs.map((paragraph) => (
+                            <p key={paragraph}>{paragraph}</p>
+                          ))}
+                        </div>
+                        {section.points?.length ? (
+                          <ul className="mt-8 grid border-l border-t border-school-navy/15 sm:grid-cols-2">
+                            {section.points.map((point) => (
+                              <li
+                                key={point}
+                                className="flex min-h-16 gap-3 border-b border-r border-school-navy/15 p-4 text-sm leading-6 text-school-ink"
+                              >
+                                <Check
+                                  aria-hidden="true"
+                                  className="mt-0.5 size-5 shrink-0 text-school-red"
+                                  strokeWidth={1.8}
+                                />
+                                {point}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : null}
+                      </div>
+                    </article>
+                  )}
 
                   {page.pullQuote?.afterSection === index + 1 ? (
                     <aside className="relative overflow-hidden bg-school-navy px-6 py-12 text-white sm:px-10 sm:py-16 lg:px-16 lg:py-20">
