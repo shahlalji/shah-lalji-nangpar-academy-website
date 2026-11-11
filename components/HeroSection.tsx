@@ -100,7 +100,7 @@ export function HeroSection() {
       onBlurCapture={handleBlur}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
-      className="relative isolate flex min-h-[calc(100svh-122px)] items-end overflow-hidden bg-school-navy md:min-h-[760px]"
+      className="relative isolate flex min-h-[620px] items-end overflow-hidden bg-school-navy sm:min-h-[calc(100svh-122px)] md:min-h-[760px]"
     >
       <div className="absolute inset-0" aria-hidden="true">
         {heroSlides.map((slide, index) => {
@@ -145,25 +145,25 @@ export function HeroSection() {
         {currentSlide.caption}
       </p>
 
-      <div className="relative z-30 mx-auto w-full max-w-[1440px] px-4 pb-10 pt-24 sm:px-6 sm:pb-14 md:pb-16 lg:px-10 lg:pb-20">
+      <div className="relative z-30 mx-auto w-full max-w-[1440px] px-4 pb-8 pt-16 sm:px-6 sm:pb-14 sm:pt-24 md:pb-16 lg:px-10 lg:pb-20">
         <div className="max-w-[900px]">
-          <div className="hero-reveal hero-reveal-1 mb-6 flex items-center gap-3 text-[0.67rem] font-bold uppercase tracking-[0.2em] text-school-gold sm:text-[0.72rem]">
+          <div className="hero-reveal hero-reveal-1 mb-4 flex items-center gap-3 text-[0.62rem] font-bold uppercase tracking-[0.16em] text-school-gold sm:mb-6 sm:text-[0.72rem] sm:tracking-[0.2em]">
             <span aria-hidden="true" className="h-px w-9 bg-school-gold" />
             Cambridge Curriculum International School · Nakuru
           </div>
           <h1
             id="hero-title"
-            className="hero-reveal hero-reveal-2 max-w-[850px] font-serif text-[clamp(3.35rem,8.5vw,7.8rem)] leading-[0.87] tracking-[-0.055em] text-white"
+            className="hero-reveal hero-reveal-2 max-w-[850px] font-serif text-[clamp(2.65rem,8.5vw,7.8rem)] leading-[0.92] tracking-[-0.045em] text-white sm:leading-[0.87] sm:tracking-[-0.055em]"
           >
             An Education That Inspires{" "}
             <span className="text-school-gold">Excellence.</span>
           </h1>
-          <p className="hero-reveal hero-reveal-3 mt-7 max-w-[680px] text-base leading-7 text-white/78 sm:text-lg sm:leading-8">
+          <p className="hero-reveal hero-reveal-3 mt-5 max-w-[680px] text-[0.95rem] leading-7 text-white/78 sm:mt-7 sm:text-lg sm:leading-8">
             Shah Lalji Nangpar Academy nurtures confident, compassionate and
             future-ready learners through a rich Cambridge education from Early
             Years to A-Level.
           </p>
-          <div className="hero-reveal hero-reveal-4 mt-9 flex flex-col gap-3 sm:flex-row">
+          <div className="hero-reveal hero-reveal-4 mt-7 flex flex-col gap-3 sm:mt-9 sm:flex-row">
             <ButtonLink href="/admissions">Explore Admissions</ButtonLink>
             <ButtonLink href="/our-school" variant="outline">
               Discover Our School
@@ -171,7 +171,7 @@ export function HeroSection() {
           </div>
         </div>
 
-        <div className="mt-12 grid gap-6 border-t border-white/20 pt-5 text-white md:grid-cols-[1fr_auto] md:items-end lg:mt-14">
+        <div className="mt-8 grid gap-5 border-t border-white/20 pt-5 text-white sm:mt-12 sm:gap-6 md:grid-cols-[1fr_auto] md:items-end lg:mt-14">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between md:block">
             <div>
               <p className="text-[0.62rem] font-bold uppercase tracking-[0.2em] text-white/45">

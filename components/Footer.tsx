@@ -18,7 +18,7 @@ export function Footer() {
         <div className="mx-auto grid max-w-[1440px] gap-px bg-white/12 px-4 sm:px-6 md:grid-cols-3 lg:px-10">
           <a
             href={school.phoneHref}
-            className="group flex min-h-32 items-start gap-4 bg-school-ink px-1 py-8 transition-colors hover:bg-school-navy focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-school-gold sm:px-6"
+            className="group flex items-start gap-4 bg-school-ink px-1 py-6 transition-colors hover:bg-school-navy focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-school-gold sm:min-h-32 sm:px-6 sm:py-8"
           >
             <Phone
               aria-hidden="true"
@@ -35,7 +35,7 @@ export function Footer() {
           </a>
           <a
             href={school.emailHref}
-            className="group flex min-h-32 items-start gap-4 bg-school-ink px-1 py-8 transition-colors hover:bg-school-navy focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-school-gold sm:px-6"
+            className="group flex items-start gap-4 bg-school-ink px-1 py-6 transition-colors hover:bg-school-navy focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-3px] focus-visible:outline-school-gold sm:min-h-32 sm:px-6 sm:py-8"
           >
             <Mail
               aria-hidden="true"
@@ -50,7 +50,7 @@ export function Footer() {
               </span>
             </span>
           </a>
-          <div className="flex min-h-32 items-start gap-4 bg-school-ink px-1 py-8 sm:px-6">
+          <div className="flex items-start gap-4 bg-school-ink px-1 py-6 sm:min-h-32 sm:px-6 sm:py-8">
             <MapPin
               aria-hidden="true"
               className="mt-1 size-5 shrink-0 text-school-gold"
@@ -67,7 +67,7 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="mx-auto grid max-w-[1440px] gap-12 px-4 py-16 sm:px-6 md:grid-cols-2 lg:grid-cols-12 lg:px-10 lg:py-20">
+      <div className="mx-auto grid max-w-[1440px] gap-10 px-4 py-12 sm:px-6 sm:py-16 md:grid-cols-2 lg:grid-cols-12 lg:px-10 lg:py-20">
         <div className="lg:col-span-4">
           <div className="flex items-center gap-4">
             <Image

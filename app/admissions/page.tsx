@@ -73,7 +73,7 @@ export default function AdmissionsPage() {
           imageAlt="SLNA learners gathered for an assembly in the school courtyard"
         />
 
-        <section className="bg-school-cream py-20 sm:py-24 lg:py-32">
+        <section className="bg-school-cream py-14 sm:py-20 lg:py-28">
           <div className="mx-auto grid max-w-[1440px] gap-12 px-4 sm:px-6 lg:grid-cols-12 lg:gap-20 lg:px-10">
             <div className="lg:col-span-7">
               <SectionHeading
@@ -107,7 +107,7 @@ export default function AdmissionsPage() {
           </div>
         </section>
 
-        <section className="bg-white py-20 sm:py-24 lg:py-32">
+        <section className="bg-white py-14 sm:py-20 lg:py-28">
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
             <SectionHeading
               eyebrow="Admission steps"
@@ -142,7 +142,7 @@ export default function AdmissionsPage() {
           </div>
         </section>
 
-        <section className="bg-school-stone py-20 sm:py-24 lg:py-32">
+        <section className="bg-school-stone py-14 sm:py-20 lg:py-28">
           <div className="mx-auto grid max-w-[1440px] gap-14 px-4 sm:px-6 lg:grid-cols-12 lg:gap-20 lg:px-10">
             <div className="lg:col-span-5">
               <SectionHeading
@@ -182,7 +182,7 @@ export default function AdmissionsPage() {
           </div>
         </section>
 
-        <section className="bg-school-navy py-20 text-white sm:py-24">
+        <section className="bg-school-navy py-14 text-white sm:py-20 lg:py-24">
           <div className="mx-auto grid max-w-[1440px] gap-6 px-4 sm:px-6 md:grid-cols-3 lg:px-10">
             {[
               [

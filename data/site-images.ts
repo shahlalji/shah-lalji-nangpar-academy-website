@@ -89,8 +89,8 @@ export const siteImageSlots: readonly SiteImageSlot[] = [
   ...(Object.values(contentPages) as ContentPage[]).flatMap((page) =>
     page.photoStory?.cards.map((card, index) => ({
       key: `content.${page.route.slice(1).replaceAll("/", ".")}.development.${index + 1}`,
-      label: `${page.hero.eyebrow} development image ${index + 1} — ${card.title}`,
-      group: "Our School",
+      label: `${page.hero.eyebrow} feature image ${index + 1} — ${card.title}`,
+      group: page.route.startsWith("/education") ? "Education" : "Our School",
       defaultUrl: card.image,
     })) ?? [],
   ),

@@ -67,7 +67,7 @@ export default function OurSchoolPage() {
           imageAlt="Senior students gathered together in their red school blazers"
         />
 
-        <section className="bg-school-cream py-20 sm:py-24 lg:py-32">
+        <section className="bg-school-cream py-14 sm:py-20 lg:py-28">
           <div className="mx-auto grid max-w-[1440px] gap-12 px-4 sm:px-6 lg:grid-cols-12 lg:gap-20 lg:px-10">
             <div className="lg:col-span-6">
               <SectionHeading
@@ -131,7 +131,7 @@ export default function OurSchoolPage() {
           </div>
         </section>
 
-        <section className="bg-school-navy py-20 text-white sm:py-24 lg:py-32">
+        <section className="bg-school-navy py-14 text-white sm:py-20 lg:py-28">
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
             <SectionHeading
               eyebrow="Why SLNA"
@@ -167,7 +167,7 @@ export default function OurSchoolPage() {
           </div>
         </section>
 
-        <section className="bg-white py-20 sm:py-24 lg:py-32">
+        <section className="bg-white py-14 sm:py-20 lg:py-28">
           <div className="mx-auto grid max-w-[1440px] items-center gap-14 px-4 sm:px-6 lg:grid-cols-12 lg:gap-20 lg:px-10">
             <div className="relative aspect-[7/6] overflow-hidden bg-school-stone lg:col-span-6">
               <Image

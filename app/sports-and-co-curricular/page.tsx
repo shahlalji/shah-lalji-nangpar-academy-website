@@ -106,7 +106,7 @@ export default async function SportsAndCoCurricularPage() {
           imageAlt="Learners taking part in an energetic outdoor school activity"
         />
 
-        <section className="bg-school-cream py-20 sm:py-24 lg:py-32">
+        <section className="bg-school-cream py-14 sm:py-20 lg:py-28">
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
             <div className="grid gap-12 lg:grid-cols-12 lg:gap-20">
               <div className="lg:col-span-5">
@@ -158,7 +158,7 @@ export default async function SportsAndCoCurricularPage() {
             </div>
 
             <div className="mt-16 grid overflow-hidden bg-school-navy lg:grid-cols-12">
-              <div className="relative min-h-[380px] lg:col-span-8 lg:min-h-[560px]">
+              <div className="relative min-h-[280px] sm:min-h-[380px] lg:col-span-8 lg:min-h-[560px]">
                 <Image
                   src="/images/school/swimming-competition.webp"
                   imageKey="school-life.pastoral"
@@ -185,7 +185,7 @@ export default async function SportsAndCoCurricularPage() {
           </div>
         </section>
 
-        <section className="bg-school-navy py-20 text-white sm:py-24 lg:py-32">
+        <section className="bg-school-navy py-14 text-white sm:py-20 lg:py-28">
           <div className="mx-auto grid max-w-[1440px] gap-14 px-4 sm:px-6 lg:grid-cols-12 lg:gap-20 lg:px-10">
             <div className="lg:col-span-7">
               <SectionHeading
@@ -217,7 +217,7 @@ export default async function SportsAndCoCurricularPage() {
               </div>
             </div>
 
-            <div className="relative min-h-[520px] overflow-hidden bg-white/5 lg:col-span-5 lg:min-h-full">
+            <div className="relative min-h-[380px] overflow-hidden bg-white/5 sm:min-h-[520px] lg:col-span-5 lg:min-h-full">
               <Image
                 src="/images/school/swimming-training.webp"
                 imageKey="school-life.activity.sport"
@@ -239,7 +239,7 @@ export default async function SportsAndCoCurricularPage() {
           </div>
         </section>
 
-        <section className="bg-white py-20 sm:py-24 lg:py-32">
+        <section className="bg-white py-14 sm:py-20 lg:py-28">
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
             <SectionHeading
               eyebrow="Explore by school section"
@@ -261,7 +261,7 @@ export default async function SportsAndCoCurricularPage() {
                     className="grid gap-0 py-8 first:pt-0 last:pb-0 lg:grid-cols-12 lg:py-14"
                   >
                     <div
-                      className={`relative min-h-[360px] overflow-hidden bg-school-cream lg:col-span-6 lg:min-h-[500px] ${
+                      className={`relative min-h-[280px] overflow-hidden bg-school-cream sm:min-h-[360px] lg:col-span-6 lg:min-h-[500px] ${
                         index % 2 ? "lg:order-2 lg:col-start-7" : ""
                       }`}
                     >
@@ -318,7 +318,7 @@ export default async function SportsAndCoCurricularPage() {
           </div>
         </section>
 
-        <section className="bg-school-cream py-20 sm:py-24 lg:py-28">
+        <section className="bg-school-cream py-14 sm:py-20 lg:py-28">
           <div className="mx-auto grid max-w-[1200px] gap-10 px-4 sm:px-6 lg:grid-cols-12 lg:items-end lg:px-10">
             <div className="lg:col-span-10">
               <p className="text-[0.68rem] font-bold uppercase tracking-[0.2em] text-school-red">

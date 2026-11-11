@@ -23,30 +23,30 @@ export function InteriorHero({
 }: InteriorHeroProps) {
   return (
     <section className="overflow-hidden bg-school-navy text-white">
-      <div className="mx-auto grid min-h-[520px] max-w-[1600px] lg:min-h-[590px] lg:grid-cols-12">
-        <div className="relative z-10 flex items-center px-4 py-14 sm:px-6 sm:py-16 lg:col-span-6 lg:px-10 lg:py-20 xl:pl-[max(2.5rem,calc((100vw-1440px)/2+2.5rem))]">
+      <div className="mx-auto grid max-w-[1600px] lg:min-h-[590px] lg:grid-cols-12">
+        <div className="relative z-10 flex items-center px-4 py-10 sm:px-6 sm:py-14 lg:col-span-6 lg:px-10 lg:py-20 xl:pl-[max(2.5rem,calc((100vw-1440px)/2+2.5rem))]">
           <div className="max-w-[720px]">
             <Link
               href="/"
-              className="mb-7 inline-flex items-center gap-3 text-[0.65rem] font-bold uppercase tracking-[0.18em] text-white/55 transition-colors hover:text-school-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-school-gold"
+              className="mb-5 inline-flex items-center gap-3 text-[0.65rem] font-bold uppercase tracking-[0.18em] text-white/55 transition-colors hover:text-school-gold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-school-gold sm:mb-7"
             >
               <span aria-hidden="true">←</span>
               Home
             </Link>
-            <p className="mb-5 flex items-center gap-3 text-[0.7rem] font-bold uppercase tracking-[0.21em] text-school-gold">
+            <p className="mb-4 flex items-center gap-3 text-[0.67rem] font-bold uppercase tracking-[0.19em] text-school-gold sm:mb-5 sm:text-[0.7rem] sm:tracking-[0.21em]">
               <span aria-hidden="true" className="h-px w-9 bg-school-gold" />
               {eyebrow}
             </p>
-            <h1 className="font-serif text-[clamp(3.05rem,6.5vw,6.35rem)] leading-[0.92] tracking-[-0.05em]">
+            <h1 className="font-serif text-[clamp(2.55rem,6.5vw,6.35rem)] leading-[0.94] tracking-[-0.045em] sm:leading-[0.92] sm:tracking-[-0.05em]">
               {title}
             </h1>
-            <p className="mt-6 max-w-2xl text-base leading-8 text-white/72 sm:text-lg">
+            <p className="mt-5 max-w-2xl text-[0.95rem] leading-7 text-white/72 sm:mt-6 sm:text-lg sm:leading-8">
               {description}
             </p>
           </div>
         </div>
 
-        <div className="relative min-h-[390px] lg:col-span-6 lg:min-h-full">
+        <div className="relative min-h-[260px] sm:min-h-[340px] lg:col-span-6 lg:min-h-full">
           <Image
             src={image}
             imageKey={imageKey}

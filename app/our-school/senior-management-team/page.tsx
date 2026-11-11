@@ -69,7 +69,7 @@ export default async function SeniorManagementTeamPage() {
           imagePosition="object-center"
         />
 
-        <section className="bg-school-cream py-20 sm:py-24 lg:py-32">
+        <section className="bg-school-cream py-14 sm:py-20 lg:py-28">
           <div className="mx-auto grid max-w-[1440px] gap-12 px-4 sm:px-6 lg:grid-cols-12 lg:gap-20 lg:px-10">
             <div className="lg:col-span-6">
               <SectionHeading
@@ -98,7 +98,7 @@ export default async function SeniorManagementTeamPage() {
           </div>
         </section>
 
-        <section className="bg-white py-20 sm:py-24 lg:py-32">
+        <section className="bg-white py-14 sm:py-20 lg:py-28">
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
             <div className="relative before:absolute before:bottom-16 before:left-1/2 before:top-16 before:w-px before:-translate-x-1/2 before:bg-school-navy/25">
               {leadershipHierarchyGroups.map((group, groupIndex) => {
@@ -142,7 +142,7 @@ export default async function SeniorManagementTeamPage() {
           </div>
         </section>
 
-        <section className="bg-school-navy py-20 text-white sm:py-24">
+        <section className="bg-school-navy py-14 text-white sm:py-20 lg:py-24">
           <div className="mx-auto grid max-w-[1440px] gap-10 px-4 sm:px-6 lg:grid-cols-12 lg:items-end lg:px-10">
             <div className="lg:col-span-7">
               <p className="text-[0.67rem] font-bold uppercase tracking-[0.18em] text-school-gold">

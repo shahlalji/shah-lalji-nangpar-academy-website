@@ -218,7 +218,7 @@ export const contentPages = {
       accent: "step.",
       paragraphs: [
         "The EYFS programme spans Playgroup, Nursery, Kindergarten and Reception, giving every child a clear and carefully supported progression into Junior School.",
-        "Children learn through purposeful play, investigation, creative expression and positive relationships. The programme supports communication, early literacy and numeracy, physical development and growing independence.",
+        "Children learn through purposeful play, investigation, creative expression and positive relationships. Every class has a maximum of 30 learners, supported by two teachers and a nanny so that care and learning remain closely connected.",
       ],
     },
     highlights: [
@@ -229,27 +229,54 @@ export const contentPages = {
       },
       {
         label: "Timetable",
-        value: "Flexible",
-        note: "Half-day and full-day options",
+        value: "By class",
+        note: "Half-day and full-day schedules designed for each stage",
       },
       {
         label: "Approach",
         value: "Inquiry-led",
-        note: "Learning through play and exploration",
+        note: "Play, exploration, problem-solving and critical thinking",
       },
     ],
+    photoStory: {
+      eyebrow: "A warm start to the day",
+      title: "Welcomed, known and ready to learn.",
+      description:
+        "Morning receiving helps every child settle with confidence, while a varied club programme gives learners more ways to discover their interests, practise new skills and enjoy learning with others.",
+      cards: [
+        {
+          eyebrow: "Morning receiving",
+          title: "A calm and caring welcome",
+          image: "/images/school/careers-day.webp",
+          imageAlt: "EYFS learners together outside the classroom",
+        },
+        {
+          eyebrow: "Movement",
+          title: "Confidence through active play",
+          image: "/images/school/early-years-taekwondo.webp",
+          imageAlt: "EYFS learners taking part in a movement activity",
+        },
+        {
+          eyebrow: "Creativity",
+          title: "Interests that grow beyond lessons",
+          image: "/images/school/creative-arts-masks.webp",
+          imageAlt: "Learners presenting their creative artwork",
+        },
+      ],
+    },
     sections: [
       {
-        eyebrow: "Progression",
-        title: "Four classes, one thoughtful journey.",
+        eyebrow: "Classes and curriculum",
+        title: "The right foundation at every stage.",
         paragraphs: [
-          "Each class builds naturally on the last, with experiences shaped around children’s changing language, social, physical and learning needs.",
+          "Each class builds naturally on the last, with a curriculum and learning environment shaped around children’s changing language, social, physical and academic needs.",
+          "Class sizes are capped at 30 learners. Two teachers and a nanny support each class, helping children receive consistent guidance, attention and care throughout their day.",
         ],
         points: [
-          "Playgroup",
-          "Nursery",
-          "Kindergarten",
-          "Reception",
+          "Playgroup — Montessori",
+          "Nursery — Montessori and Cambridge",
+          "Kindergarten — Cambridge",
+          "Reception — Cambridge",
         ],
       },
       {
@@ -257,29 +284,66 @@ export const contentPages = {
         title: "Active discovery, thoughtful guidance.",
         paragraphs: [
           "Learning experiences invite children to ask questions, collaborate and make connections with the world around them. Montessori-informed activities support fine and gross motor development in the youngest classes.",
-          "Teachers observe each child carefully and shape experiences that build language, number confidence, social skills, creativity and a positive sense of self.",
+          "Teachers observe each child carefully and shape experiences that build language, number confidence, problem-solving, critical thinking, social skills, creativity and a positive sense of self.",
         ],
         points: [
           "Child-centred and inquiry-based learning",
+          "Problem-solving and critical thinking",
           "Social inclusion and collaborative play",
           "Holistic physical, emotional and cognitive development",
           "A caring transition into Junior School",
         ],
       },
       {
-        eyebrow: "Beyond the classroom",
-        title: "Movement, music and imagination.",
+        eyebrow: "The school day",
+        title: "A timetable shaped for each age.",
         paragraphs: [
-          "Arts, crafts and music are woven into the school week. Children can also take part in age-appropriate activities that help them build coordination, confidence and joy in participation.",
+          "The length of the school day grows with the child, giving younger learners a gentle start while preparing older EYFS learners for the routines of Junior School.",
         ],
         points: [
-          "Taekwondo",
-          "Swimming",
-          "Ballet and movement",
-          "Afternoon clubs and activities",
+          "Playgroup — half day",
+          "Nursery — half day",
+          "Kindergarten — half day, with an optional full day until 3:30pm",
+          "Reception — mandatory full day until 3:30pm",
+        ],
+      },
+      {
+        eyebrow: "Pastoral care",
+        title: "Care, love and support every day.",
+        paragraphs: [
+          "Pastoral care is part of every interaction in EYFS. Teachers and nannies build secure, trusting relationships so children feel safe to speak, ask for help and take part with confidence.",
+          "Close communication with families helps the school understand each child’s needs, celebrate progress and respond thoughtfully whenever additional support is needed.",
+        ],
+        points: [
+          "A safe and nurturing environment",
+          "Attentive emotional and social support",
+          "Strong communication with families",
+          "Every child known as an individual",
+        ],
+      },
+      {
+        eyebrow: "Clubs and wider experiences",
+        title: "New skills, interests and confidence.",
+        paragraphs: [
+          "Age-appropriate clubs extend learning through movement, language, performance and specialist instruction. Children are encouraged to try something new, practise consistently and enjoy learning alongside others.",
+        ],
+        points: [
+          "Skating",
+          "Scouts",
+          "Spelling Bee, letter formation and Jolly Phonics",
+          "LAMDA",
+          "Peripatetic music lessons",
         ],
       },
     ],
+    notice: {
+      eyebrow: "Our EYFS promise",
+      title: "No child is forgotten.",
+      description:
+        "At EYFS, every child is heard, given a chance and cared for.",
+      actionLabel: "Speak with admissions",
+      actionHref: "/contact",
+    },
   },
   juniorSchool: {
     route: "/education/junior-school",

@@ -32,7 +32,7 @@ export default async function Home() {
 
         <section
           id="our-school"
-          className="scroll-mt-28 overflow-hidden bg-school-cream py-20 sm:py-24 lg:py-32"
+          className="scroll-mt-28 overflow-hidden bg-school-cream py-14 sm:py-20 lg:py-28"
         >
           <div className="mx-auto grid max-w-[1440px] items-center gap-14 px-4 sm:px-6 lg:grid-cols-12 lg:gap-16 lg:px-10">
             <div className="lg:col-span-6">
@@ -105,7 +105,7 @@ export default async function Home() {
 
         <section
           id="education"
-          className="scroll-mt-28 bg-school-stone py-20 sm:py-24 lg:py-32"
+          className="scroll-mt-28 bg-school-stone py-14 sm:py-20 lg:py-28"
         >
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
             <div className="grid gap-8 lg:grid-cols-12">
@@ -130,7 +130,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="relative overflow-hidden bg-school-navy py-20 sm:py-24 lg:py-32">
+        <section className="relative overflow-hidden bg-school-navy py-14 sm:py-20 lg:py-28">
           <div
             aria-hidden="true"
             className="absolute -right-40 -top-72 size-[640px] rounded-full border border-white/10"
@@ -159,7 +159,7 @@ export default async function Home() {
 
         <section
           id="chairman-message"
-          className="scroll-mt-28 bg-white py-20 sm:py-24 lg:py-32"
+          className="scroll-mt-28 bg-white py-14 sm:py-20 lg:py-28"
         >
           <div className="mx-auto grid max-w-[1440px] items-center gap-14 px-4 sm:px-6 lg:grid-cols-12 lg:gap-20 lg:px-10">
             <div className="relative lg:col-span-5">
@@ -225,7 +225,7 @@ export default async function Home() {
 
         <section
           id="school-life"
-          className="scroll-mt-28 overflow-hidden bg-school-cream py-20 sm:py-24 lg:py-32"
+          className="scroll-mt-28 overflow-hidden bg-school-cream py-14 sm:py-20 lg:py-28"
         >
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
             <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
@@ -298,7 +298,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="bg-white py-20 sm:py-24">
+        <section className="bg-white py-14 sm:py-20 lg:py-24">
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
             <div className="flex flex-col gap-6 border-b border-school-navy/15 pb-8 md:flex-row md:items-end md:justify-between">
               <div>
@@ -335,7 +335,7 @@ export default async function Home() {
           </div>
         </section>
 
-        <section className="bg-school-stone py-20 sm:py-24 lg:py-32">
+        <section className="bg-school-stone py-14 sm:py-20 lg:py-28">
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
             <div className="grid gap-8 lg:grid-cols-12">
               <div className="lg:col-span-7">
@@ -405,7 +405,7 @@ export default async function Home() {
 
         <section
           id="admissions"
-          className="relative scroll-mt-28 overflow-hidden bg-school-red py-20 text-white sm:py-24 lg:py-32"
+          className="relative scroll-mt-28 overflow-hidden bg-school-red py-14 text-white sm:py-20 lg:py-28"
         >
           <div
             aria-hidden="true"
@@ -421,7 +421,7 @@ export default async function Home() {
                 <span aria-hidden="true" className="h-px w-9 bg-white/70" />
                 Begin your family’s journey
               </p>
-              <h2 className="max-w-[980px] font-serif text-[clamp(3.15rem,7.8vw,7.4rem)] leading-[0.9] tracking-[-0.05em]">
+              <h2 className="max-w-[980px] font-serif text-[clamp(2.45rem,7.8vw,7.4rem)] leading-[0.95] tracking-[-0.04em] sm:leading-[0.9] sm:tracking-[-0.05em]">
                 Come and see where your child could{" "}
                 <span className="italic text-school-gold">thrive.</span>
               </h2>
@@ -452,7 +452,7 @@ export default async function Home() {
 
         <section
           id="gallery"
-          className="scroll-mt-28 bg-white py-20 sm:py-24 lg:py-32"
+          className="scroll-mt-28 bg-white py-14 sm:py-20 lg:py-28"
         >
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
             <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">

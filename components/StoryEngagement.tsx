@@ -114,7 +114,7 @@ export function StoryEngagement({ storySlug }: { storySlug: string }) {
   if (!engagement) return null;
 
   return (
-    <section className="border-t border-school-navy/10 bg-school-cream py-20 sm:py-24" aria-labelledby="story-conversation-title">
+    <section className="border-t border-school-navy/10 bg-school-cream py-14 sm:py-20 lg:py-24" aria-labelledby="story-conversation-title">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-10">
         <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
           <div>

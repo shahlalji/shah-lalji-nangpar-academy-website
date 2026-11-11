@@ -32,7 +32,7 @@ export default function GalleryPage() {
           imageAlt="Learners presenting colourful masks they created during an arts activity"
         />
 
-        <section className="bg-school-cream py-20 sm:py-24 lg:py-32">
+        <section className="bg-school-cream py-14 sm:py-20 lg:py-28">
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
             <SectionHeading
               eyebrow="Life at SLNA"

@@ -37,7 +37,7 @@ export default function ContactPage() {
           imageAlt="School leaders speaking with learners during an academy event"
         />
 
-        <section className="bg-school-cream py-20 sm:py-24 lg:py-32">
+        <section className="bg-school-cream py-14 sm:py-20 lg:py-28">
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
             <SectionHeading
               eyebrow="Get in touch"
@@ -105,7 +105,7 @@ export default function ContactPage() {
 
         <section
           id="visit"
-          className="scroll-mt-32 bg-white py-20 sm:py-24 lg:py-32"
+          className="scroll-mt-32 bg-white py-14 sm:py-20 lg:py-28"
         >
           <div className="mx-auto grid max-w-[1440px] items-center gap-14 px-4 sm:px-6 lg:grid-cols-12 lg:gap-20 lg:px-10">
             <div className="relative aspect-[7/6] overflow-hidden bg-school-stone lg:col-span-6">

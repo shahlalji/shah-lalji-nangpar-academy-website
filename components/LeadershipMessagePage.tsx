@@ -32,7 +32,7 @@ export function LeadershipMessagePage({
           imagePosition={message.imagePosition}
         />
 
-        <section className="bg-school-cream py-20 sm:py-24 lg:py-32">
+        <section className="bg-school-cream py-14 sm:py-20 lg:py-28">
           <div className="mx-auto grid max-w-[1440px] gap-12 px-4 sm:px-6 lg:grid-cols-12 lg:gap-20 lg:px-10">
             <aside className="lg:col-span-4">
               <div className="sticky top-32 border-t-4 border-school-red bg-white p-7 shadow-[0_18px_45px_rgba(6,47,95,0.08)] sm:p-8">

@@ -37,7 +37,7 @@ export default async function EventsPage() {
           imageAlt="SLNA learners gathered for a school event"
         />
 
-        <section className="bg-school-cream py-20 sm:py-24 lg:py-32">
+        <section className="bg-school-cream py-14 sm:py-20 lg:py-28">
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
             <SectionHeading
               eyebrow="Upcoming Events"

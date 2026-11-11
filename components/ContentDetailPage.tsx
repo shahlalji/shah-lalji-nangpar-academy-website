@@ -35,8 +35,8 @@ export function ContentDetailPage({ page }: ContentDetailPageProps) {
           imagePosition={page.hero.imagePosition}
         />
 
-        <section className="bg-school-cream py-20 sm:py-24 lg:py-32">
-          <div className="mx-auto grid max-w-[1440px] gap-12 px-4 sm:px-6 lg:grid-cols-12 lg:gap-20 lg:px-10">
+        <section className="bg-school-cream py-14 sm:py-20 lg:py-28">
+          <div className="mx-auto grid max-w-[1440px] gap-8 px-4 sm:gap-12 sm:px-6 lg:grid-cols-12 lg:gap-20 lg:px-10">
             <div className="lg:col-span-6">
               <SectionHeading
                 eyebrow={page.introduction.eyebrow}
@@ -60,7 +60,7 @@ export function ContentDetailPage({ page }: ContentDetailPageProps) {
           </div>
 
           <div
-            className={`mx-auto mt-16 grid max-w-[1440px] border-l border-t border-school-navy/15 px-4 sm:px-6 lg:px-10 ${
+            className={`mx-auto mt-10 grid max-w-[1440px] border-l border-t border-school-navy/15 px-4 sm:mt-14 sm:px-6 lg:mt-16 lg:px-10 ${
               page.highlights.length === 4
                 ? "sm:grid-cols-2 lg:grid-cols-4"
                 : "md:grid-cols-3"
@@ -69,12 +69,12 @@ export function ContentDetailPage({ page }: ContentDetailPageProps) {
             {page.highlights.map((highlight) => (
               <article
                 key={highlight.label}
-                className="min-h-52 border-b border-r border-school-navy/15 bg-white p-7 sm:p-8"
+                className="border-b border-r border-school-navy/15 bg-white p-6 sm:min-h-52 sm:p-8"
               >
                 <p className="text-[0.65rem] font-bold uppercase tracking-[0.18em] text-school-red">
                   {highlight.label}
                 </p>
-                <p className="mt-8 font-serif text-3xl leading-tight text-school-ink sm:text-4xl">
+                <p className="mt-5 font-serif text-3xl leading-tight text-school-ink sm:mt-8 sm:text-4xl">
                   {highlight.value}
                 </p>
                 <p className="mt-3 text-sm leading-6 text-school-muted">
@@ -115,7 +115,7 @@ export function ContentDetailPage({ page }: ContentDetailPageProps) {
         </section>
 
         {page.photoStory ? (
-          <section className="bg-school-stone pb-14 pt-20 sm:pb-16 sm:pt-24 lg:pb-16 lg:pt-32">
+          <section className="bg-school-stone pb-12 pt-14 sm:pb-16 sm:pt-20 lg:pt-28">
             <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
               <div className="grid gap-8 lg:grid-cols-12 lg:items-end lg:gap-20">
                 <div className="lg:col-span-6">
@@ -129,7 +129,7 @@ export function ContentDetailPage({ page }: ContentDetailPageProps) {
                 </p>
               </div>
 
-              <div className="mt-14 grid gap-px overflow-hidden border border-school-navy/15 bg-school-navy/15 lg:grid-cols-12">
+              <div className="mt-10 grid gap-px overflow-hidden border border-school-navy/15 bg-school-navy/15 sm:mt-14 lg:grid-cols-12">
                 {page.photoStory.cards.map((card, index) => (
                   <figure
                     key={card.title}
@@ -180,21 +180,21 @@ export function ContentDetailPage({ page }: ContentDetailPageProps) {
         <section
           className={
             page.photoStory
-              ? "bg-white pb-20 pt-14 sm:pb-24 sm:pt-16 lg:pb-32 lg:pt-16"
-              : "bg-white py-20 sm:py-24 lg:py-32"
+              ? "bg-white pb-14 pt-12 sm:pb-20 sm:pt-16 lg:pb-28"
+              : "bg-white py-14 sm:py-20 lg:py-28"
           }
         >
           <div className="mx-auto max-w-[1440px] divide-y divide-school-navy/15 px-4 sm:px-6 lg:px-10">
             {page.sections.map((section, index) => (
               <article
                 key={section.title}
-                className="grid gap-9 py-14 first:pt-0 last:pb-0 lg:grid-cols-12 lg:gap-20 lg:py-20"
+                className="grid gap-7 py-11 first:pt-0 last:pb-0 sm:gap-9 sm:py-14 lg:grid-cols-12 lg:gap-20 lg:py-20"
               >
                 <div className="lg:col-span-5">
                   <p className="text-[0.67rem] font-bold uppercase tracking-[0.18em] text-school-red">
                     {section.eyebrow ?? `Section 0${index + 1}`}
                   </p>
-                  <h2 className="mt-4 max-w-xl font-serif text-4xl leading-[1.02] tracking-[-0.035em] text-school-ink sm:text-5xl">
+                  <h2 className="mt-4 max-w-xl font-serif text-3xl leading-[1.04] tracking-[-0.03em] text-school-ink sm:text-5xl sm:leading-[1.02] sm:tracking-[-0.035em]">
                     {section.title}
                   </h2>
                 </div>
@@ -228,7 +228,7 @@ export function ContentDetailPage({ page }: ContentDetailPageProps) {
         </section>
 
         {page.relatedLinks?.length ? (
-          <section className="bg-school-stone py-20 sm:py-24 lg:py-32">
+          <section className="bg-school-stone py-14 sm:py-20 lg:py-28">
             <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
               <SectionHeading
                 eyebrow="School leadership"
@@ -273,7 +273,7 @@ export function ContentDetailPage({ page }: ContentDetailPageProps) {
         ) : null}
 
         {page.notice ? (
-          <section className="bg-school-navy py-20 text-white sm:py-24">
+          <section className="bg-school-navy py-14 text-white sm:py-20 lg:py-24">
             <div className="mx-auto grid max-w-[1440px] gap-10 px-4 sm:px-6 lg:grid-cols-12 lg:items-end lg:px-10">
               <div className="lg:col-span-7">
                 <p className="text-[0.67rem] font-bold uppercase tracking-[0.19em] text-school-gold">

@@ -79,7 +79,7 @@ export default function EducationPage() {
           imagePosition="object-center"
         />
 
-        <section className="bg-school-cream py-20 sm:py-24 lg:py-32">
+        <section className="bg-school-cream py-14 sm:py-20 lg:py-28">
           <div className="mx-auto grid max-w-[1440px] gap-12 px-4 sm:px-6 lg:grid-cols-12 lg:gap-20 lg:px-10">
             <div className="lg:col-span-7">
               <SectionHeading
@@ -109,7 +109,7 @@ export default function EducationPage() {
           </div>
         </section>
 
-        <section className="bg-white py-20 sm:py-24 lg:py-32">
+        <section className="bg-white py-14 sm:py-20 lg:py-28">
           <div className="mx-auto max-w-[1440px] space-y-20 px-4 sm:px-6 lg:px-10">
             {academicJourney.map((stage, index) => {
               const detail = stageDetails[index];
@@ -184,7 +184,7 @@ export default function EducationPage() {
           </div>
         </section>
 
-        <section className="bg-school-navy py-20 text-white sm:py-24 lg:py-28">
+        <section className="bg-school-navy py-14 text-white sm:py-20 lg:py-28">
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-10">
             <SectionHeading
               eyebrow="Beyond core subjects"
