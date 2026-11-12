@@ -1,9 +1,16 @@
 "use client";
 
-import { X, ZoomIn } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, ZoomIn } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ManagedImage as Image } from "@/components/ManagedImage";
-import { photoLibrary } from "@/data/site";
+import {
+  getDefaultGalleryPhotos,
+  type GalleryPhoto,
+  gallerySections,
+  type GallerySectionKey,
+} from "@/data/gallery";
+
+const photosPerPage = 9;
 
 const spans = [
   "sm:col-span-2 lg:col-span-7 lg:row-span-2",
@@ -25,8 +32,25 @@ const spans = [
   "sm:col-span-2 lg:col-span-12",
 ] as const;
 
-export function GalleryLightboxGrid() {
+export function GalleryLightboxGrid({
+  photos = getDefaultGalleryPhotos(),
+}: {
+  photos?: readonly GalleryPhoto[];
+}) {
   const [selected, setSelected] = useState<number | null>(null);
+  const [activeSection, setActiveSection] = useState<"all" | GallerySectionKey>("all");
+  const [page, setPage] = useState(1);
+  const filteredPhotos = activeSection === "all"
+    ? photos
+    : photos.filter((photo) => photo.section === activeSection);
+  const pageCount = Math.max(1, Math.ceil(filteredPhotos.length / photosPerPage));
+  const visiblePhotos = filteredPhotos.slice(
+    (page - 1) * photosPerPage,
+    page * photosPerPage,
+  );
+  const availableSections = gallerySections.filter((section) =>
+    photos.some((photo) => photo.section === section.key),
+  );
 
   useEffect(() => {
     if (selected === null) return;
@@ -42,13 +66,60 @@ export function GalleryLightboxGrid() {
     };
   }, [selected]);
 
-  const activePhoto = selected === null ? null : photoLibrary[selected];
+  const activePhoto = selected === null ? null : visiblePhotos[selected];
+
+  function changeSection(section: "all" | GallerySectionKey) {
+    setActiveSection(section);
+    setPage(1);
+    setSelected(null);
+  }
+
+  function changePage(nextPage: number) {
+    setPage(Math.min(pageCount, Math.max(1, nextPage)));
+    setSelected(null);
+    document.getElementById("gallery-grid")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
 
   return (
     <>
-      <div className="mt-14 grid auto-rows-[250px] grid-cols-1 gap-4 sm:grid-cols-2 lg:auto-rows-[270px] lg:grid-cols-12">
-        {photoLibrary.map((photo, index) => (
-          <figure key={photo.src} className={`group relative overflow-hidden bg-school-navy ${spans[index]}`}>
+      <div className="mt-10 flex flex-wrap items-center gap-2 border-y border-school-navy/15 py-4">
+        <button
+          type="button"
+          onClick={() => changeSection("all")}
+          className={`min-h-10 px-4 text-[0.62rem] font-bold uppercase tracking-[0.11em] transition-colors ${
+            activeSection === "all"
+              ? "bg-school-navy text-white"
+              : "bg-white text-school-navy hover:bg-school-gold"
+          }`}
+        >
+          All ({photos.length})
+        </button>
+        {availableSections.map((section) => {
+          const count = photos.filter((photo) => photo.section === section.key).length;
+          return (
+            <button
+              key={section.key}
+              type="button"
+              onClick={() => changeSection(section.key)}
+              className={`min-h-10 px-4 text-[0.62rem] font-bold uppercase tracking-[0.11em] transition-colors ${
+                activeSection === section.key
+                  ? "bg-school-navy text-white"
+                  : "bg-white text-school-navy hover:bg-school-gold"
+              }`}
+            >
+              {section.label} ({count})
+            </button>
+          );
+        })}
+      </div>
+
+      <div id="gallery-grid" className="scroll-mt-28">
+        <div className="mt-8 grid auto-rows-[250px] grid-cols-1 gap-4 sm:grid-cols-2 lg:auto-rows-[270px] lg:grid-cols-12">
+        {visiblePhotos.map((photo, index) => (
+          <figure key={photo.id} className={`group relative overflow-hidden bg-school-navy ${spans[index % spans.length]}`}>
             <button
               type="button"
               onClick={() => setSelected(index)}
@@ -57,7 +128,6 @@ export function GalleryLightboxGrid() {
             >
               <Image
                 src={photo.src}
-                imageKey={`gallery.photo.${index + 1}`}
                 alt={photo.alt}
                 fill
                 unoptimized
@@ -69,13 +139,40 @@ export function GalleryLightboxGrid() {
                 <ZoomIn aria-hidden="true" className="size-5" />
               </span>
               <span className="absolute inset-x-0 bottom-0 block p-5 text-white sm:p-6">
-                <p className="text-[0.6rem] font-bold uppercase tracking-[0.17em] text-school-gold">{photo.category}</p>
+                <p className="text-[0.6rem] font-bold uppercase tracking-[0.17em] text-school-gold">{photo.caption || "School life"}</p>
                 <p className="mt-2 font-serif text-2xl leading-tight">{photo.title}</p>
               </span>
             </button>
           </figure>
         ))}
+        </div>
       </div>
+
+      {pageCount > 1 ? (
+        <nav aria-label="Gallery pages" className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-school-navy/15 pt-6">
+          <p className="text-xs font-bold uppercase tracking-[0.12em] text-school-muted">
+            Page {page} of {pageCount} · {filteredPhotos.length} photographs
+          </p>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => changePage(page - 1)}
+              disabled={page === 1}
+              className="inline-flex min-h-11 items-center gap-2 border border-school-navy/15 bg-white px-4 text-[0.62rem] font-bold uppercase tracking-[0.1em] text-school-navy hover:bg-school-gold disabled:cursor-not-allowed disabled:opacity-35"
+            >
+              <ChevronLeft aria-hidden="true" className="size-4" /> Previous
+            </button>
+            <button
+              type="button"
+              onClick={() => changePage(page + 1)}
+              disabled={page === pageCount}
+              className="inline-flex min-h-11 items-center gap-2 border border-school-navy/15 bg-white px-4 text-[0.62rem] font-bold uppercase tracking-[0.1em] text-school-navy hover:bg-school-gold disabled:cursor-not-allowed disabled:opacity-35"
+            >
+              Next <ChevronRight aria-hidden="true" className="size-4" />
+            </button>
+          </div>
+        </nav>
+      ) : null}
 
       {activePhoto && selected !== null ? (
         <div
@@ -99,7 +196,6 @@ export function GalleryLightboxGrid() {
             <div className="relative min-h-0 flex-1">
               <Image
                 src={activePhoto.src}
-                imageKey={`gallery.photo.${selected + 1}`}
                 alt={activePhoto.alt}
                 fill
                 unoptimized
@@ -109,7 +205,7 @@ export function GalleryLightboxGrid() {
               />
             </div>
             <figcaption className="shrink-0 pt-4 text-center text-white">
-              <span className="text-[0.62rem] font-bold uppercase tracking-[0.16em] text-school-gold">{activePhoto.category}</span>
+              <span className="text-[0.62rem] font-bold uppercase tracking-[0.16em] text-school-gold">{activePhoto.caption || "School life"}</span>
               <span className="ml-3 font-serif text-xl">{activePhoto.title}</span>
             </figcaption>
           </figure>

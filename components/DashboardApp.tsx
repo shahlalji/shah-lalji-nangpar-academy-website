@@ -34,6 +34,7 @@ import {
 import type {
   DashboardSnapshot,
   DashboardEvent,
+  DashboardGalleryItem,
   DashboardStory,
   Enquiry,
   LeadershipProfile,
@@ -41,6 +42,7 @@ import type {
 } from "@/db/dashboard";
 import type { DashboardStoryComment } from "@/db/story-engagement";
 import { leadershipHierarchyGroups } from "@/data/leadership";
+import { gallerySections, type GallerySectionKey } from "@/data/gallery";
 import {
   getDashboardImageExtension,
   prepareDashboardImage,
@@ -54,6 +56,7 @@ type DashboardSection =
   | "comments"
   | "events"
   | "media"
+  | "gallery"
   | "leadership"
   | "pages"
   | "enquiries";
@@ -71,7 +74,8 @@ const navigation = [
   { id: "stories", label: "Stories", Icon: BookOpenText },
   { id: "comments", label: "Comments", Icon: MessageSquareText },
   { id: "events", label: "Events", Icon: CalendarDays },
-  { id: "media", label: "Media", Icon: Images },
+  { id: "media", label: "Page Images", Icon: Images },
+  { id: "gallery", label: "Gallery", Icon: Images },
   { id: "leadership", label: "Leadership", Icon: UsersRound },
   { id: "pages", label: "Pages", Icon: FileText },
   { id: "enquiries", label: "Enquiries", Icon: Inbox },
@@ -85,7 +89,7 @@ const enquiryStatuses = [
 
 async function uploadDashboardImage(
   file: File,
-  folder: "replacements" | "leadership" | "events",
+  folder: "replacements" | "leadership" | "events" | "gallery",
   stem: string,
 ) {
   const uploadFile = await prepareDashboardImage(file);
@@ -172,6 +176,9 @@ export function DashboardApp({
   const [enquiries, setEnquiries] = useState(initialSnapshot.enquiries);
   const [media, setMedia] = useState<SiteImage[]>([]);
   const [mediaLoading, setMediaLoading] = useState(false);
+  const [galleryItems, setGalleryItems] = useState<DashboardGalleryItem[]>([]);
+  const [galleryLoaded, setGalleryLoaded] = useState(false);
+  const [galleryLoading, setGalleryLoading] = useState(false);
   const [leadership, setLeadership] = useState<LeadershipProfile[]>([]);
   const [leadershipLoaded, setLeadershipLoaded] = useState(false);
   const [leadershipLoading, setLeadershipLoading] = useState(false);
@@ -200,6 +207,34 @@ export function DashboardApp({
         );
       } finally {
         setMediaLoading(false);
+      }
+    }
+
+    if (
+      nextSection === "gallery" &&
+      !galleryLoaded &&
+      !galleryLoading
+    ) {
+      setGalleryLoading(true);
+      try {
+        const response = await fetch("/api/dashboard/gallery");
+        const result = await readApiResult<{
+          items?: DashboardGalleryItem[];
+          error?: string;
+        }>(response);
+        if (!response.ok) {
+          throw new Error(result.error || "The Gallery panel could not be loaded.");
+        }
+        setGalleryItems(result.items ?? []);
+        setGalleryLoaded(true);
+      } catch (error) {
+        setNotice(
+          error instanceof Error
+            ? error.message
+            : "The Gallery panel could not be loaded.",
+        );
+      } finally {
+        setGalleryLoading(false);
       }
     }
 
@@ -497,6 +532,15 @@ export function DashboardApp({
               images={media}
               loading={mediaLoading}
               onImagesChange={setMedia}
+              onNotice={setNotice}
+            />
+          ) : null}
+
+          {section === "gallery" ? (
+            <GalleryPanel
+              items={galleryItems}
+              loading={galleryLoading}
+              onItemsChange={setGalleryItems}
               onNotice={setNotice}
             />
           ) : null}
@@ -1765,16 +1809,15 @@ function MediaPanel({
     <div>
       <div>
         <p className="text-[0.66rem] font-bold uppercase tracking-[0.17em] text-school-red">
-          Website photography
+          Exact website placements
         </p>
         <h2 className="mt-3 font-serif text-4xl tracking-[-0.035em] sm:text-5xl">
-          Media Library
+          Page images
         </h2>
         <p className="mt-4 max-w-3xl text-sm leading-7 text-school-muted">
-          Every card represents one exact website placement. Replacing it will
-          not change another section, even when both originally used the same
-          photograph. JPG, PNG, WebP and AVIF files are accepted up to the
-          Supabase project’s storage allowance.
+          Choose a page using the filters below, then replace any photograph in
+          its exact position. The EYFS page keeps all of its current image
+          placements, while each one remains independently editable here.
         </p>
       </div>
 
@@ -1888,11 +1931,349 @@ function MediaPanel({
       ) : (
         <EmptyState
           Icon={Images}
-          title="Media Library setup required"
+          title="Page images setup required"
           description="Run supabase/media-library.sql, then reopen this section."
         />
       )}
     </div>
+  );
+}
+
+type GalleryEditorPayload = {
+  section: GallerySectionKey;
+  title: string;
+  caption: string;
+  imageAlt: string;
+  sortOrder: number;
+  published: boolean;
+  imageFile: File | null;
+};
+
+function GalleryPanel({
+  items,
+  loading,
+  onItemsChange,
+  onNotice,
+}: {
+  items: DashboardGalleryItem[];
+  loading: boolean;
+  onItemsChange: (items: DashboardGalleryItem[]) => void;
+  onNotice: (message: string) => void;
+}) {
+  const [sectionFilter, setSectionFilter] = useState<"all" | GallerySectionKey>("all");
+  const [editingItem, setEditingItem] = useState<DashboardGalleryItem | null>(null);
+  const [showForm, setShowForm] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const visibleItems = sectionFilter === "all"
+    ? items
+    : items.filter((item) => item.section === sectionFilter);
+
+  function sorted(nextItems: DashboardGalleryItem[]) {
+    return [...nextItems].sort(
+      (first, second) =>
+        first.section.localeCompare(second.section) ||
+        first.sortOrder - second.sortOrder ||
+        first.id - second.id,
+    );
+  }
+
+  async function saveItem(values: GalleryEditorPayload) {
+    setSaving(true);
+    let uploadedPath = "";
+    try {
+      if (values.imageFile) {
+        uploadedPath = await uploadDashboardImage(
+          values.imageFile,
+          "gallery",
+          `${values.section}-${values.title}`,
+        );
+      }
+      const response = await fetch(
+        editingItem
+          ? `/api/dashboard/gallery/${editingItem.id}`
+          : "/api/dashboard/gallery",
+        {
+          method: editingItem ? "PATCH" : "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify({
+            section: values.section,
+            title: values.title,
+            caption: values.caption,
+            imageAlt: values.imageAlt,
+            sortOrder: values.sortOrder,
+            published: values.published,
+            imageObjectPath: uploadedPath || null,
+          }),
+        },
+      );
+      const result = await readApiResult<{
+        item?: DashboardGalleryItem;
+        error?: string;
+      }>(response);
+      if (!response.ok || !result.item) {
+        throw new Error(result.error || "The gallery photograph could not be saved.");
+      }
+      onItemsChange(
+        sorted(
+          editingItem
+            ? items.map((item) => item.id === result.item?.id ? result.item : item)
+            : [...items, result.item],
+        ),
+      );
+      setEditingItem(null);
+      setShowForm(false);
+      onNotice(
+        editingItem
+          ? "The gallery photograph has been updated."
+          : "The photograph has been added to the gallery.",
+      );
+    } catch (error) {
+      await removeDashboardUpload(uploadedPath);
+      onNotice(
+        error instanceof Error
+          ? error.message
+          : "The gallery photograph could not be saved.",
+      );
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function togglePublished(item: DashboardGalleryItem) {
+    setSaving(true);
+    try {
+      const response = await fetch(`/api/dashboard/gallery/${item.id}`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          section: item.section,
+          title: item.title,
+          caption: item.caption,
+          imageAlt: item.alt,
+          sortOrder: item.sortOrder,
+          published: !item.published,
+        }),
+      });
+      const result = await readApiResult<{
+        item?: DashboardGalleryItem;
+        error?: string;
+      }>(response);
+      if (!response.ok || !result.item) {
+        throw new Error(result.error || "The gallery status could not be changed.");
+      }
+      onItemsChange(items.map((current) => current.id === item.id ? result.item! : current));
+      onNotice(result.item.published ? "The photograph is now visible." : "The photograph is now hidden.");
+    } catch (error) {
+      onNotice(error instanceof Error ? error.message : "The gallery status could not be changed.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function deleteItem(item: DashboardGalleryItem) {
+    if (!window.confirm(`Delete “${item.title}” from the gallery? This cannot be undone.`)) return;
+    setSaving(true);
+    try {
+      const response = await fetch(`/api/dashboard/gallery/${item.id}`, { method: "DELETE" });
+      const result = await readApiResult<{ error?: string }>(response);
+      if (!response.ok) throw new Error(result.error || "The gallery photograph could not be deleted.");
+      onItemsChange(items.filter((current) => current.id !== item.id));
+      onNotice("The photograph has been deleted from the gallery.");
+    } catch (error) {
+      onNotice(error instanceof Error ? error.message : "The gallery photograph could not be deleted.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  return (
+    <div>
+      <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
+        <div>
+          <p className="text-[0.66rem] font-bold uppercase tracking-[0.17em] text-school-red">
+            Expandable photo collection
+          </p>
+          <h2 className="mt-3 font-serif text-4xl tracking-[-0.035em] sm:text-5xl">
+            Gallery
+          </h2>
+          <p className="mt-4 max-w-3xl text-sm leading-7 text-school-muted">
+            Add as many photographs as needed, place each one in a school section, reorder it and choose whether it is visible. These images are separate from fixed page placements in Media.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-3">
+          <Link href="/gallery" target="_blank" className="inline-flex min-h-12 items-center gap-2 border border-school-navy/15 bg-white px-5 text-[0.68rem] font-bold uppercase tracking-[0.12em] text-school-navy">
+            View gallery <ArrowUpRight aria-hidden="true" className="size-4" />
+          </Link>
+          <button
+            type="button"
+            onClick={() => {
+              setEditingItem(null);
+              setShowForm((open) => !open);
+            }}
+            className="inline-flex min-h-12 items-center gap-2 bg-school-red px-5 text-[0.68rem] font-bold uppercase tracking-[0.12em] text-white hover:bg-school-red-dark"
+          >
+            {showForm ? <X aria-hidden="true" className="size-4" /> : <Plus aria-hidden="true" className="size-4" />}
+            {showForm ? "Close editor" : "Add photograph"}
+          </button>
+        </div>
+      </div>
+
+      {showForm ? (
+        <GalleryEditor
+          key={editingItem?.id ?? "new-gallery-photo"}
+          item={editingItem}
+          saving={saving}
+          onSubmit={saveItem}
+          onCancel={() => {
+            setEditingItem(null);
+            setShowForm(false);
+          }}
+        />
+      ) : null}
+
+      <div className="mt-8 flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => setSectionFilter("all")}
+          className={`min-h-10 px-4 text-[0.62rem] font-bold uppercase tracking-[0.1em] ${
+            sectionFilter === "all" ? "bg-school-navy text-white" : "border border-school-navy/15 bg-white text-school-navy"
+          }`}
+        >
+          All ({items.length})
+        </button>
+        {gallerySections.map((section) => (
+          <button
+            key={section.key}
+            type="button"
+            onClick={() => setSectionFilter(section.key)}
+            className={`min-h-10 px-4 text-[0.62rem] font-bold uppercase tracking-[0.1em] ${
+              sectionFilter === section.key ? "bg-school-navy text-white" : "border border-school-navy/15 bg-white text-school-navy"
+            }`}
+          >
+            {section.label} ({items.filter((item) => item.section === section.key).length})
+          </button>
+        ))}
+      </div>
+
+      {loading ? (
+        <div className="mt-7 border border-school-navy/10 bg-white p-10 text-center text-sm text-school-muted">
+          Loading the Gallery…
+        </div>
+      ) : visibleItems.length ? (
+        <div className="mt-7 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {visibleItems.map((item) => {
+            const section = gallerySections.find((entry) => entry.key === item.section);
+            return (
+              <article key={item.id} className="overflow-hidden border border-school-navy/10 bg-white shadow-sm">
+                <div className="relative aspect-[4/3] bg-school-stone">
+                  <Image src={item.src} alt="" fill unoptimized sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
+                  <span className={`absolute left-3 top-3 px-3 py-2 text-[0.58rem] font-bold uppercase tracking-[0.1em] ${item.published ? "bg-emerald-700 text-white" : "bg-white text-school-muted"}`}>
+                    {item.published ? "Visible" : "Hidden"}
+                  </span>
+                </div>
+                <div className="p-5">
+                  <p className="text-[0.6rem] font-bold uppercase tracking-[0.14em] text-school-red">
+                    {section?.label ?? item.section} · Order {item.sortOrder}
+                  </p>
+                  <h3 className="mt-2 font-serif text-2xl">{item.title}</h3>
+                  {item.caption ? <p className="mt-2 text-sm leading-6 text-school-muted">{item.caption}</p> : null}
+                  <div className="mt-5 grid grid-cols-2 gap-2 border-t border-school-navy/10 pt-5">
+                    <button type="button" onClick={() => { setEditingItem(item); setShowForm(true); }} className="inline-flex min-h-10 items-center justify-center gap-2 border border-school-navy/15 px-3 text-[0.6rem] font-bold uppercase tracking-[0.09em] text-school-navy hover:bg-school-cream">
+                      <Pencil aria-hidden="true" className="size-3.5" /> Edit
+                    </button>
+                    <button type="button" disabled={saving} onClick={() => void togglePublished(item)} className="inline-flex min-h-10 items-center justify-center border border-school-navy/15 px-3 text-[0.6rem] font-bold uppercase tracking-[0.09em] text-school-navy hover:bg-school-cream disabled:opacity-60">
+                      {item.published ? "Hide" : "Publish"}
+                    </button>
+                    <button type="button" disabled={saving} onClick={() => void deleteItem(item)} className="col-span-2 inline-flex min-h-10 items-center justify-center gap-2 border border-school-red/25 px-3 text-[0.6rem] font-bold uppercase tracking-[0.09em] text-school-red hover:bg-school-red hover:text-white disabled:opacity-60">
+                      <Trash2 aria-hidden="true" className="size-3.5" /> Delete photograph
+                    </button>
+                  </div>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="mt-7 border border-school-navy/10 bg-white">
+          <EmptyState
+            Icon={Images}
+            title={items.length ? "No photographs in this section" : "Gallery setup required"}
+            description={items.length ? "Add a photograph or choose another section." : "Run supabase/gallery-library.sql, then reopen this panel."}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function GalleryEditor({
+  item,
+  saving,
+  onSubmit,
+  onCancel,
+}: {
+  item: DashboardGalleryItem | null;
+  saving: boolean;
+  onSubmit: (values: GalleryEditorPayload) => void;
+  onCancel: () => void;
+}) {
+  const inputClass = "min-h-11 w-full border border-white/20 bg-white px-4 py-3 text-sm font-normal normal-case tracking-normal text-school-ink outline-none placeholder:text-school-muted/60 focus:border-school-gold";
+
+  function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const file = formData.get("imageFile");
+    onSubmit({
+      section: String(formData.get("section")) as GallerySectionKey,
+      title: String(formData.get("title") ?? "").trim(),
+      caption: String(formData.get("caption") ?? "").trim(),
+      imageAlt: String(formData.get("imageAlt") ?? "").trim(),
+      sortOrder: Number(formData.get("sortOrder") ?? 100),
+      published: formData.get("published") === "on",
+      imageFile: file instanceof File && file.size > 0 ? file : null,
+    });
+  }
+
+  return (
+    <form onSubmit={submit} className="mt-8 border-t-4 border-school-gold bg-school-navy p-6 text-white shadow-sm sm:p-8">
+      <p className="text-[0.62rem] font-bold uppercase tracking-[0.16em] text-school-gold">Gallery editor</p>
+      <h3 className="mt-3 font-serif text-3xl">{item ? `Edit ${item.title}` : "Add a gallery photograph"}</h3>
+      <div className="mt-7 grid gap-5 md:grid-cols-2">
+        <DashboardField label="School section">
+          <select name="section" defaultValue={item?.section ?? "eyfs"} className={inputClass} required>
+            {gallerySections.map((section) => <option key={section.key} value={section.key}>{section.label}</option>)}
+          </select>
+        </DashboardField>
+        <DashboardField label="Display order">
+          <input type="number" min="0" step="1" name="sortOrder" defaultValue={item?.sortOrder ?? 100} className={inputClass} required />
+        </DashboardField>
+        <DashboardField label="Photo title">
+          <input name="title" defaultValue={item?.title} maxLength={120} className={inputClass} required />
+        </DashboardField>
+        <DashboardField label="Short caption (optional)">
+          <input name="caption" defaultValue={item?.caption} maxLength={180} className={inputClass} />
+        </DashboardField>
+        <DashboardField label={item ? "Replace photograph (optional)" : "Photograph"}>
+          <input type="file" name="imageFile" accept="image/jpeg,image/png,image/webp,image/avif" required={!item} className="block w-full text-xs font-normal normal-case tracking-normal text-white/70 file:mr-3 file:border-0 file:bg-white file:px-4 file:py-3 file:text-[0.62rem] file:font-bold file:uppercase file:tracking-[0.1em] file:text-school-navy" />
+        </DashboardField>
+        <DashboardField label="Image description">
+          <input name="imageAlt" defaultValue={item?.alt} maxLength={220} placeholder="Describe what is visible" className={inputClass} required />
+        </DashboardField>
+      </div>
+      <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <label className="flex items-center gap-3 text-sm text-white/72">
+          <input type="checkbox" name="published" defaultChecked={item?.published ?? true} className="size-4 accent-school-gold" />
+          Show on the public gallery
+        </label>
+        <div className="flex gap-3">
+          <button type="button" onClick={onCancel} className="min-h-12 border border-white/25 px-5 text-[0.68rem] font-bold uppercase tracking-[0.12em]">Cancel</button>
+          <button type="submit" disabled={saving} className="inline-flex min-h-12 items-center gap-2 bg-school-red px-6 text-[0.68rem] font-bold uppercase tracking-[0.12em] text-white disabled:opacity-60">
+            <Upload aria-hidden="true" className="size-4" />
+            {saving ? "Saving…" : "Save photograph"}
+          </button>
+        </div>
+      </div>
+    </form>
   );
 }
 

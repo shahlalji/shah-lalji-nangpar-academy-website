@@ -5,6 +5,10 @@ import { Header } from "@/components/Header";
 import { InteriorHero } from "@/components/InteriorHero";
 import { SectionHeading } from "@/components/SectionHeading";
 import { GalleryLightboxGrid } from "@/components/GalleryLightboxGrid";
+import { getDefaultGalleryPhotos } from "@/data/gallery";
+import { getPublicGalleryItems } from "@/db/dashboard";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Photo Gallery | Shah Lalji Nangpar Academy",
@@ -13,7 +17,15 @@ export const metadata: Metadata = {
   alternates: { canonical: "/gallery" },
 };
 
-export default function GalleryPage() {
+export default async function GalleryPage() {
+  let photos = getDefaultGalleryPhotos();
+  try {
+    const storedPhotos = await getPublicGalleryItems();
+    if (storedPhotos.length) photos = storedPhotos;
+  } catch {
+    // Keep the local collection visible until gallery-library.sql is activated.
+  }
+
   return (
     <>
       <Header />
@@ -45,7 +57,7 @@ export default function GalleryPage() {
               description="From focused study to performance, competition and shared celebration, every image reflects part of the learner experience."
             />
 
-            <GalleryLightboxGrid />
+            <GalleryLightboxGrid photos={photos} />
           </div>
         </section>
 

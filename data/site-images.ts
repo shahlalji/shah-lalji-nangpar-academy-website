@@ -1,4 +1,4 @@
-import { academicJourney, gallery, heroSlides, photoLibrary } from "@/data/site";
+import { academicJourney, gallery, heroSlides } from "@/data/site";
 import {
   contentPages,
   type ContentPage,
@@ -70,27 +70,17 @@ export const siteImageSlots: readonly SiteImageSlot[] = [
     group: "Homepage",
     defaultUrl: photo.src,
   })),
-  ...photoLibrary.map((photo, index) => ({
-    key: `gallery.photo.${index + 1}`,
-    label: `Gallery — ${photo.title}`,
-    group: "Gallery",
-    defaultUrl: photo.src,
-  })),
   ...Object.values(contentPages).map((page) => ({
     key: `content.${page.route.slice(1).replaceAll("/", ".")}.hero`,
     label: `${page.hero.eyebrow} hero`,
-    group: page.route.startsWith("/education")
-      ? "Education"
-      : page.route.startsWith("/our-school")
-        ? "Our School"
-        : "Other pages",
+    group: `${page.hero.eyebrow} page`,
     defaultUrl: page.hero.image,
   })),
   ...(Object.values(contentPages) as ContentPage[]).flatMap((page) =>
     page.photoStory?.cards.map((card, index) => ({
       key: `content.${page.route.slice(1).replaceAll("/", ".")}.development.${index + 1}`,
       label: `${page.hero.eyebrow} feature image ${index + 1} — ${card.title}`,
-      group: page.route.startsWith("/education") ? "Education" : "Our School",
+      group: `${page.hero.eyebrow} page`,
       defaultUrl: card.image,
     })) ?? [],
   ),
@@ -99,11 +89,7 @@ export const siteImageSlots: readonly SiteImageSlot[] = [
       section.media?.map((media, mediaIndex) => ({
         key: `content.${page.route.slice(1).replaceAll("/", ".")}.section.${sectionIndex + 1}.image.${mediaIndex + 1}`,
         label: `${page.hero.eyebrow} — ${section.eyebrow ?? section.title} image ${mediaIndex + 1}`,
-        group: page.route.startsWith("/education")
-          ? "Education"
-          : page.route.startsWith("/our-school")
-            ? "Our School"
-            : "Other pages",
+        group: `${page.hero.eyebrow} page`,
         defaultUrl: media.image,
       })) ?? [],
     ),

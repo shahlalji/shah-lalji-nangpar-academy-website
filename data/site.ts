@@ -107,7 +107,7 @@ export const academicJourney = [
   {
     index: "02",
     title: "Junior School",
-    stage: "Primary · Up to Year 6",
+    stage: "Junior School · Years 1–6",
     description:
       "Engaging Cambridge-aligned learning that develops strong foundations, inquiry and a growing sense of independence.",
     image: "/images/school/chess-club.webp",

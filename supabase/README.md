@@ -19,10 +19,12 @@
 8. When updating an existing project, run leadership-hierarchy.sql to add the
    five-level leadership tree: Board Chair, School Administration, School
    Heads, Deputies and Co-curricular Leadership, and Operational Leadership.
-9. Sign out and back in if the user existed before the SQL ran. This refreshes
+9. Run gallery-library.sql to enable the expandable Gallery dashboard panel
+   and organise additional gallery photographs by school section.
+10. Sign out and back in if the user existed before the SQL ran. This refreshes
    the JWT with the new administrator role.
-10. Open /login, sign in, and test Stories, Comments, Enquiries, Media and Leadership.
-11. Add the same two environment variables to Vercel for Production, Preview
+11. Open /login, sign in, and test Stories, Comments, Enquiries, Media, Gallery and Leadership.
+12. Add the same two environment variables to Vercel for Production, Preview
    and Development, then redeploy.
 
 Never place a secret key, service-role key or database password in a

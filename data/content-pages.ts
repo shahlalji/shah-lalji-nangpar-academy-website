@@ -381,13 +381,13 @@ export const contentPages = {
       title: "Strong foundations for",
       accent: "growing minds.",
       description:
-        "An engaging primary programme from Year 1 to Year 6 that builds knowledge, inquiry, confidence and independence.",
+        "An engaging Junior School programme from Year 1 to Year 6 that builds knowledge, inquiry, confidence and independence.",
       image: "/images/school/chess-club.webp",
       imageAlt: "Junior School learners concentrating during a chess activity",
       imagePosition: "object-center",
     },
     introduction: {
-      eyebrow: "Primary education",
+      eyebrow: "Junior School education",
       title: "Broad learning.",
       accent: "Real progress.",
       paragraphs: [
@@ -399,7 +399,7 @@ export const contentPages = {
       {
         label: "Year groups",
         value: "Year 1–6",
-        note: "A connected primary journey",
+        note: "A connected Junior School journey",
       },
       {
         label: "Curriculum",
@@ -426,6 +426,12 @@ export const contentPages = {
           "Art and Design, Music and Physical Education",
           "ICT and French",
         ],
+        media: [
+          {
+            image: "/images/school/creative-arts-masks.webp",
+            imageAlt: "Junior School learners presenting colourful creative arts work",
+          },
+        ],
       },
       {
         eyebrow: "Enrichment",
@@ -439,6 +445,12 @@ export const contentPages = {
           "Public speaking and debate",
           "Team and individual sports",
           "Creative and performing arts",
+        ],
+        media: [
+          {
+            image: "/images/school/cycling-club.webp",
+            imageAlt: "Junior School learners taking part in an outdoor cycling activity",
+          },
         ],
       },
     ],
@@ -499,6 +511,12 @@ export const contentPages = {
           "Technical and creative subjects",
           "Physical education and personal development",
         ],
+        media: [
+          {
+            image: "/images/school/senior-students-community.webp",
+            imageAlt: "Senior School learners together in their red school blazers",
+          },
+        ],
       },
       {
         eyebrow: "IGCSE preparation",
@@ -511,6 +529,12 @@ export const contentPages = {
           "Practical and coursework-based learning where required",
           "Examination preparation and study skills",
           "Progression into A-Level and other post-16 pathways",
+        ],
+        media: [
+          {
+            image: "/images/school/museum-learning-trip.webp",
+            imageAlt: "Senior learners extending their studies during an educational visit",
+          },
         ],
       },
     ],

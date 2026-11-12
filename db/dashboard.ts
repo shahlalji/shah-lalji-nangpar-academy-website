@@ -1,5 +1,6 @@
 import type { Story } from "@/data/stories";
 import type { LeadershipHierarchyGroup } from "@/data/leadership";
+import type { GalleryPhoto, GallerySectionKey } from "@/data/gallery";
 import {
   editablePageDefinitions,
   getEditablePageDefinition,
@@ -100,6 +101,15 @@ export type LeadershipProfile = {
   updatedAt: string;
 };
 
+export type DashboardGalleryItem = GalleryPhoto & {
+  id: number;
+  slug: string;
+  published: boolean;
+  sortOrder: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
 type StoryRow = {
   id: number;
   slug: string;
@@ -171,6 +181,20 @@ type LeadershipProfileRow = {
   confirmed: boolean;
   hierarchy_group: LeadershipHierarchyGroup;
   sort_order: number;
+  updated_at: string;
+};
+
+type GalleryItemRow = {
+  id: number;
+  slug: string;
+  section: GallerySectionKey;
+  title: string;
+  caption: string | null;
+  image_url: string;
+  image_alt: string;
+  published: boolean;
+  sort_order: number;
+  created_at: string;
   updated_at: string;
 };
 
@@ -631,6 +655,103 @@ export async function deleteLeadershipProfile(slug: string) {
   if (error) throw error;
 }
 
+export async function getDashboardGalleryItems(): Promise<DashboardGalleryItem[]> {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("gallery_items")
+    .select("*")
+    .order("section")
+    .order("sort_order")
+    .order("id");
+  if (error) throw error;
+  return (data as GalleryItemRow[]).map(mapGalleryItem);
+}
+
+export async function getPublicGalleryItems(
+  section?: GallerySectionKey,
+): Promise<DashboardGalleryItem[]> {
+  const supabase = createSupabasePublicClient();
+  let query = supabase
+    .from("gallery_items")
+    .select("*")
+    .eq("published", true)
+    .order("sort_order")
+    .order("created_at", { ascending: false })
+    .order("id");
+  if (section) query = query.eq("section", section);
+  const { data, error } = await query;
+  if (error) throw error;
+  return (data as GalleryItemRow[]).map(mapGalleryItem);
+}
+
+export async function createGalleryItem(input: {
+  slug: string;
+  section: GallerySectionKey;
+  title: string;
+  caption: string;
+  imageUrl: string;
+  imageAlt: string;
+  published: boolean;
+  sortOrder: number;
+  createdBy: string;
+}) {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("gallery_items")
+    .insert({
+      slug: input.slug,
+      section: input.section,
+      title: input.title,
+      caption: input.caption,
+      image_url: input.imageUrl,
+      image_alt: input.imageAlt,
+      published: input.published,
+      sort_order: input.sortOrder,
+      created_by: input.createdBy,
+    })
+    .select("*")
+    .single();
+  if (error) throw error;
+  return mapGalleryItem(data as GalleryItemRow);
+}
+
+export async function updateGalleryItem(
+  id: number,
+  input: {
+    section: GallerySectionKey;
+    title: string;
+    caption: string;
+    imageUrl: string;
+    imageAlt: string;
+    published: boolean;
+    sortOrder: number;
+  },
+) {
+  const supabase = await createSupabaseServerClient();
+  const { data, error } = await supabase
+    .from("gallery_items")
+    .update({
+      section: input.section,
+      title: input.title,
+      caption: input.caption,
+      image_url: input.imageUrl,
+      image_alt: input.imageAlt,
+      published: input.published,
+      sort_order: input.sortOrder,
+    })
+    .eq("id", id)
+    .select("*")
+    .single();
+  if (error) throw error;
+  return mapGalleryItem(data as GalleryItemRow);
+}
+
+export async function deleteGalleryItem(id: number) {
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase.from("gallery_items").delete().eq("id", id);
+  if (error) throw error;
+}
+
 export async function getDashboardEditablePages(): Promise<DashboardEditablePage[]> {
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase.from("editable_pages").select("*");
@@ -793,6 +914,22 @@ function mapLeadershipProfile(row: LeadershipProfileRow): LeadershipProfile {
     confirmed: row.confirmed,
     hierarchyGroup: row.hierarchy_group,
     sortOrder: row.sort_order,
+    updatedAt: row.updated_at,
+  };
+}
+
+function mapGalleryItem(row: GalleryItemRow): DashboardGalleryItem {
+  return {
+    id: row.id,
+    slug: row.slug,
+    section: row.section,
+    title: row.title,
+    caption: row.caption ?? "",
+    src: row.image_url,
+    alt: row.image_alt,
+    published: row.published,
+    sortOrder: row.sort_order,
+    createdAt: row.created_at,
     updatedAt: row.updated_at,
   };
 }
