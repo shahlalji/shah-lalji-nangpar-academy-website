@@ -160,7 +160,7 @@ export function ContentDetailPage({ page }: ContentDetailPageProps) {
                             ? "(max-width: 1024px) 100vw, 58vw"
                             : "(max-width: 1024px) 100vw, 42vw"
                         }
-                        className="object-contain"
+                        className="object-cover"
                       />
                     </div>
                     <figcaption className="border-t border-school-navy/10 p-6 sm:p-7">
@@ -223,7 +223,7 @@ export function ContentDetailPage({ page }: ContentDetailPageProps) {
                                 fill
                                 unoptimized
                                 sizes="(max-width: 1024px) 100vw, 50vw"
-                                className={`object-contain ${media.imagePosition ?? "object-center"}`}
+                                className={`object-cover ${media.imagePosition ?? "object-center"}`}
                               />
                             </figure>
                           ))}
