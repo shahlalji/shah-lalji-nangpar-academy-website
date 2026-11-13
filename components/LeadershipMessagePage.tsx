@@ -14,6 +14,10 @@ type LeadershipMessagePageProps = {
 export function LeadershipMessagePage({
   message,
 }: LeadershipMessagePageProps) {
+  const imageKeyPrefix = message.route.includes("board-chair")
+    ? "leadership.board-chair"
+    : "leadership.administrator";
+
   return (
     <>
       <Header />
@@ -28,6 +32,7 @@ export function LeadershipMessagePage({
           }
           description={message.description}
           image={message.image}
+          imageKey={`${imageKeyPrefix}.hero`}
           imageAlt={message.imageAlt}
           imagePosition={message.imagePosition}
         />
@@ -39,6 +44,7 @@ export function LeadershipMessagePage({
                 <div className="relative aspect-[4/3] overflow-hidden bg-school-stone">
                   <Image
                     src={message.image}
+                    imageKey={`${imageKeyPrefix}.portrait`}
                     alt={message.imageAlt}
                     fill
                     unoptimized
