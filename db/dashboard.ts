@@ -827,6 +827,14 @@ function currentEditablePageContent(
   fallback: DashboardEditablePage["content"],
 ) {
   if (
+    key === "school-administrator-message" &&
+    parsed &&
+    "role" in parsed &&
+    parsed.role === "School Administrator"
+  ) {
+    return { ...parsed, role: "Executive School Administrator" };
+  }
+  if (
     key === "fee-structure" &&
     (!parsed || !("document" in parsed) || !parsed.document)
   ) return fallback;

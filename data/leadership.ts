@@ -68,7 +68,7 @@ export const leadershipMessages = {
     description:
       "Ms Alice Okidia shares the academy’s commitment to academic excellence, wellbeing, safeguarding and strong community relationships.",
     person: "Ms Alice Okidia",
-    role: "School Administrator",
+    role: "Executive School Administrator",
     image: "/images/school/school-event-leadership.webp",
     imageAlt: "School leadership engaging with learners during an academy event",
     imagePosition: "object-center",
