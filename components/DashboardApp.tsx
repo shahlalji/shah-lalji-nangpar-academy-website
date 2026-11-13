@@ -311,7 +311,7 @@ export function DashboardApp({
 
   return (
     <div className="min-h-screen bg-[#f2f4f7] text-school-ink lg:grid lg:grid-cols-[278px_minmax(0,1fr)]">
-      <aside className="hidden min-h-screen flex-col bg-school-navy text-white lg:sticky lg:top-0 lg:flex lg:h-screen">
+      <aside className="hidden min-h-screen flex-col overflow-hidden bg-school-navy text-white lg:sticky lg:top-0 lg:flex lg:h-dvh lg:min-h-0">
         <div className="border-b border-white/10 px-7 py-7">
           <Link
             href="/"
@@ -335,7 +335,10 @@ export function DashboardApp({
           </Link>
         </div>
 
-        <nav aria-label="Dashboard navigation" className="flex-1 px-4 py-7">
+        <nav
+          aria-label="Dashboard navigation"
+          className="min-h-0 flex-1 overflow-y-auto px-4 py-7"
+        >
           <p className="px-3 text-[0.6rem] font-bold uppercase tracking-[0.18em] text-white/38">
             Workspace
           </p>
@@ -368,7 +371,7 @@ export function DashboardApp({
           </div>
         </nav>
 
-        <div className="border-t border-white/10 p-5">
+        <div className="shrink-0 border-t border-white/10 bg-school-navy p-5">
           <div className="flex items-center gap-3 px-2 py-3">
             <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-school-gold font-bold text-school-navy">
               {initials(displayName)}
