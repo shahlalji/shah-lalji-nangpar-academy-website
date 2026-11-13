@@ -253,7 +253,7 @@ values
   (
     'school-administrator',
     'Ms Alice Okidia',
-    'School Administrator',
+    'Executive School Administrator',
     'Executive leadership',
     'Leads whole-school operations, strategy, safeguarding and the coordination of academic and administrative teams.',
     true,

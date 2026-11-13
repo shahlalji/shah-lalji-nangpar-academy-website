@@ -39,7 +39,7 @@ export default async function DashboardPage() {
     return (
       <DashboardAccessPage
         title="School Desk"
-        description="Sign in with your approved school administrator account to manage stories and admissions enquiries."
+        description="Sign in with your approved school dashboard account to manage stories and admissions enquiries."
         actionHref="/login?next=/dashboard"
         actionLabel="Sign in to dashboard"
       />

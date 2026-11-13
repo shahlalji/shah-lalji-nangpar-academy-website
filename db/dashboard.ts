@@ -914,7 +914,10 @@ function mapLeadershipProfile(row: LeadershipProfileRow): LeadershipProfile {
     id: row.id,
     slug: row.slug,
     name: row.name,
-    role: row.role,
+    role:
+      row.role === "School Administrator"
+        ? "Executive School Administrator"
+        : row.role,
     area: row.area,
     description: row.description,
     photoUrl: row.photo_url,

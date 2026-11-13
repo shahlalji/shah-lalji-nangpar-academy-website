@@ -193,7 +193,7 @@ export const contentPages = {
       },
       {
         eyebrow: "School administration",
-        title: "Message from the School Administrator",
+        title: "Message from the Executive School Administrator",
         description:
           "Read Ms Alice Okidia’s full message on safeguarding, wellbeing, academic ambition and partnership.",
         href: "/our-school/school-administrator-message",

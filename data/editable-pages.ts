@@ -50,7 +50,7 @@ export const editablePageDefinitions: readonly DashboardEditablePage[] = [
   },
   {
     key: "school-administrator-message",
-    label: "School Administrator message",
+    label: "Executive School Administrator message",
     kind: "leadership-message",
     content: leadershipMessages.schoolAdministrator,
     updatedAt: "",

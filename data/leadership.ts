@@ -59,10 +59,10 @@ export const leadershipMessages = {
   schoolAdministrator: {
     route: "/our-school/school-administrator-message",
     metaTitle:
-      "Message from the School Administrator | Shah Lalji Nangpar Academy",
+      "Message from the Executive School Administrator | Shah Lalji Nangpar Academy",
     metaDescription:
-      "Read the welcome message from Ms Alice Okidia, School Administrator at Shah Lalji Nangpar Academy.",
-    eyebrow: "Message from the School Administrator",
+      "Read the welcome message from Ms Alice Okidia, Executive School Administrator at Shah Lalji Nangpar Academy.",
+    eyebrow: "Message from the Executive School Administrator",
     title: "A safe place to learn,",
     accent: "belong and grow.",
     description:
@@ -148,7 +148,7 @@ export const seniorManagementTeam = [
   {
     slug: "school-administrator",
     name: "Ms Alice Okidia",
-    role: "School Administrator",
+    role: "Executive School Administrator",
     area: "Executive leadership",
     description:
       "Leads whole-school operations, strategy, safeguarding and the coordination of academic and administrative teams.",

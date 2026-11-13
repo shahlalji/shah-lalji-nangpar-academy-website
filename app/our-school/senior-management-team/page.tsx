@@ -86,7 +86,7 @@ export default async function SeniorManagementTeamPage() {
             </div>
             <div className="space-y-5 text-base leading-8 text-school-muted lg:col-span-5 lg:col-start-8">
               <p>
-                The Board provides governance, the School Administrator leads
+                The Board provides governance, the Executive School Administrator leads
                 whole-school execution, and academic heads guide each stage of
                 the learner journey.
               </p>
@@ -159,7 +159,7 @@ export default async function SeniorManagementTeamPage() {
                   href: "/our-school/board-chair-message",
                 },
                 {
-                  label: "Message from the School Administrator",
+                  label: "Message from the Executive School Administrator",
                   href: "/our-school/school-administrator-message",
                 },
               ].map((link) => (

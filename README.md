@@ -9,7 +9,7 @@ Academy. Built with Next.js, TypeScript, Tailwind CSS and Lucide icons.
 - Our School: `/our-school`
   - About Us & School History: `/our-school/about-us`
   - Message from the Board Chair: `/our-school/board-chair-message`
-  - Message from the School Administrator: `/our-school/school-administrator-message`
+  - Message from the Executive School Administrator: `/our-school/school-administrator-message`
   - Senior Management Team: `/our-school/senior-management-team`
 - Education: `/education`
   - EYFS: `/education/eyfs`
