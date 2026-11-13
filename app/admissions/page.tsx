@@ -159,11 +159,16 @@ export default function AdmissionsPage() {
             <div className="lg:col-span-6 lg:col-start-7">
               <ul className="border-t border-school-navy/20">
                 {[
-                  "Copy of the learner’s passport or birth certificate",
-                  "The previous two academic reports",
-                  "Leaving certificate from the previous school",
-                  "Parent or guardian passport photo",
-                  "Parent or guardian ID or passport copy",
+                  "Duly completed and signed Admission Form",
+                  "Copy of the learner’s Birth Certificate or Passport",
+                  "Two recent passport-size photographs of the learner",
+                  "Copy of Parent/Guardian National ID or Passport",
+                  "Latest school report or academic transcript",
+                  "Previous school’s Leaving Certificate or Transfer Letter, where applicable",
+                  "Parent or guardian’s passport photo",
+                  "Duly completed School Medical Form",
+                  "Learner’s immunisation records, particularly for Early Years",
+                  "Emergency contact details",
                 ].map((document) => (
                   <li
                     key={document}
