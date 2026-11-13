@@ -320,7 +320,13 @@ export default async function Home() {
                   key={stat.label}
                   className="min-h-52 border-b border-school-navy/15 py-8 sm:border-r sm:px-7 first:pl-0 lg:border-b-0 lg:py-10 last:border-r-0"
                 >
-                  <p className="font-serif text-6xl tracking-[-0.05em] text-school-navy sm:text-7xl">
+                  <p
+                    className={`font-serif tracking-[-0.05em] text-school-navy ${
+                      stat.value.length > 5
+                        ? "text-4xl sm:text-5xl"
+                        : "text-6xl sm:text-7xl"
+                    }`}
+                  >
                     {stat.value}
                   </p>
                   <p className="mt-6 text-sm font-bold uppercase tracking-[0.14em] text-school-ink">
