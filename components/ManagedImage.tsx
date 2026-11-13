@@ -85,7 +85,9 @@ export function ManagedImage({
       {...props}
       src={activeSrc}
       alt={resolvedAlt}
-      unoptimized={false}
+      // Vinext's local Worker does not expose the asset fetcher required by
+      // Next's optimiser. Vercel production keeps full optimisation enabled.
+      unoptimized={process.env.NODE_ENV !== "production"}
       onError={(event) => {
         if (activeOverride) setFailedOverrideUrl(activeOverride.url);
         onError?.(event);
