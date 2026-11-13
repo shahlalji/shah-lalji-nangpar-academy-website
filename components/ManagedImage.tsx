@@ -64,6 +64,7 @@ export function ManagedImage({
   alt,
   imageKey,
   onError,
+  unoptimized: _legacyUnoptimized,
   ...props
 }: ManagedImageProps) {
   const registry = useContext(ImageRegistryContext);
@@ -79,48 +80,12 @@ export function ManagedImage({
   const resolvedSrc =
     typeof src === "string" ? normalizePublicImageUrl(src) : src;
   const activeSrc = activeOverride?.url || resolvedSrc;
-  const isSupabasePublicImage =
-    typeof activeSrc === "string" &&
-    activeSrc.includes(".supabase.co/storage/v1/object/public/");
-
-  if (isSupabasePublicImage) {
-    const fillStyle = props.fill
-      ? {
-          position: "absolute" as const,
-          inset: 0,
-          width: "100%",
-          height: "100%",
-          ...props.style,
-        }
-      : props.style;
-
-    return (
-      // Supabase's render endpoint may reject otherwise public uploads. Serve
-      // the original public object while retaining the same responsive frame.
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src={activeSrc}
-        alt={resolvedAlt}
-        className={props.className}
-        style={fillStyle}
-        width={typeof props.width === "number" ? props.width : undefined}
-        height={typeof props.height === "number" ? props.height : undefined}
-        sizes={props.sizes}
-        loading={props.priority ? "eager" : props.loading}
-        decoding={props.decoding}
-        onError={(event) => {
-          if (activeOverride) setFailedOverrideUrl(activeOverride.url);
-          onError?.(event);
-        }}
-      />
-    );
-  }
-
   return (
     <NextImage
       {...props}
       src={activeSrc}
       alt={resolvedAlt}
+      unoptimized={false}
       onError={(event) => {
         if (activeOverride) setFailedOverrideUrl(activeOverride.url);
         onError?.(event);

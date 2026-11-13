@@ -5,9 +5,9 @@ const imageExtensions: Record<string, string> = {
   "image/avif": "avif",
 };
 
-// Keep optimized uploads below legacy 10 MB Supabase bucket limits.
-const uploadTargetBytes = 9 * 1024 * 1024;
-const maximumImageDimension = 3000;
+// Keep every new upload presentation-ready instead of storing camera originals.
+const uploadTargetBytes = 850 * 1024;
+const maximumImageDimension = 1920;
 
 export function getDashboardImageExtension(file: File) {
   return imageExtensions[file.type] ?? "";

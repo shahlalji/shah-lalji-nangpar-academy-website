@@ -103,31 +103,17 @@ export function HeroSection() {
       className="relative isolate flex min-h-[620px] items-end overflow-hidden bg-school-navy sm:min-h-[calc(100svh-122px)] md:min-h-[760px]"
     >
       <div className="absolute inset-0" aria-hidden="true">
-        {heroSlides.map((slide, index) => {
-          const isActive = index === activeSlide;
-
-          return (
-            <div
-              key={slide.src}
-              className={`absolute inset-0 transition-[opacity,transform] duration-[1400ms] ease-out ${
-                isActive
-                  ? "z-10 scale-100 opacity-100"
-                  : "z-0 scale-[1.035] opacity-0"
-              }`}
-            >
-              <Image
-                src={slide.src}
-                imageKey={`home.hero.${index + 1}`}
-                alt=""
-                fill
-                unoptimized
-                priority={index === 0}
-                sizes="100vw"
-                className="object-cover"
-              />
-            </div>
-          );
-        })}
+        <div key={currentSlide.src} className="absolute inset-0 z-10">
+          <Image
+            src={currentSlide.src}
+            imageKey={`home.hero.${activeSlide + 1}`}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+        </div>
       </div>
 
       <div className="absolute inset-0 z-20 bg-[linear-gradient(90deg,rgba(3,29,60,0.94)_0%,rgba(3,29,60,0.78)_43%,rgba(3,29,60,0.2)_79%),linear-gradient(0deg,rgba(3,29,60,0.84)_0%,transparent_48%)]" />
