@@ -25,6 +25,7 @@ export const creator = {
 } as const;
 
 export const navigation = [
+  { label: "Home", href: "/" },
   {
     label: "Our School",
     href: "/our-school",

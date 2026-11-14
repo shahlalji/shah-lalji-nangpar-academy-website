@@ -60,7 +60,7 @@ export function Header() {
       </div>
 
       <div className="sticky top-0 z-50 border-b border-school-navy/10 bg-white/95 shadow-[0_12px_28px_rgba(6,47,95,0.07)] backdrop-blur-md">
-        <div className="mx-auto flex min-h-[64px] max-w-[1440px] items-center justify-between gap-5 px-4 sm:min-h-[82px] sm:px-6 lg:min-h-[92px] lg:px-10">
+        <div className="mx-auto flex min-h-[60px] max-w-[1440px] items-center justify-between gap-5 px-4 sm:min-h-[76px] sm:px-6 lg:min-h-[84px] lg:px-10">
           <Link
             href="/"
             aria-label="Shah Lalji Nangpar Academy home"
@@ -74,7 +74,7 @@ export function Header() {
               height={70}
               unoptimized
               priority
-              className="h-11 w-11 object-contain sm:h-[62px] sm:w-[62px] lg:h-[72px] lg:w-[72px]"
+              className="h-10 w-10 object-contain sm:h-14 sm:w-14 lg:h-16 lg:w-16"
             />
             <span className="hidden max-w-[205px] border-l border-school-navy/15 pl-3 text-[0.75rem] font-extrabold uppercase leading-[1.25] tracking-[0.08em] text-school-navy sm:block">
               Shah Lalji
@@ -136,7 +136,7 @@ export function Header() {
           <div className="flex items-center gap-3">
             <Link
               href="/contact#visit"
-              className="hidden min-h-12 items-center justify-center rounded-[3px] bg-school-red px-5 text-[0.7rem] font-bold uppercase tracking-[0.15em] text-white transition-colors hover:bg-school-red-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-school-red sm:inline-flex lg:px-6"
+              className="hidden min-h-11 items-center justify-center rounded-[3px] bg-school-red px-5 text-[0.7rem] font-bold uppercase tracking-[0.15em] text-white transition-colors hover:bg-school-red-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-school-red sm:inline-flex lg:px-6"
             >
               Book a Visit
             </Link>
@@ -146,7 +146,7 @@ export function Header() {
               aria-controls="mobile-navigation"
               aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
               onClick={() => setMenuOpen((open) => !open)}
-              className="inline-flex size-10 items-center justify-center rounded-[3px] border border-school-navy/15 text-school-navy transition-colors hover:bg-school-navy hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-school-navy sm:size-12 xl:hidden"
+              className="inline-flex size-10 items-center justify-center rounded-[3px] border border-school-navy/15 text-school-navy transition-colors hover:bg-school-navy hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-school-navy sm:size-11 xl:hidden"
             >
               {menuOpen ? (
                 <X aria-hidden="true" className="size-5 sm:size-6" />
